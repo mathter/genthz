@@ -15,17 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.loly.test;
 
-public interface ObjectFactory {
+import java.util.UUID;
 
-    public default <T> T build(Class<T> clazz) {
-        return (T) this.build(Spec.of(clazz)).get();
+public class WithRecursion {
+    private UUID uuid;
+
+    private WithRecursion next;
+
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public <T> ObjectContext<T> build(Spec<T> initContext);
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
 
-    public <T> InstanceBuilder<T> instanceBuilder(Context<T> context);
+    public WithRecursion getNext() {
+        return next;
+    }
 
-    public <T> Filler<T> filler(Context<T> context);
+    public void setNext(WithRecursion next) {
+        this.next = next;
+    }
 }

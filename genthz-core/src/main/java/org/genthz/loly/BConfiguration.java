@@ -20,12 +20,12 @@ package org.genthz.loly;
 import org.apache.commons.lang3.tuple.Triple;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
+import org.genthz.configuration.dsl.Configuration;
 import org.genthz.configuration.dsl.Custom;
 import org.genthz.configuration.dsl.NonStrict;
+import org.genthz.configuration.dsl.Path;
 import org.genthz.configuration.dsl.Selectable;
 import org.genthz.configuration.dsl.Strict;
-import org.genthz.configuration.dsl.Configuration;
-import org.genthz.configuration.dsl.Path;
 
 import java.util.Arrays;
 import java.util.Collection;

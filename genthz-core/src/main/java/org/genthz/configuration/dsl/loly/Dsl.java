@@ -18,12 +18,12 @@
 package org.genthz.configuration.dsl.loly;
 
 import org.genthz.Context;
+import org.genthz.configuration.dsl.Configuration;
 import org.genthz.configuration.dsl.DefaultFiller;
+import org.genthz.configuration.dsl.Specification;
 import org.genthz.util.NameGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.genthz.configuration.dsl.Configuration;
-import org.genthz.configuration.dsl.Specification;
 
 import java.util.Objects;
 import java.util.function.Predicate;

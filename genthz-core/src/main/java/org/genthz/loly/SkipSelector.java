@@ -30,16 +30,16 @@ public class SkipSelector extends Selector {
                 metrics,
                 next,
                 (context) -> Stream
-                        .of(context, new Function<Context<?>, Context<?>>() {
-                            @Override
-                            public Context<?> apply(Context<?> context) {
-                                return (Context<?>) context.parent();
-                            }
-                        })
+                        .of(context, (Function<Context<?>, Context<?>>) с -> (Context<?>) с.parent())
                         .skip(count)
                         .findFirst()
                         .map(e -> next != null ? next.test(e) : true)
                         .orElse(false)
         );
+    }
+
+    @Override
+    public final boolean test(Context<?> context) {
+        return this.predicate.test(context);
     }
 }

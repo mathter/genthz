@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-public final class Stream<A> {
+public final class Stream {
 
     public static final <T> java.util.stream.Stream<T> of(T startElement, Function<T, T> next) {
         return StreamSupport.stream(new NextSpliterator(startElement, next), false);
@@ -44,7 +44,7 @@ public final class Stream<A> {
 
         @Override
         public boolean tryAdvance(Consumer<? super T> action) {
-            if (element != null) {
+            if (this.element != null) {
                 Objects.requireNonNull(action).accept(this.element);
                 this.element = this.next.apply(this.element);
 

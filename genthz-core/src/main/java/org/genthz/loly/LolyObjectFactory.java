@@ -17,10 +17,10 @@
  */
 package org.genthz.loly;
 
-import org.genthz.ObjectFactory;
 import org.genthz.Context;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
+import org.genthz.ObjectFactory;
 import org.genthz.Spec;
 import org.genthz.Util;
 import org.genthz.loly.context.ObjectContext;
@@ -30,6 +30,10 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 final class LolyObjectFactory implements ObjectFactory {
+    private static final Filler<?> FILTER_UNIT = new UnitFiller<>();
+
+    private static final Filler<?> FILLER_DEFAULT = new DefaultFiller<>(null, null);
+
     private final BConfiguration configuration;
 
     public LolyObjectFactory(BConfiguration configuration) {
@@ -49,6 +53,7 @@ final class LolyObjectFactory implements ObjectFactory {
         return context;
     }
 
+    @Override
     public <T> InstanceBuilder<T> instanceBuilder(Context<T> context) {
         Collection<Selector> candidates = this
                 .configuration
@@ -63,6 +68,7 @@ final class LolyObjectFactory implements ObjectFactory {
                 .orElse(new DefaultInstanceBuilder(context.clazz()));
     }
 
+    @Override
     public <T> Filler<T> filler(Context<T> context) {
         Collection<Selector> candidates = this
                 .configuration
@@ -75,12 +81,7 @@ final class LolyObjectFactory implements ObjectFactory {
                 .max(Comparator.comparing((Selector s) -> s.metrics().apply(context)))
                 .map(s -> this.configuration.getFiller(s))
                 .orElse(
-                        Util.isSimple(context.clazz())
-                                ? new UnitFiller<>() :
-                                new DefaultFiller(
-                                        null,
-                                        null
-                                )
+                        (Filler<Object>) (Util.isSimple(context.clazz()) ? FILTER_UNIT : FILLER_DEFAULT)
                 );
     }
 }

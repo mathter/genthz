@@ -19,8 +19,8 @@ package org.genthz.configuration.dsl.loly;
 
 import org.genthz.Context;
 import org.genthz.Filler;
-import org.genthz.configuration.dsl.DefaultFiller;
 import org.genthz.InstanceBuilder;
+import org.genthz.configuration.dsl.DefaultFiller;
 import org.genthz.configuration.dsl.Selectable;
 
 import java.util.Objects;
@@ -32,20 +32,20 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
 
     private final Dsl dsl;
 
-    private final String name;
+    private String name;
 
     private Function<Context<?>, Long> metrics;
 
     private final Selector next;
 
     public Selector(Dsl dsl, String name, Selector next) {
-        this(dsl, name, null, next);
+        this(dsl, name, (c) -> 1L, next);
     }
 
     public Selector(Dsl dsl, String name, Function<Context<?>, Long> metrics, Selector next) {
-        this.dsl = dsl;
-        this.name = name;
-        this.metrics = metrics;
+        this.dsl = Objects.requireNonNull(dsl);
+        this.name = Objects.requireNonNull(name);
+        this.metrics = Objects.requireNonNull(metrics);
         this.next = next;
     }
 
@@ -55,6 +55,12 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
 
     public String name() {
         return this.name;
+    }
+
+    @Override
+    public org.genthz.configuration.dsl.Selector name(String name) {
+        this.name = name;
+        return this;
     }
 
     @Override
@@ -86,7 +92,7 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
 
     @Override
     public <T> org.genthz.configuration.dsl.Selector nonstrict(Class<T> clazz) {
-        return this.dsl.nonstrict(clazz);
+        return this.dsl.nonstrict(clazz, this);
     }
 
     @Override
@@ -107,7 +113,7 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
 
     @Override
     public <T> org.genthz.configuration.dsl.Selector strict(Class<T> clazz) {
-        return this.dsl.strict(clazz);
+        return this.dsl.strict(clazz, this);
     }
 
     @Override

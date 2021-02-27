@@ -62,7 +62,7 @@ public class DefaultConfiguration extends AbstractConfiguration {
                     return collection;
                 }, Collection.class),
                 custom((c) -> c.stream().count() > maxGenerationDeep().get())
-                        .metrics((c) -> Long.MAX_VALUE)
+                        .metrics((c) -> Long.MAX_VALUE / 2)
                         .nonstrict((c, o) -> o, Object.class));
     }
 

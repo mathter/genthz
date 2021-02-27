@@ -19,9 +19,9 @@ package org.genthz.loly;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.genthz.configuration.dsl.Dsl;
+import org.genthz.configuration.dsl.DslFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.genthz.configuration.dsl.DslFactory;
 
 public class PathSelectorBuilderTest {
 

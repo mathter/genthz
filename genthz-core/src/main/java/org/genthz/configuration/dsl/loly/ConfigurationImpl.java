@@ -19,15 +19,15 @@ package org.genthz.configuration.dsl.loly;
 
 import org.genthz.Context;
 import org.genthz.Filler;
-import org.genthz.configuration.dsl.Selector;
-import org.genthz.util.NameGenerator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.genthz.InstanceBuilder;
 import org.genthz.configuration.dsl.Configuration;
 import org.genthz.configuration.dsl.Selectable;
+import org.genthz.configuration.dsl.Selector;
 import org.genthz.configuration.dsl.Specification;
 import org.genthz.configuration.dsl.SpecificationAdapter;
+import org.genthz.util.NameGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collection;

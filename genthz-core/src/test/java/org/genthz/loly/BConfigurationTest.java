@@ -18,9 +18,9 @@
 package org.genthz.loly;
 
 import org.genthz.configuration.dsl.AbstractConfiguration;
-import org.junit.jupiter.api.Test;
 import org.genthz.configuration.dsl.Configuration;
 import org.genthz.configuration.dsl.DslFactory;
+import org.junit.jupiter.api.Test;
 
 public class BConfigurationTest {
 

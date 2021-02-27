@@ -20,10 +20,10 @@ package org.genthz.loly;
 import org.genthz.ObjectFactory;
 import org.genthz.ObjectFactoryProducer;
 import org.genthz.configuration.dsl.DefaultConfiguration;
+import org.genthz.configuration.dsl.DslFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.genthz.configuration.dsl.DslFactory;
 
 import java.util.Collection;
 import java.util.Date;

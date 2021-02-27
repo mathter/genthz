@@ -25,13 +25,18 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public interface Selector extends Strictable, NonStrictable, Pathable, Сustomizable, DefaultFillered {
+    public static final Function<Context<?>, Long> ZERO = (c) -> 0L;
+
+    public static final Function<Context<?>, Long> UNIT = (c) -> 1L;
 
     public String name();
+
+    public Selector name(String name);
 
     public Selector next();
 
     public default Function<Context<?>, Long> metrics() {
-        return (c) -> 1L;
+        return UNIT;
     }
 
     public Selector metrics(Function<Context<?>, Long> metrics);

@@ -20,13 +20,13 @@ package org.genthz.loly;
 import org.genthz.Context;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
+import org.genthz.loly.context.RefFieldContext;
+import org.genthz.loly.context.Stage;
+import org.genthz.loly.context.ValFieldContext;
 import org.genthz.loly.context.ValueContext;
 import org.genthz.loly.reflect.Accessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.genthz.loly.context.RefFieldContext;
-import org.genthz.loly.context.Stage;
-import org.genthz.loly.context.ValFieldContext;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -62,8 +62,8 @@ class DefaultFiller<T> implements Filler<T> {
         final ValueContext<T> context = (ValueContext<T>) accessor;
 
         if (context.getStage() != Stage.COMPLETE) {
-            final InstanceBuilder<T> instanceBuilder = ((LolyObjectFactory) context.objectFactory()).instanceBuilder(context);
-            final Filler<T> filler = ((LolyObjectFactory) context.objectFactory()).filler(context);
+            final InstanceBuilder<T> instanceBuilder = context.objectFactory().instanceBuilder(context);
+            final Filler<T> filler = context.objectFactory().filler(context);
             final T object = instanceBuilder.apply(context);
 
             accessor.setInstance(object);

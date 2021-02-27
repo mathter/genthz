@@ -18,13 +18,13 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
-import org.genthz.ObjectContext;
+import org.genthz.loly.context.ObjectContext;
 
 import java.util.function.Function;
 
 public class RootMatchSelector extends Selector {
 
     public RootMatchSelector(String name, Function<Context<?>, Long> metrics, Selector next) {
-        super(name, metrics, next, (context) -> ObjectContext.class.equals(context.clazz()));
+        super(name, metrics, next, (context) -> ObjectContext.class.equals(context.getClass()));
     }
 }

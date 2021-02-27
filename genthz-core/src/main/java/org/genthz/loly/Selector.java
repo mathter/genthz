@@ -25,13 +25,13 @@ import java.util.function.Predicate;
 
 abstract class Selector implements Predicate<Context<?>> {
 
-    private String name;
+    private final String name;
 
-    private Function<Context<?>, Long> metrics;
+    private final Function<Context<?>, Long> metrics;
 
-    private Selector next;
+    private final Selector next;
 
-    private Predicate<Context<?>> predicate;
+    protected final Predicate<Context<?>> predicate;
 
     protected Selector(String name, Function<Context<?>, Long> metrics, Selector next, Predicate<Context<?>> predicate) {
         this.name = Objects.requireNonNull(name);
@@ -45,7 +45,7 @@ abstract class Selector implements Predicate<Context<?>> {
     }
 
     public Function<Context<?>, Long> metrics() {
-        return this.metrics;
+        return this.next != null ? (c) -> this.metrics.apply(c) + this.next.metrics().apply(c) : this.metrics;
     }
 
     public Selector next() {
@@ -53,7 +53,7 @@ abstract class Selector implements Predicate<Context<?>> {
     }
 
     @Override
-    public final boolean test(Context<?> context) {
+    public boolean test(Context<?> context) {
         return this.predicate.test(context) && (this.next == null || this.next.test(context));
     }
 }

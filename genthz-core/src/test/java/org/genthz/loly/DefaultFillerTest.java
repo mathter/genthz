@@ -3,10 +3,10 @@ package org.genthz.loly;
 import org.genthz.Context;
 import org.genthz.Filler;
 import org.genthz.ObjectFactory;
+import org.genthz.ObjectFactoryProducer;
 import org.genthz.configuration.dsl.DefaultConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.genthz.ObjectFactoryProducer;
 
 import java.util.Date;
 import java.util.UUID;

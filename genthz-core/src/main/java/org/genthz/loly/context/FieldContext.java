@@ -17,9 +17,9 @@
  */
 package org.genthz.loly.context;
 
+import org.genthz.Bindings;
 import org.genthz.Context;
 import org.genthz.ObjectFactory;
-import org.genthz.Bindings;
 import org.genthz.Util;
 import org.genthz.loly.reflect.FieldAccessor;
 

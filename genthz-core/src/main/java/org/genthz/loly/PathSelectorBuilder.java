@@ -28,10 +28,10 @@ import org.genthz.configuration.dsl.Path;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-final class PathSelectorBuilder {
-    private static final Function<Context<?>, Long> ZERO = (c) -> 0L;
+import static org.genthz.configuration.dsl.Selector.UNIT;
+import static org.genthz.configuration.dsl.Selector.ZERO;
 
-    private static final Function<Context<?>, Long> UNIT = (c) -> Constants.METRICS_UNIT;
+final class PathSelectorBuilder {
 
     public static Selector build(org.genthz.configuration.dsl.Selector path, Selector next) {
         final CharStream stream = CharStreams.fromString(((Path) path).path());
