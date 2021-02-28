@@ -25,9 +25,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 
@@ -140,6 +145,7 @@ public class DefaultConfigurationTest {
     public void testCollection() {
         Collection<?> value = this.OBJECT_FACTORY.build(Collection.class);
         Assertions.assertNotNull(value);
+        Assertions.assertEquals(ArrayList.class, value.getClass());
 
         value.stream().forEach(e -> Assertions.assertNotNull(e));
     }
@@ -148,6 +154,7 @@ public class DefaultConfigurationTest {
     public void testCollectionList() {
         Collection<?> value = this.OBJECT_FACTORY.build(List.class);
         Assertions.assertNotNull(value);
+        Assertions.assertEquals(ArrayList.class, value.getClass());
 
         value.stream().forEach(e -> Assertions.assertNotNull(e));
     }
@@ -156,6 +163,25 @@ public class DefaultConfigurationTest {
     public void testCollectionSet() {
         Collection<?> value = this.OBJECT_FACTORY.build(Set.class);
         Assertions.assertNotNull(value);
+        Assertions.assertEquals(HashSet.class, value.getClass());
+
+        value.stream().forEach(e -> Assertions.assertNotNull(e));
+    }
+
+    @Test
+    public void testCollectionQueue() {
+        Collection<?> value = this.OBJECT_FACTORY.build(Queue.class);
+        Assertions.assertNotNull(value);
+        Assertions.assertEquals(ArrayDeque.class, value.getClass());
+
+        value.stream().forEach(e -> Assertions.assertNotNull(e));
+    }
+
+    @Test
+    public void testCollectionDeque() {
+        Collection<?> value = this.OBJECT_FACTORY.build(Deque.class);
+        Assertions.assertNotNull(value);
+        Assertions.assertEquals(ArrayDeque.class, value.getClass());
 
         value.stream().forEach(e -> Assertions.assertNotNull(e));
     }

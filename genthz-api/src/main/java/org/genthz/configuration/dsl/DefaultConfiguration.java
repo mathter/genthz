@@ -20,14 +20,21 @@ package org.genthz.configuration.dsl;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.genthz.GeneratedException;
+import org.genthz.InstanceBuilder;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class DefaultConfiguration extends AbstractConfiguration {
     {
         reg(
+                // Common types.
                 nonstrict((c) -> RandomUtils.nextBoolean(), boolean.class),
                 nonstrict((c) -> RandomUtils.nextBytes(1)[0], byte.class),
                 nonstrict((c) -> (short) RandomUtils.nextInt(), short.class),
@@ -35,6 +42,8 @@ public class DefaultConfiguration extends AbstractConfiguration {
                 nonstrict((c) -> RandomUtils.nextLong(), long.class),
                 nonstrict((c) -> RandomUtils.nextFloat(), float.class),
                 nonstrict((c) -> RandomUtils.nextDouble(), double.class),
+
+                // Common boxed types.
                 nonstrict((c) -> RandomUtils.nextBoolean(), Boolean.class),
                 nonstrict((c) -> RandomUtils.nextBytes(1)[0], Byte.class),
                 nonstrict((c) -> (short) RandomUtils.nextInt(), Short.class),
@@ -45,25 +54,47 @@ public class DefaultConfiguration extends AbstractConfiguration {
                 nonstrict((c) -> RandomStringUtils.randomAlphanumeric(10), String.class),
                 nonstrict((c) -> UUID.randomUUID(), UUID.class),
                 nonstrict((c) -> new Date(), Date.class),
-                nonstrict((c) -> {
-                    final Collection collection;
-                    final Class<?> itemClass = defaultCollectionItemClass().get();
 
-                    try {
-                        collection = defaultCollectionClass().get().newInstance();
+                // Default collections.
+                nonstrict(Collection.class)
+                        .metrics(Selector.METRICS_UNIT)
+                        .instanceBuilder(collectionBuilder(defaultCollectionClass())),
+                nonstrict(List.class)
+                        .metrics(Selector.METRICS_TWO)
+                        .instanceBuilder(collectionBuilder(defaultListClass())),
+                nonstrict(Set.class)
+                        .metrics(Selector.METRICS_TWO)
+                        .instanceBuilder(collectionBuilder(defaultSetClass())),
+                nonstrict(Queue.class)
+                        .metrics(Selector.METRICS_TWO)
+                        .instanceBuilder(collectionBuilder(defaultQueueClass())),
+                nonstrict(Deque.class)
+                        .metrics(Selector.METRICS_TWO)
+                        .instanceBuilder(collectionBuilder(defaultDequeClass())),
 
-                        for (int i = 0, count = defaultCollectionSize().get(); i < count; i++) {
-                            collection.add(itemClass.newInstance());
-                        }
-                    } catch (Exception e) {
-                        throw new GeneratedException(e);
-                    }
-
-                    return collection;
-                }, Collection.class),
+                // Terminate filler.
                 custom((c) -> c.stream().count() > maxGenerationDeep().get())
                         .metrics((c) -> Long.MAX_VALUE / 2)
                         .nonstrict((c, o) -> o, Object.class));
+    }
+
+    private <T extends Collection> InstanceBuilder<T> collectionBuilder(Supplier<Class<? extends T>> supplier) {
+        return (c) -> {
+            final T collection;
+            final Class<?> itemClass = defaultCollectionItemClass().get();
+
+            try {
+                collection = supplier.get().newInstance();
+
+                for (int i = 0, count = defaultCollectionSize().get(); i < count; i++) {
+                    collection.add(itemClass.newInstance());
+                }
+            } catch (Exception e) {
+                throw new GeneratedException(e);
+            }
+
+            return collection;
+        };
     }
 
     public DefaultConfiguration() {

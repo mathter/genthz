@@ -13,46 +13,56 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ComplexTest {
-    private static String MANAGER_NAME;
+    private static String MANAGER_NAME_0;
+
+    private static String MANAGER_NAME_1;
+
     private static Configuration CONF;
 
     @BeforeAll
     public static void init() {
-        MANAGER_NAME = RandomStringUtils.randomAlphanumeric(10);
+        MANAGER_NAME_0 = RandomStringUtils.randomAlphanumeric(10);
+        MANAGER_NAME_1 = RandomStringUtils.randomAlphanumeric(10);
         CONF = new DefaultConfiguration() {
             {
                 reg(
                         strict(Manager.class)
                                 .defaultFiller()
                                 .custom((Filler<Manager>) (managerContext, manager) -> {
+                                    manager.setEmployees(new ArrayList<>());
+                                    manager.setName(MANAGER_NAME_1);
                                     return manager;
                                 }),
                         /**
-                         * {@linkplain Employee} generator for as Root object.
+                         * {@linkplain Employee} generator.
                          */
-                        path("/")
-                                .strict(Employee.class)
+                        strict(Employee.class)
                                 .defaultFiller()
+                                .excluding("manager")
                                 .custom((Filler<Employee>) (employeeContext, employee) -> {
-                                    employee.getManager().getEmployees().add(employee);
+                                    if (employeeContext.parent() != null && employeeContext.parent().clazz().equals(Manager.class)) {
+                                        employee.getManager().getEmployees().add(employee);
+                                    }
+
                                     return employee;
-                                }),
+                                })
                         /**
                          * Manager generator for {@linkplain Employee#manager}.
                          */
-                        strict(Employee.class)
-                                .path("..")
-                                .strict(Manager.class)
-                                .defaultFiller()
-                                .excluding("employees")
-                                .custom((Filler<Manager>) (managerContext, manager) -> {
-                                    manager.setEmployees(new ArrayList<>());
-                                    manager.setName(MANAGER_NAME);
-                                    return manager;
-                                })
+//                        strict(Employee.class)
+//                                .path("..")
+//                                .strict(Manager.class)
+//                                .defaultFiller()
+//                                .excluding("employees")
+//                                .custom((Filler<Manager>) (managerContext, manager) -> {
+//                                    manager.setEmployees(new ArrayList<>());
+//                                    manager.setName(MANAGER_NAME_0);
+//                                    return manager;
+//                                })
                 );
             }
 
@@ -79,10 +89,25 @@ public class ComplexTest {
         Assertions.assertNotNull(value.getManager());
         Assertions.assertNotNull(value.getManager().getUuid());
         Assertions.assertNotNull(value.getManager().getName());
-        Assertions.assertEquals(MANAGER_NAME, value.getManager().getName());
+        Assertions.assertEquals(MANAGER_NAME_0, value.getManager().getName());
         Assertions.assertNotNull(value.getManager().getLastName());
         Assertions.assertNotNull(value.getManager().getBirthDate());
         Assertions.assertNotNull(value.getManager().getEmployees());
         Assertions.assertEquals(1, value.getManager().getEmployees().size());
+    }
+
+    @Test
+    public void testManager() {
+        final ObjectFactory factory = ObjectFactoryProducer
+                .producer()
+                .factory(CONF);
+
+        Manager value = factory.build(Manager.class);
+        Assertions.assertNotNull(value);
+        Assertions.assertNotNull(value.getUuid());
+        Assertions.assertNotNull(value.getName());
+        Assertions.assertEquals(MANAGER_NAME_1, value.getName());
+        Assertions.assertNotNull(value.getLastName());
+        Assertions.assertNotNull(value.getBirthDate());
     }
 }

@@ -22,6 +22,10 @@ import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
 
 import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -109,6 +113,26 @@ public class AbstractConfiguration implements Configuration, Specification {
     @Override
     public Supplier<Class<? extends Collection>> defaultCollectionClass() {
         return SpecificationAdapter.DEFAULT_COLLECTION_CLASS;
+    }
+
+    @Override
+    public Supplier<Class<? extends List>> defaultListClass() {
+        return SpecificationAdapter.DEFAULT_LIST_CLASS;
+    }
+
+    @Override
+    public Supplier<Class<? extends Set>> defaultSetClass() {
+        return SpecificationAdapter.DEFAULT_SET_CLASS;
+    }
+
+    @Override
+    public Supplier<Class<? extends Queue>> defaultQueueClass() {
+        return SpecificationAdapter.DEFAUT_QUEUE;
+    }
+
+    @Override
+    public Supplier<Class<? extends Deque>> defaultDequeClass() {
+        return SpecificationAdapter.DEFAUT_DEQUE;
     }
 
     @Override

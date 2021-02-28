@@ -18,12 +18,24 @@
 package org.genthz.configuration.dsl;
 
 import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public interface Specification {
     public Supplier<Long> maxGenerationDeep();
 
     public Supplier<Class<? extends Collection>> defaultCollectionClass();
+
+    public Supplier<Class<? extends List>> defaultListClass();
+
+    public Supplier<Class<? extends Set>> defaultSetClass();
+
+    public Supplier<Class<? extends Queue>> defaultQueueClass();
+
+    public Supplier<Class<? extends Deque>> defaultDequeClass();
 
     public Supplier<Integer> defaultCollectionSize();
 

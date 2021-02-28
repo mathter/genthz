@@ -22,7 +22,7 @@ abstract class ClassSelector<T> extends Selector implements org.genthz.configura
     private final Class<T> clazz;
 
     protected ClassSelector(Dsl dsl, String name, Selector selector, Class<T> clazz) {
-        super(dsl, name, org.genthz.configuration.dsl.Selector.UNIT, selector);
+        super(dsl, name, org.genthz.configuration.dsl.Selector.METRICS_UNIT, selector);
         this.clazz = clazz;
     }
 

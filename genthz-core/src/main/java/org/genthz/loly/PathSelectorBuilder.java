@@ -28,8 +28,8 @@ import org.genthz.configuration.dsl.Path;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import static org.genthz.configuration.dsl.Selector.UNIT;
-import static org.genthz.configuration.dsl.Selector.ZERO;
+import static org.genthz.configuration.dsl.Selector.METRICS_UNIT;
+import static org.genthz.configuration.dsl.Selector.METRICS_ZERO;
 
 final class PathSelectorBuilder {
 
@@ -42,7 +42,7 @@ final class PathSelectorBuilder {
         final Listener listener = new Listener(
                 path.name(),
                 path.metrics(),
-                next != null ? new SkipSelector(path.name(), ZERO, next, 1) : next
+                next != null ? new SkipSelector(path.name(), METRICS_ZERO, next, 1) : next
         );
 
         walker.walk(listener, parser.path());
@@ -76,7 +76,7 @@ final class PathSelectorBuilder {
         public void enterRoot(PathParser.RootContext ctx) {
             this.last = new RootMatchSelector(
                     this.name,
-                    this.metrics != null ? this.metrics : UNIT,
+                    this.metrics != null ? this.metrics : METRICS_UNIT,
                     this.last
             );
         }
@@ -85,7 +85,7 @@ final class PathSelectorBuilder {
         public void enterName(PathParser.NameContext ctx) {
             this.last = new NameEqualsSelector(
                     this.name + (index++),
-                    this.metrics != null ? ZERO : UNIT,
+                    this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
                     this.last,
                     ctx.getText()
             );
@@ -95,7 +95,7 @@ final class PathSelectorBuilder {
         public void enterMatchedName(PathParser.MatchedNameContext ctx) {
             this.last = new MatchedNameSelector(
                     this.name + (index++),
-                    this.metrics != null ? ZERO : UNIT,
+                    this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
                     this.last,
                     Pattern.compile(ctx.getText().replace("*", ".*"))
             );
@@ -110,7 +110,7 @@ final class PathSelectorBuilder {
         public void exitSkip(PathParser.SkipContext ctx) {
             this.last = new SkipSelector(
                     this.name + (index++),
-                    this.metrics != null ? ZERO : (c) -> this.skipCount,
+                    this.metrics != null ? METRICS_ZERO : (c) -> this.skipCount,
                     this.last,
                     this.skipCount
             );

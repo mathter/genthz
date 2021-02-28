@@ -17,14 +17,28 @@
  */
 package org.genthz.configuration.dsl;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class SpecificationAdapter implements Specification {
     static final Supplier<Long> DEFAULT_MAX_GENERATION_DEEP = () -> 100L;
 
     static final Supplier<Class<? extends Collection>> DEFAULT_COLLECTION_CLASS = () -> ArrayList.class;
+
+    static final Supplier<Class<? extends List>> DEFAULT_LIST_CLASS = () -> ArrayList.class;
+
+    static final Supplier<Class<? extends Set>> DEFAULT_SET_CLASS = () -> HashSet.class;
+
+    static final Supplier<Class<? extends Queue>> DEFAUT_QUEUE = () -> ArrayDeque.class;
+
+    static final Supplier<Class<? extends Deque>> DEFAUT_DEQUE = () -> ArrayDeque.class;
 
     static final Supplier<Integer> DEFAULT_COLLECTION_SIZE = () -> 10;
 
@@ -38,6 +52,26 @@ public class SpecificationAdapter implements Specification {
     @Override
     public Supplier<Class<? extends Collection>> defaultCollectionClass() {
         return DEFAULT_COLLECTION_CLASS;
+    }
+
+    @Override
+    public Supplier<Class<? extends List>> defaultListClass() {
+        return DEFAULT_LIST_CLASS;
+    }
+
+    @Override
+    public Supplier<Class<? extends Set>> defaultSetClass() {
+        return DEFAULT_SET_CLASS;
+    }
+
+    @Override
+    public Supplier<Class<? extends Queue>> defaultQueueClass() {
+        return DEFAUT_QUEUE;
+    }
+
+    @Override
+    public Supplier<Class<? extends Deque>> defaultDequeClass() {
+        return DEFAUT_DEQUE;
     }
 
     @Override
