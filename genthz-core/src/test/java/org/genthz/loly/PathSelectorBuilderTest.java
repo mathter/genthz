@@ -29,11 +29,7 @@ public class PathSelectorBuilderTest {
     public void test() {
         Dsl dsl = DslFactory.dsl();
         Selector selector = PathSelectorBuilder.build(
-                dsl
-                        .path("/a*/name/../..4/das")
-                        .nonstrict((c) -> RandomStringUtils.randomAlphanumeric(10), String.class)
-                        .selector()
-                        .next(),
+                dsl.path("/a*/name/../..4/field"),
                 null
         );
 
@@ -43,5 +39,19 @@ public class PathSelectorBuilderTest {
         Assertions.assertEquals(MatchedNameSelector.class, selector.next().next().next().getClass());
         Assertions.assertEquals(RootMatchSelector.class, selector.next().next().next().next().getClass());
         Assertions.assertNull(selector.next().next().next().next().next());
+    }
+
+    @Test
+    public void test1() {
+        Dsl dsl = DslFactory.dsl();
+        Selector selector = PathSelectorBuilder.build(
+                dsl.path("field"),
+                PathSelectorBuilder.build(dsl.path("a"), null)
+        );
+
+        Assertions.assertEquals(NameEqualsSelector.class, selector.getClass());
+        Assertions.assertEquals(SkipSelector.class, selector.next().getClass());
+        Assertions.assertEquals(NameEqualsSelector.class, selector.next().next().getClass());
+        Assertions.assertNull(selector.next().next().next());
     }
 }

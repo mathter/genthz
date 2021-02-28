@@ -39,7 +39,11 @@ final class PathSelectorBuilder {
         final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         final PathParser parser = new PathParser(tokenStream);
         final ParseTreeWalker walker = new ParseTreeWalker();
-        final Listener listener = new Listener(path.name(), path.metrics(), next);
+        final Listener listener = new Listener(
+                path.name(),
+                path.metrics(),
+                next != null ? new SkipSelector(path.name(), ZERO, next, 1) : next
+        );
 
         walker.walk(listener, parser.path());
 
