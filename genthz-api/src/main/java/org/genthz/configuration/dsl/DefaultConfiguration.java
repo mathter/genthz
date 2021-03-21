@@ -78,6 +78,14 @@ public class DefaultConfiguration extends AbstractConfiguration {
                         .nonstrict((c, o) -> o, Object.class));
     }
 
+    public DefaultConfiguration() {
+        this(DslFactory.dsl());
+    }
+
+    public DefaultConfiguration(Dsl dsl) {
+        super(dsl);
+    }
+
     private <T extends Collection> InstanceBuilder<T> collectionBuilder(Supplier<Class<? extends T>> supplier) {
         return (c) -> {
             final T collection;
@@ -95,13 +103,5 @@ public class DefaultConfiguration extends AbstractConfiguration {
 
             return collection;
         };
-    }
-
-    public DefaultConfiguration() {
-        this(DslFactory.dsl());
-    }
-
-    public DefaultConfiguration(Dsl dsl) {
-        super(dsl);
     }
 }

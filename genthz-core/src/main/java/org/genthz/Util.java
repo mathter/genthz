@@ -51,6 +51,35 @@ public final class Util {
 
     private static final Collection<Class<?>> SIMPLE_CLASSES;
 
+    static {
+        final Map<Class<?>, Class<?>> boxed_primitive = new HashMap<>();
+        boxed_primitive.put(Boolean.class, boolean.class);
+        boxed_primitive.put(Byte.class, byte.class);
+        boxed_primitive.put(Short.class, short.class);
+        boxed_primitive.put(Integer.class, int.class);
+        boxed_primitive.put(Long.class, long.class);
+        boxed_primitive.put(Float.class, float.class);
+        boxed_primitive.put(Double.class, double.class);
+
+        BOXED_PRIMITIVE = Collections.unmodifiableMap(boxed_primitive);
+
+        final Map<Class<?>, Class<?>> primitive_boxed = new HashMap<>();
+        for (Map.Entry<Class<?>, Class<?>> entry : boxed_primitive.entrySet()) {
+            primitive_boxed.put(entry.getValue(), entry.getKey());
+        }
+
+        PRIMITIVE_BOXED = Collections.unmodifiableMap(primitive_boxed);
+
+        final Collection<Class<?>> simple = new HashSet<>();
+        simple.add(String.class);
+        simple.add(UUID.class);
+        simple.add(Date.class);
+        simple.addAll(BOXED_PRIMITIVE.keySet());
+        simple.addAll(PRIMITIVE_BOXED.keySet());
+
+        SIMPLE_CLASSES = Collections.unmodifiableCollection(simple);
+    }
+
     /**
      * Method return true i argument is a primitive or boxing type.
      *
@@ -185,7 +214,7 @@ public final class Util {
         return result;
     }
 
-    public static Class<?> getFunctionArgumentType(ParameterizedType type){
+    public static Class<?> getFunctionArgumentType(ParameterizedType type) {
         final Class<?> result;
 
         if (type != null) {
@@ -220,34 +249,5 @@ public final class Util {
         }
 
         return result;
-    }
-
-    static {
-        final Map<Class<?>, Class<?>> boxed_primitive = new HashMap<>();
-        boxed_primitive.put(Boolean.class, boolean.class);
-        boxed_primitive.put(Byte.class, byte.class);
-        boxed_primitive.put(Short.class, short.class);
-        boxed_primitive.put(Integer.class, int.class);
-        boxed_primitive.put(Long.class, long.class);
-        boxed_primitive.put(Float.class, float.class);
-        boxed_primitive.put(Double.class, double.class);
-
-        BOXED_PRIMITIVE = Collections.unmodifiableMap(boxed_primitive);
-
-        final Map<Class<?>, Class<?>> primitive_boxed = new HashMap<>();
-        for (Map.Entry<Class<?>, Class<?>> entry : boxed_primitive.entrySet()) {
-            primitive_boxed.put(entry.getValue(), entry.getKey());
-        }
-
-        PRIMITIVE_BOXED = Collections.unmodifiableMap(primitive_boxed);
-
-        final Collection<Class<?>> simple = new HashSet<>();
-        simple.add(String.class);
-        simple.add(UUID.class);
-        simple.add(Date.class);
-        simple.addAll(BOXED_PRIMITIVE.keySet());
-        simple.addAll(PRIMITIVE_BOXED.keySet());
-
-        SIMPLE_CLASSES = Collections.unmodifiableCollection(simple);
     }
 }

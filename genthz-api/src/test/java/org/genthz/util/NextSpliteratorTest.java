@@ -17,8 +17,12 @@
  */
 package org.genthz.util;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class NextSpliteratorTest {
     private int i = 0;
@@ -30,19 +34,23 @@ public class NextSpliteratorTest {
 
     @Test
     public void test() {
-        A a = new A(new A(new A(new A(null, i++), i++), i++), i++);
+        final A a = new A(new A(new A(new A(null, i++), i++), i++), i++);
+        final java.util.stream.Stream<A> stream = StreamUtil.of(a, A::next);
+        final List<A> list = stream.collect(Collectors.toList());
 
-        Stream
-                .of(a, A::next)
-                .forEach(e -> System.out.println(e));
+        Assertions.assertEquals(4, list.size());
+        Assertions.assertEquals(3, list.get(0).i);
+        Assertions.assertEquals(2, list.get(1).i);
+        Assertions.assertEquals(1, list.get(2).i);
+        Assertions.assertEquals(0, list.get(3).i);
     }
 }
 
 class A {
 
-    private final int i;
+    final int i;
 
-    private final A next;
+    final A next;
 
     public A(A next, int i) {
         this.next = next;

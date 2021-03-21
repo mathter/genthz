@@ -17,11 +17,12 @@
  */
 package org.genthz.loly;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.genthz.configuration.dsl.Dsl;
 import org.genthz.configuration.dsl.DslFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 public class PathSelectorBuilderTest {
 
@@ -34,11 +35,44 @@ public class PathSelectorBuilderTest {
         );
 
         Assertions.assertEquals(NameEqualsSelector.class, selector.getClass());
-        Assertions.assertEquals(SkipSelector.class, selector.next().getClass());
-        Assertions.assertEquals(NameEqualsSelector.class, selector.next().next().getClass());
-        Assertions.assertEquals(MatchedNameSelector.class, selector.next().next().next().getClass());
-        Assertions.assertEquals(RootMatchSelector.class, selector.next().next().next().next().getClass());
-        Assertions.assertNull(selector.next().next().next().next().next());
+        Assertions.assertEquals(
+                SkipSelector.class,
+                selector.next()
+                        .map(Selector::getClass)
+                        .get()
+        );
+        Assertions.assertEquals(
+                NameEqualsSelector.class,
+                selector.next()
+                        .flatMap(Selector::next)
+                        .map(Selector::getClass)
+                        .get()
+        );
+        Assertions.assertEquals(
+                MatchedNameSelector.class,
+                selector.next()
+                        .flatMap(Selector::next)
+                        .flatMap(Selector::next)
+                        .map(Selector::getClass)
+                        .get()
+        );
+        Assertions.assertEquals(
+                RootMatchSelector.class,
+                selector.next()
+                        .flatMap(Selector::next)
+                        .flatMap(Selector::next)
+                        .flatMap(Selector::next)
+                        .map(Selector::getClass)
+                        .get()
+        );
+        Assertions.assertNull(
+                selector.next()
+                        .flatMap(Selector::next)
+                        .flatMap(Selector::next)
+                        .flatMap(Selector::next)
+                        .flatMap(Selector::next)
+                        .orElse(null)
+        );
     }
 
     @Test
@@ -46,12 +80,23 @@ public class PathSelectorBuilderTest {
         Dsl dsl = DslFactory.dsl();
         Selector selector = PathSelectorBuilder.build(
                 dsl.path("field"),
-                PathSelectorBuilder.build(dsl.path("a"), null)
+                Optional.of(PathSelectorBuilder.build(dsl.path("a"), null))
         );
 
-        Assertions.assertEquals(NameEqualsSelector.class, selector.getClass());
-        Assertions.assertEquals(SkipSelector.class, selector.next().getClass());
-        Assertions.assertEquals(NameEqualsSelector.class, selector.next().next().getClass());
-        Assertions.assertNull(selector.next().next().next());
+        Assertions.assertEquals(
+                NameEqualsSelector.class,
+                selector.getClass()
+        );
+        Assertions.assertEquals(
+                NameEqualsSelector.class,
+                selector.next()
+                        .map(Selector::getClass)
+                        .get()
+        );
+        Assertions.assertNull(
+                selector.next()
+                        .flatMap(Selector::next)
+                        .orElse(null)
+        );
     }
 }

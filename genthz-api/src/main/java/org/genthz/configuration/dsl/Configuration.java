@@ -17,13 +17,20 @@
  */
 package org.genthz.configuration.dsl;
 
+import java.util.Arrays;
 import java.util.Collection;
 
-public interface Configuration extends Strictable, NonStrictable, Pathable, Сustomizable {
+public interface Configuration extends Strictable, NonStrictable, Pathable, Сustomizable, Conditional {
 
     public Configuration reg(Selectable selectable);
 
-    public Configuration reg(Selectable ... selectables);
+    public default Configuration reg(Selectable... selectables) {
+        this.reg(Arrays.asList(selectables));
+
+        return this;
+    }
+
+    public Configuration reg(Collection<Selectable> selectables);
 
     public Collection<Selectable> selectables();
 

@@ -20,11 +20,17 @@ package org.genthz.loly;
 import org.genthz.Context;
 import org.genthz.Util;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 class NonStrictClassSelector<T, B> extends ClassSelector<T, NonStrictClassSelector<B, T>> {
 
-    public NonStrictClassSelector(String name, Function<Context<?>, Long> metrics, Selector next, Class<T> clazz) {
+    public NonStrictClassSelector(
+            String name,
+            Function<Context<?>,Long> metrics,
+            Optional<Selector> next,
+            Class<T> clazz
+    ) {
         super(
                 name,
                 metrics,

@@ -18,6 +18,7 @@
 package org.genthz.configuration.dsl.loly;
 
 import org.genthz.Context;
+import org.genthz.configuration.dsl.CollectionFiller;
 import org.genthz.configuration.dsl.Configuration;
 import org.genthz.configuration.dsl.DefaultFiller;
 import org.genthz.configuration.dsl.Specification;
@@ -143,12 +144,29 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
     }
 
     public DefaultFiller defaultFiller(Selector selector) {
+        Objects.requireNonNull(selector);
+
+        final DefaultFiller filler = new org.genthz.configuration.dsl.loly.DefaultFiller(selector);
+        LOG.debug("Constract DefaultFiller '{}' with '{}'", filler, selector);
         return new org.genthz.configuration.dsl.loly.DefaultFiller(selector);
     }
 
-    @Override
-    public Configuration configuration() {
-        return this.configuration(null);
+    public <T, C> CollectionFiller collectionFiller(
+            Selector selector,
+            Class<T> collectionClass,
+            Class<C> componentClass,
+            int count
+    ) {
+        Objects.requireNonNull(selector);
+        Objects.requireNonNull(componentClass);
+
+        final CollectionFiller<T, C> filler = new org.genthz.configuration.dsl.loly.CollectionFiller(selector, collectionClass, componentClass, count);
+        LOG.debug("Constract DefaultFiller '{}' with '{}'", filler, selector);
+        return filler;
+    }
+
+    public NegateSelector notSelector(Selector selector, boolean negateChain) {
+        return new NegateSelector(this, selector, negateChain);
     }
 
     @Override

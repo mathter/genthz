@@ -20,6 +20,7 @@ package org.genthz.loly.context;
 import org.genthz.Bindings;
 import org.genthz.Context;
 import org.genthz.ObjectFactory;
+import org.genthz.Path;
 import org.genthz.Util;
 import org.genthz.loly.reflect.FieldAccessor;
 
@@ -62,18 +63,18 @@ public abstract class FieldContext<T> extends ValueContext<T> implements FieldAc
 
     @Override
     public T get() {
-        return Util.getFieldValue(this.field, this.parent().node());
+        return Util.getFieldValue(this.field, this.parent().map(Path::node).get());
     }
 
     @Override
     public void setInstance(T value) {
-        Util.setFieldValue(this.field, this.parent().node(), value);
+        Util.setFieldValue(this.field, this.parent().map(Path::node).get(), value);
         this.setStage(Stage.INITIALIZATION);
     }
 
     @Override
     public void setFilled(T value) {
-        Util.setFieldValue(this.field, this.parent().node(), value);
+        Util.setFieldValue(this.field, this.parent().map(Path::node).get(), value);
         this.setStage(Stage.COMPLETE);
     }
 }

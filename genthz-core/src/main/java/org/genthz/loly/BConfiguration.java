@@ -22,6 +22,7 @@ import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
 import org.genthz.configuration.dsl.Configuration;
 import org.genthz.configuration.dsl.Custom;
+import org.genthz.configuration.dsl.NegateSelector;
 import org.genthz.configuration.dsl.NonStrict;
 import org.genthz.configuration.dsl.Path;
 import org.genthz.configuration.dsl.Selectable;
@@ -33,6 +34,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 final class BConfiguration {
@@ -54,22 +56,6 @@ final class BConfiguration {
 
         this.fillerMap = Collections.unmodifiableMap(Objects.requireNonNull(fillerMap));
         this.fillerSelectors = Collections.unmodifiableCollection(this.fillerMap.keySet());
-    }
-
-    public Stream<Selector> getInstanceBuilderSelectors() {
-        return this.instanceBuilderSelectors.stream();
-    }
-
-    public Stream<Selector> getFillerSelectors() {
-        return this.fillerSelectors.stream();
-    }
-
-    public <T> InstanceBuilder<T> getInstanceBuilder(Selector selector) {
-        return (InstanceBuilder<T>) this.instanceBuilderMap.get(selector);
-    }
-
-    public <T> Filler<T> getFiller(Selector selector) {
-        return (Filler<T>) this.fillerMap.get(selector);
     }
 
     public static BConfiguration build(Configuration configuration) {
@@ -102,11 +88,13 @@ final class BConfiguration {
 
     private static Triple<Selector, InstanceBuilder, Filler> selectable(Selectable selectable) {
         final Triple<Selector, InstanceBuilder, Filler> result;
-        final Selector selector = selector(selectable.selector());
+        final Selector selector = selector(selectable.selector()).get();
         final Object function;
 
         if (selectable instanceof org.genthz.configuration.dsl.DefaultFiller) {
             result = Triple.of(selector, null, BConfiguration.build((org.genthz.configuration.dsl.DefaultFiller) selectable));
+        } else if (selectable instanceof org.genthz.configuration.dsl.CollectionFiller) {
+            result = Triple.of(selector, null, BConfiguration.build((org.genthz.configuration.dsl.CollectionFiller) selectable));
         } else {
             function = selectable.function();
 
@@ -130,28 +118,66 @@ final class BConfiguration {
         return result;
     }
 
-    private static Selector selector(org.genthz.configuration.dsl.Selector selector) {
+    private static Optional<Selector> selector(org.genthz.configuration.dsl.Selector selector) {
         return selector != null ? selector(
                 selector,
                 selector(
                         selector.next()
                 )
-        ) : null;
+        ) : Optional.empty();
     }
 
-    private static Selector selector(org.genthz.configuration.dsl.Selector selector, Selector next) {
+    private static Optional<Selector> selector(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
         final Selector result;
 
         if (selector instanceof Strict) {
-            result = new StrictClassSelector(selector.name(), selector.metrics(), next, ((Strict<?>) selector).clazz());
+            result = buildStrict(selector, next);
         } else if (selector instanceof NonStrict) {
-            result = new NonStrictClassSelector(selector.name(), selector.metrics(), next, ((NonStrict<?>) selector).clazz());
+            result = buildNonStrict(selector, next);
         } else if (selector instanceof Custom) {
-            result = new CustomSelector(selector.name(), selector.metrics(), next, (Custom) selector);
+            result = buildCustom(selector, next);
         } else if (selector instanceof Path) {
             result = PathSelectorBuilder.build(selector, next);
+        } else if (selector instanceof NegateSelector) {
+            result = buildNot(selector, next);
         } else {
             throw new IllegalArgumentException("'" + selector + "' is illegal selector!");
+        }
+
+        return Optional.ofNullable(result);
+    }
+
+    private static Selector buildStrict(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
+        return new StrictClassSelector(selector.name(), selector.metrics(), next, ((Strict<?>) selector).clazz());
+    }
+
+    private static Selector buildNonStrict(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
+        return new NonStrictClassSelector(selector.name(), selector.metrics(), next, ((NonStrict<?>) selector).clazz());
+    }
+
+    private static Selector buildCustom(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
+        return new CustomSelector(selector.name(), selector.metrics(), next, (Custom) selector);
+    }
+
+    private static Selector buildNot(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
+        final Selector result;
+        final Selector origin = selector(((NegateSelector) selector).origin(), next).get();
+        final boolean negateChain = ((NegateSelector) selector).negateChain();
+
+        if (negateChain) {
+            result = new org.genthz.loly.NegateSelector(
+                    selector.name(),
+                    selector.metrics(),
+                    Optional.empty(),
+                    origin.negate()
+            );
+        } else {
+            result = new org.genthz.loly.NegateSelector(
+                    selector.name(),
+                    selector.metrics(),
+                    origin.next(),
+                    origin.predicate().negate()
+            );
         }
 
         return result;
@@ -163,5 +189,31 @@ final class BConfiguration {
                 defaultFiller.excluded() != null ? Arrays.asList(defaultFiller.excluded()) : null,
                 defaultFiller.custom()
         );
+    }
+
+    private static <T, C> CollectionDefaultFiller build(org.genthz.configuration.dsl.CollectionFiller collectionFiller) {
+        return new CollectionDefaultFiller<T, C>(
+                collectionFiller.collectionClass(),
+                collectionFiller.componentClass(),
+                collectionFiller.custom(),
+                collectionFiller.componentCustom(),
+                collectionFiller.count()
+        );
+    }
+
+    public Stream<Selector> getInstanceBuilderSelectors() {
+        return this.instanceBuilderSelectors.stream();
+    }
+
+    public Stream<Selector> getFillerSelectors() {
+        return this.fillerSelectors.stream();
+    }
+
+    public <T> InstanceBuilder<T> getInstanceBuilder(Selector selector) {
+        return (InstanceBuilder<T>) this.instanceBuilderMap.get(selector);
+    }
+
+    public <T> Filler<T> getFiller(Selector selector) {
+        return (Filler<T>) this.fillerMap.get(selector);
     }
 }

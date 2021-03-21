@@ -20,6 +20,7 @@ package org.genthz.loly;
 import org.genthz.Context;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -34,12 +35,16 @@ abstract class ClassSelector<T, B extends ClassSelector<?, ?>> extends Selector 
     private static Lock LOCK_READ = LOCK.readLock();
 
     private static Lock LOCK_WRITE = LOCK.writeLock();
-
+    private final Supplier<B> boxedProducer;
     private B boxed;
 
-    private final Supplier<B> boxedProducer;
-
-    protected ClassSelector(String name, Function<Context<?>, Long> metrics, Selector next, Predicate<Context<?>> predicate, Supplier<B> boxedProducer) {
+    protected ClassSelector(
+            String name,
+            Function<Context<?>, Long> metrics,
+            Optional<Selector> next,
+            Predicate<Context<?>> predicate,
+            Supplier<B> boxedProducer
+    ) {
         super(name, metrics, next, predicate);
 
         this.boxedProducer = Objects.requireNonNull(boxedProducer);

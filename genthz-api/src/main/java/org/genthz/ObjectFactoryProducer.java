@@ -23,6 +23,9 @@ import java.util.stream.StreamSupport;
 public abstract class ObjectFactoryProducer {
     public static final String DEFAULT_FACTORY = "loly";
 
+    protected ObjectFactoryProducer() {
+    }
+
     public static final ObjectFactoryProducer producer() {
         return producer(DEFAULT_FACTORY);
     }
@@ -34,9 +37,6 @@ public abstract class ObjectFactoryProducer {
                 .findAny()
                 .orElseThrow(() -> new ProducerNotFoundException(id))
                 : producer();
-    }
-
-    protected ObjectFactoryProducer() {
     }
 
     public abstract ObjectFactory factory(Object configuration);

@@ -20,23 +20,31 @@ package org.genthz.loly;
 import org.genthz.Context;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static org.genthz.configuration.dsl.Selector.METRICS_ZERO;
+
 abstract class Selector implements Predicate<Context<?>> {
+
+    protected final Predicate<Context<?>> predicate;
 
     private final String name;
 
     private final Function<Context<?>, Long> metrics;
 
-    private final Selector next;
+    protected final Optional<Selector> next;
 
-    protected final Predicate<Context<?>> predicate;
-
-    protected Selector(String name, Function<Context<?>, Long> metrics, Selector next, Predicate<Context<?>> predicate) {
+    protected Selector(
+            String name,
+            Function<Context<?>, Long> metrics,
+            Optional<Selector> next,
+            Predicate<Context<?>> predicate
+    ) {
         this.name = Objects.requireNonNull(name);
         this.metrics = metrics;
-        this.next = next;
+        this.next = Objects.requireNonNull(next);
         this.predicate = Objects.requireNonNull(predicate);
     }
 
@@ -45,15 +53,22 @@ abstract class Selector implements Predicate<Context<?>> {
     }
 
     public Function<Context<?>, Long> metrics() {
-        return this.next != null ? (c) -> this.metrics.apply(c) + this.next.metrics().apply(c) : this.metrics;
+        return (c) -> this.next
+                .map(Selector::metrics)
+                .orElse(METRICS_ZERO)
+                .apply(c) + this.metrics.apply(c);
     }
 
-    public Selector next() {
+    public Optional<Selector> next() {
         return this.next;
+    }
+
+    public Predicate<Context<?>> predicate() {
+        return this.predicate;
     }
 
     @Override
     public boolean test(Context<?> context) {
-        return this.predicate.test(context) && (this.next == null || this.next.test(context));
+        return this.predicate.test(context) && this.next.map((s) -> s.test(context)).orElse(true);
     }
 }

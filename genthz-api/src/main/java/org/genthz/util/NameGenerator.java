@@ -29,14 +29,10 @@ public final class NameGenerator {
     private static final String NAME = "predefined.name.";
 
     private static final NameGenerator SINGLITON = new NameGenerator();
-
-    private long index = 0L;
-
     private final String[] predefinedNames;
-
     private final Random nameIndexSelector;
-
     private final Lock lock = new ReentrantLock();
+    private long index = 0L;
 
     private NameGenerator() {
         this.predefinedNames = NameGenerator.predefinedNames();
@@ -45,19 +41,6 @@ public final class NameGenerator {
 
     public static final String nextName() {
         return SINGLITON.next();
-    }
-
-    private String next() {
-        this.lock.lock();
-
-        try {
-            return new StringBuilder(this.predefinedNames[this.nameIndexSelector.nextInt(this.predefinedNames.length)])
-                    .append('-')
-                    .append(this.index++)
-                    .toString();
-        } finally {
-            this.lock.unlock();
-        }
     }
 
     private static String[] predefinedNames() {
@@ -75,5 +58,18 @@ public final class NameGenerator {
         }
 
         return result.toArray(new String[result.size()]);
+    }
+
+    private String next() {
+        this.lock.lock();
+
+        try {
+            return new StringBuilder(this.predefinedNames[this.nameIndexSelector.nextInt(this.predefinedNames.length)])
+                    .append('-')
+                    .append(this.index++)
+                    .toString();
+        } finally {
+            this.lock.unlock();
+        }
     }
 }

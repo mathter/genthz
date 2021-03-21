@@ -21,4 +21,11 @@ import java.util.function.Function;
 
 @FunctionalInterface
 public interface InstanceBuilder<T> extends Function<Context<?>, T> {
+
+    public static class Empty<T> implements InstanceBuilder<T> {
+        @Override
+        public T apply(Context<?> context) {
+            return null;
+        }
+    }
 }

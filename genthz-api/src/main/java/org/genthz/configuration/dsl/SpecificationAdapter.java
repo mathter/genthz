@@ -40,7 +40,7 @@ public class SpecificationAdapter implements Specification {
 
     static final Supplier<Class<? extends Deque>> DEFAUT_DEQUE = () -> ArrayDeque.class;
 
-    static final Supplier<Integer> DEFAULT_COLLECTION_SIZE = () -> 10;
+    static final Supplier<Integer> DEFAULT_COLLECTION_SIZE = () -> 0;
 
     static final Supplier<Class<?>> DEFAULT_COLLECTION_ITEM_CLASS = () -> Object.class;
 

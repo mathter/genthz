@@ -18,13 +18,22 @@
 package org.genthz.configuration.dsl;
 
 import org.genthz.Context;
-import org.genthz.Filler;
-import org.genthz.InstanceBuilder;
 
-import java.util.function.Consumer;
+import java.util.Collection;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public interface Selector extends Strictable, NonStrictable, Pathable, Сustomizable, DefaultFillered {
+public interface Selector extends
+        Strictable,
+        NonStrictable,
+        Pathable,
+        Сustomizable,
+        DefaultFillered,
+        CollectionFillered,
+        Fillered,
+        InstanceBuildered,
+        Conditional
+{
     public static final Function<Context<?>, Long> METRICS_ZERO = (c) -> 0L;
 
     public static final Function<Context<?>, Long> METRICS_UNIT = (c) -> 1L;
@@ -33,7 +42,7 @@ public interface Selector extends Strictable, NonStrictable, Pathable, Сustomiz
 
     public String name();
 
-    public Selector name(String name);
+    public Fillered name(String name);
 
     public Selector next();
 
@@ -43,9 +52,7 @@ public interface Selector extends Strictable, NonStrictable, Pathable, Сustomiz
 
     public Selector metrics(Function<Context<?>, Long> metrics);
 
-    public void use(Consumer<Selector> consumer);
+    public Collection<Selectable> use(BiConsumer<Collection<Selectable>, Selector> consumer);
 
-    public <T> Selectable filler(Filler<T> function);
-
-    public <T> Selectable instanceBuilder(InstanceBuilder<T> function);
+    public NegateSelector not();
 }

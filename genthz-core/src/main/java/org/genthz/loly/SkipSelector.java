@@ -18,22 +18,22 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
-import org.genthz.util.Stream;
 
+import java.util.Optional;
 import java.util.function.Function;
 
-public class SkipSelector extends Selector {
+public class SkipSelector extends UpSelector {
 
-    public SkipSelector(String name, Function<Context<?>, Long> metrics, Selector next, long count) {
+    public SkipSelector(String name, Function<Context<?>, Long> metrics, Optional<Selector> next, long count) {
         super(
                 name,
                 metrics,
                 next,
-                (context) -> Stream
-                        .of(context, (Function<Context<?>, Context<?>>) с -> (Context<?>) с.parent())
+                (context) -> context
+                        .stream()
                         .skip(count)
                         .findFirst()
-                        .map(e -> next != null ? next.test(e) : true)
+                        .map(с -> next.map(s -> s.test((Context<?>) с)).orElse(false))
                         .orElse(false)
         );
     }

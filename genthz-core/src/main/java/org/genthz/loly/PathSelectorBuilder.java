@@ -25,6 +25,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.genthz.Context;
 import org.genthz.configuration.dsl.Path;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -33,7 +34,10 @@ import static org.genthz.configuration.dsl.Selector.METRICS_ZERO;
 
 final class PathSelectorBuilder {
 
-    public static Selector build(org.genthz.configuration.dsl.Selector path, Selector next) {
+    private PathSelectorBuilder() {
+    }
+
+    public static Selector build(org.genthz.configuration.dsl.Selector path, Optional<Selector> next) {
         final CharStream stream = CharStreams.fromString(((Path) path).path());
         final PathLexer lexer = new PathLexer(stream);
         final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
@@ -42,15 +46,12 @@ final class PathSelectorBuilder {
         final Listener listener = new Listener(
                 path.name(),
                 path.metrics(),
-                next != null ? new SkipSelector(path.name(), METRICS_ZERO, next, 1) : next
+                next != null ? next : Optional.empty()
         );
 
         walker.walk(listener, parser.path());
 
-        return listener.last;
-    }
-
-    private PathSelectorBuilder() {
+        return listener.last.get();
     }
 
     private static class Listener extends PathBaseListener {
@@ -64,9 +65,9 @@ final class PathSelectorBuilder {
 
         private long skipCount = UNDEFINED;
 
-        private Selector last;
+        private Optional<Selector> last;
 
-        public Listener(String name, Function<Context<?>, Long> metrics, Selector next) {
+        public Listener(String name, Function<Context<?>, Long> metrics, Optional<Selector> next) {
             this.name = name;
             this.metrics = metrics;
             this.last = next;
@@ -74,30 +75,36 @@ final class PathSelectorBuilder {
 
         @Override
         public void enterRoot(PathParser.RootContext ctx) {
-            this.last = new RootMatchSelector(
-                    this.name,
-                    this.metrics != null ? this.metrics : METRICS_UNIT,
-                    this.last
+            this.last = Optional.of(
+                    new RootMatchSelector(
+                            this.name,
+                            this.metrics != null ? this.metrics : METRICS_UNIT,
+                            this.last
+                    )
             );
         }
 
         @Override
         public void enterName(PathParser.NameContext ctx) {
-            this.last = new NameEqualsSelector(
-                    this.name + (index++),
-                    this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
-                    this.last,
-                    ctx.getText()
+            this.last = Optional.of(
+                    new NameEqualsSelector(
+                            this.name + (index++),
+                            this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
+                            this.last,
+                            ctx.getText()
+                    )
             );
         }
 
         @Override
         public void enterMatchedName(PathParser.MatchedNameContext ctx) {
-            this.last = new MatchedNameSelector(
-                    this.name + (index++),
-                    this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
-                    this.last,
-                    Pattern.compile(ctx.getText().replace("*", ".*"))
+            this.last = Optional.of(
+                    new MatchedNameSelector(
+                            this.name + (index++),
+                            this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
+                            this.last,
+                            Pattern.compile(ctx.getText().replace("*", ".*"))
+                    )
             );
         }
 
@@ -108,11 +115,12 @@ final class PathSelectorBuilder {
 
         @Override
         public void exitSkip(PathParser.SkipContext ctx) {
-            this.last = new SkipSelector(
-                    this.name + (index++),
-                    this.metrics != null ? METRICS_ZERO : (c) -> this.skipCount,
-                    this.last,
-                    this.skipCount
+            this.last = Optional.of(new SkipSelector(
+                            this.name + (index++),
+                            this.metrics != null ? METRICS_ZERO : (c) -> this.skipCount,
+                            this.last,
+                            this.skipCount
+                    )
             );
 
             this.skipCount = -1;

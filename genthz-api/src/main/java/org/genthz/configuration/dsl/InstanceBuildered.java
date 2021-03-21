@@ -15,17 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.configuration.dsl;
 
-import java.util.function.BiFunction;
+import org.genthz.InstanceBuilder;
 
-@FunctionalInterface
-public interface Filler<T> extends BiFunction<Context<T>, T, T> {
-
-    public static class Unit<T> implements Filler<T> {
-        @Override
-        public T apply(Context<T> context, T value) {
-            return value;
-        }
-    }
+public interface InstanceBuildered {
+    <T> Selectable instanceBuilder(InstanceBuilder<T> function);
 }

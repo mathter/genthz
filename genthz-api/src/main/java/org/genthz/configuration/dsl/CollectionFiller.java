@@ -15,17 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.configuration.dsl;
 
-import java.util.function.BiFunction;
+import org.genthz.Filler;
 
-@FunctionalInterface
-public interface Filler<T> extends BiFunction<Context<T>, T, T> {
+public interface CollectionFiller<T, C> extends Selectable {
 
-    public static class Unit<T> implements Filler<T> {
-        @Override
-        public T apply(Context<T> context, T value) {
-            return value;
-        }
-    }
+    public Class<T> collectionClass();
+
+    public Class<C> componentClass();
+
+    public int count();
+
+    public CollectionFiller<T, C> custom(Filler<T> function);
+
+    public Filler<T> custom();
+
+    public CollectionFiller<T, C> componentCustom(Filler<C> function);
+
+    public Filler<C> componentCustom();
 }

@@ -29,7 +29,6 @@ import org.genthz.util.NameGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,10 +41,8 @@ public class ConfigurationImpl implements Configuration {
     private final String name = NameGenerator.nextName();
 
     private final Collection<Selectable> selectables = new HashSet<>();
-
-    private Specification specification;
-
     private final Dsl dsl;
+    private Specification specification;
 
     public ConfigurationImpl(Dsl dsl, Specification specification) {
         this.dsl = dsl;
@@ -60,8 +57,10 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public Configuration reg(Selectable... selectables) {
-        Arrays.stream(selectables).forEach(s -> reg(s));
+    public Configuration reg(Collection<Selectable> selectables) {
+        selectables
+                .stream()
+                .forEach(e -> this.a(e));
 
         return this;
     }
@@ -130,6 +129,11 @@ public class ConfigurationImpl implements Configuration {
     @Override
     public Selector custom(Predicate<Context<?>> predicate) {
         return this.dsl.custom(Objects.requireNonNull(predicate));
+    }
+
+    @Override
+    public Selector not(Selector selector) {
+        return this.dsl.notSelector((org.genthz.configuration.dsl.loly.Selector) selector, true);
     }
 
     private Selectable a(Selectable selectable) {

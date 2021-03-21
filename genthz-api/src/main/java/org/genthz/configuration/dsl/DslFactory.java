@@ -23,6 +23,9 @@ import java.util.stream.StreamSupport;
 public abstract class DslFactory {
     public static final String DEFAULT_FACTORY = "loly";
 
+    protected DslFactory() {
+    }
+
     public static final Dsl dsl() {
         return dsl(DEFAULT_FACTORY);
     }
@@ -35,9 +38,6 @@ public abstract class DslFactory {
                 .findAny()
                 .orElseThrow(() -> new DslFactoryNotFoundException(factoryName))
                 .newDsl() : dsl();
-    }
-
-    protected DslFactory() {
     }
 
     protected abstract String id();

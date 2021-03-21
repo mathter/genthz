@@ -25,6 +25,7 @@ import org.genthz.loly.context.Stage;
 import org.genthz.loly.context.ValFieldContext;
 import org.genthz.loly.context.ValueContext;
 import org.genthz.loly.reflect.Accessor;
+import org.genthz.util.StreamUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,13 +88,24 @@ class DefaultFiller<T> implements Filler<T> {
                         )
                         .get()
                 )
-                .map(f -> f.getType().isPrimitive()
-                        ? new ValFieldContext(parent, f)
-                        : new RefFieldContext(parent, f)
+                .flatMap(f -> {
+                            final Stream<Accessor<?>> result;
+                            final Class<?> c = f.getType();
+
+                            if (c.isPrimitive()) {
+                                result = Stream.of(new ValFieldContext(parent, f));
+                            } else if (Collection.class.isAssignableFrom(c)) {
+                                result = Stream.of(new RefFieldContext(parent, f));
+                            } else {
+                                result = Stream.of(new RefFieldContext(parent, f));
+                            }
+
+                            return result;
+                        }
                 );
     }
 
     private Stream<Class<?>> classes(Class<?> clazz) {
-        return org.genthz.util.Stream.of(clazz, Class::getSuperclass);
+        return StreamUtil.of(clazz, Class::getSuperclass);
     }
 }

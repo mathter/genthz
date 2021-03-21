@@ -20,11 +20,17 @@ package org.genthz;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Spec<T> implements Context<T> {
     private final Class<T> clazz;
 
     private final Bindings bindings;
+
+    private Spec(Class<T> clazz, Bindings bindings) {
+        this.clazz = Objects.requireNonNull(clazz);
+        this.bindings = bindings != null ? bindings : Bindings.bindings();
+    }
 
     public static <T> Spec<T> of(Class<T> clazz) {
         return of(clazz, null);
@@ -40,11 +46,6 @@ public class Spec<T> implements Context<T> {
 
     public static <T, E> Spec<T> of(Class<T> clazz, Class<E> componentClazz, int size, Bindings bindings) {
         return new SpecCollection(clazz, bindings, componentClazz, size);
-    }
-
-    private Spec(Class<T> clazz, Bindings bindings) {
-        this.clazz = Objects.requireNonNull(clazz);
-        this.bindings = bindings != null ? bindings : Bindings.bindings();
     }
 
     @Override
@@ -68,8 +69,8 @@ public class Spec<T> implements Context<T> {
     }
 
     @Override
-    public Context<T> parent() {
-        return null;
+    public Optional<Context<?>> parent() {
+        return Optional.empty();
     }
 
     @Override

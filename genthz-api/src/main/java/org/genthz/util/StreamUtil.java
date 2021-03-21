@@ -18,24 +18,24 @@
 package org.genthz.util;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
-public final class Stream {
+public final class StreamUtil {
+
+    private StreamUtil() {
+    }
 
     public static final <T> java.util.stream.Stream<T> of(T startElement, Function<T, T> next) {
         return StreamSupport.stream(new NextSpliterator(startElement, next), false);
     }
 
-    private Stream() {
-    }
-
     private static final class NextSpliterator<T> implements Spliterator<T> {
-        private T element;
-
         private final Function<T, T> next;
+        private T element;
 
         public NextSpliterator(T element, Function<T, T> next) {
             this.element = Objects.requireNonNull(element);

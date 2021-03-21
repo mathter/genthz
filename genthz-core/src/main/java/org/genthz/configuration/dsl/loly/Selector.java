@@ -20,23 +20,26 @@ package org.genthz.configuration.dsl.loly;
 import org.genthz.Context;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
+import org.genthz.configuration.dsl.CollectionFiller;
 import org.genthz.configuration.dsl.DefaultFiller;
+import org.genthz.configuration.dsl.Fillered;
+import org.genthz.configuration.dsl.NegateSelector;
 import org.genthz.configuration.dsl.Selectable;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 abstract class Selector implements org.genthz.configuration.dsl.Selector {
 
     private final Dsl dsl;
-
-    private String name;
-
-    private Function<Context<?>, Long> metrics;
-
     private final Selector next;
+    private String name;
+    private Function<Context<?>, Long> metrics;
 
     public Selector(Dsl dsl, String name, Selector next) {
         this(dsl, name, (c) -> 1L, next);
@@ -58,13 +61,13 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
     }
 
     @Override
-    public org.genthz.configuration.dsl.Selector name(String name) {
+    public Fillered name(String name) {
         this.name = name;
         return this;
     }
 
     @Override
-    public org.genthz.configuration.dsl.Selector next() {
+    public Selector next() {
         return this.next;
     }
 
@@ -122,8 +125,12 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
     }
 
     @Override
-    public void use(Consumer<org.genthz.configuration.dsl.Selector> consumer) {
-        Objects.requireNonNull(consumer).accept(this);
+    public Collection<Selectable> use(BiConsumer<Collection<Selectable>, org.genthz.configuration.dsl.Selector> consumer) {
+        final Collection<Selectable> selectables = new ArrayList<>();
+
+        consumer.accept(selectables, this);
+
+        return Collections.unmodifiableCollection(selectables);
     }
 
     @Override
@@ -139,5 +146,20 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
     @Override
     public DefaultFiller defaultFiller() {
         return this.dsl.defaultFiller(this);
+    }
+
+    @Override
+    public <T, C> CollectionFiller<T, C> collectionFiller(Class<T> collectionClass, Class<C> componentClass, int count) {
+        return this.dsl.collectionFiller(this, collectionClass, componentClass, count);
+    }
+
+    @Override
+    public NegateSelector not() {
+        return this.dsl.notSelector(this, false);
+    }
+
+    @Override
+    public org.genthz.configuration.dsl.Selector not(org.genthz.configuration.dsl.Selector selector) {
+        return this.dsl.notSelector(this, false);
     }
 }

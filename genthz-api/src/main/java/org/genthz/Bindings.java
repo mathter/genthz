@@ -29,12 +29,6 @@ import java.util.Map;
  */
 public interface Bindings {
 
-    public <T> T get(Object key);
-
-    public <T> void put(Object key, T value);
-
-    public void remove(Object key);
-
     public static Bindings bindings(Bindings parent, Object... args) {
         final Simple result = new Simple(parent);
 
@@ -57,6 +51,12 @@ public interface Bindings {
     public static Bindings bindings(Object... args) {
         return Bindings.bindings(null, args);
     }
+
+    public <T> T get(Object key);
+
+    public <T> void put(Object key, T value);
+
+    public void remove(Object key);
 
     static final class Simple implements Bindings {
 

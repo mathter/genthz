@@ -17,7 +17,10 @@
  */
 package org.genthz;
 
+import org.genthz.util.StreamUtil;
+
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -57,7 +60,11 @@ public interface Path<N, P extends Path<?, P>> {
      *
      * @return parent path.
      */
-    public P parent();
+    public Optional<? extends P> parent();
+
+    default public Optional<?> parentNode() {
+        return this.parent().flatMap(e -> Optional.ofNullable(e.node()));
+    }
 
     /**
      * Child paths.
@@ -67,6 +74,6 @@ public interface Path<N, P extends Path<?, P>> {
     public Collection<? extends P> childs();
 
     public default Stream<Path<?, ?>> stream() {
-        return org.genthz.util.Stream.of(this, Path::parent);
+        return StreamUtil.of(this, e -> e.parent().orElse(null));
     }
 }

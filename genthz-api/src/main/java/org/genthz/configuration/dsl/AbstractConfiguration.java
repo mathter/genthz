@@ -51,7 +51,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public Configuration reg(Selectable... selectables) {
+    public Configuration reg(Collection<Selectable> selectables) {
         return this.configuration.reg(selectables);
     }
 
@@ -143,5 +143,10 @@ public class AbstractConfiguration implements Configuration, Specification {
     @Override
     public Supplier<Class<?>> defaultCollectionItemClass() {
         return SpecificationAdapter.DEFAULT_COLLECTION_ITEM_CLASS;
+    }
+
+    @Override
+    public Selector not(Selector selector) {
+        return this.configuration.not(selector);
     }
 }

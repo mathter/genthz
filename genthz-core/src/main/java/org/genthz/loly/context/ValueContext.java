@@ -22,9 +22,11 @@ import org.genthz.Context;
 import org.genthz.ObjectFactory;
 import org.genthz.loly.reflect.Accessor;
 
+import java.util.Optional;
+
 public abstract class ValueContext<T> implements Context<T>, Accessor<T> {
 
-    private final ValueContext<?> parent;
+    private final Optional<ValueContext<?>> parent;
 
     private final Bindings bindings;
 
@@ -33,14 +35,14 @@ public abstract class ValueContext<T> implements Context<T>, Accessor<T> {
     private Stage stage = Stage.NEW;
 
     public ValueContext(ObjectFactory objectFactory, Bindings bindings) {
-        this.parent = null;
+        this.parent = Optional.empty();
         this.bindings = bindings;
         this.objectFactory = objectFactory;
     }
 
     public ValueContext(ObjectFactory objectFactory, ValueContext<?> parent) {
-        this.parent = parent;
-        this.bindings = parent.bindings();
+        this.parent = Optional.ofNullable(parent);
+        this.bindings = this.parent.map(Context::bindings).orElse(null);
         this.objectFactory = objectFactory;
     }
 
@@ -58,7 +60,7 @@ public abstract class ValueContext<T> implements Context<T>, Accessor<T> {
     }
 
     @Override
-    public ValueContext<?> parent() {
+    public Optional<ValueContext<?>> parent() {
         return this.parent;
     }
 

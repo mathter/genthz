@@ -1,7 +1,6 @@
 package org.genthz.loly;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.genthz.Filler;
 import org.genthz.ObjectFactory;
 import org.genthz.ObjectFactoryProducer;
 import org.genthz.configuration.dsl.Configuration;
@@ -12,9 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Supplier;
+import java.util.Collections;
 
 public class ComplexTest {
     private static String MANAGER_NAME_0;
@@ -30,51 +28,47 @@ public class ComplexTest {
         CONF = new DefaultConfiguration() {
             {
                 reg(
-                        strict(Manager.class)
-                                .defaultFiller()
-                                .custom((Filler<Manager>) (managerContext, manager) -> {
-                                    manager.setEmployees(new ArrayList<>());
-                                    manager.setName(MANAGER_NAME_1);
-                                    return manager;
-                                }),
-                        /**
-                         * {@linkplain Employee} generator.
-                         */
-                        strict(Employee.class)
-                                .defaultFiller()
-                                .excluding("manager")
-                                .custom((Filler<Employee>) (employeeContext, employee) -> {
-                                    if (employeeContext.parent() != null && employeeContext.parent().clazz().equals(Manager.class)) {
-                                        employee.getManager().getEmployees().add(employee);
-                                    }
-
-                                    return employee;
-                                })
-                        /**
-                         * Manager generator for {@linkplain Employee#manager}.
-                         */
-//                        strict(Employee.class)
-//                                .path("..")
-//                                .strict(Manager.class)
-//                                .defaultFiller()
-//                                .excluding("employees")
-//                                .custom((Filler<Manager>) (managerContext, manager) -> {
-//                                    manager.setEmployees(new ArrayList<>());
-//                                    manager.setName(MANAGER_NAME_0);
-//                                    return manager;
-//                                })
+                        not(strict(Manager.class).path(".."))
+                                .strict(Employee.class)
+                                .path("manager")
+                                .strict(Manager.class)
+                                .defaultFiller().excluding("employees")
+                                .<Manager>custom((context, manager) -> {
+                                            manager.setName(MANAGER_NAME_0);
+                                            manager.setEmployees(Collections.singletonList((Employee) context.parentNode().get()));
+                                            return manager;
+                                        }
+                                )
                 );
-            }
 
-            @Override
-            public Supplier<Long> maxGenerationDeep() {
-                return () -> 4L;
+                reg(
+                        not(strict(Employee.class).path(".."))
+                                .strict(Manager.class)
+                                .use(
+                                        (a, s) -> {
+                                            a.add(s.defaultFiller().<Manager>custom((context, manager) -> {
+                                                        manager.setName(MANAGER_NAME_1);
+                                                        return manager;
+                                                    }
+                                            ));
+                                            a.add(
+                                                    s.path("employees")
+                                                            .nonstrict(Collection.class)
+                                                            .collectionFiller(Employee.class, 5)
+                                                            .componentCustom((context, employee) -> {
+                                                                employee.setManager((Manager) context.parentNode().get());
+                                                                return employee;
+                                                            })
+                                            );
+                                        }
+                                )
+                );
             }
         };
     }
 
     @Test
-    public void testPerson() {
+    public void testEmployee() {
         final ObjectFactory factory = ObjectFactoryProducer
                 .producer()
                 .factory(CONF);

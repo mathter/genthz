@@ -19,12 +19,13 @@ package org.genthz.loly;
 
 import org.genthz.Context;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-public class MatchedNameSelector extends Selector {
+public class MatchedNameSelector extends UpSelector {
 
-    public MatchedNameSelector(String name, Function<Context<?>, Long> metrics, Selector next, Pattern pattern) {
+    public MatchedNameSelector(String name, Function<Context<?>, Long> metrics, Optional<Selector> next, Pattern pattern) {
         super(name, metrics, next, (context) -> pattern.matcher(context.name()).matches());
     }
 }
