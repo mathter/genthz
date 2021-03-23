@@ -48,6 +48,8 @@ public class RecursionTest {
                         Assertions.assertNotNull(value);
                         Assertions.assertNotNull(value.getUuid());
                     }
+
+                    Assertions.assertNull(value.getNext());
                 });
     }
 }

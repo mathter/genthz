@@ -45,10 +45,6 @@ skipElememt
     :   SKIP_NAME SKIP_NAME_COUNT?
     ;
 
-ANY
-    :   '*'
-    ;
-
 SKIP_NAME
     :   '..'
     ;
@@ -62,7 +58,7 @@ SYMBOLS
     ;
 
 MATCHED_SYMBOLS
-    :   (ANY | JavaLetterOrDigit)+
+    :   ANY | (ANY? (SYMBOLS | ANY)* SYMBOLS?)
     ;
 
 ALPHABET
@@ -75,6 +71,10 @@ DIGIT
 
 PATH_SEPARATOR
     :   '/'
+    ;
+
+ANY
+    :   '*'
     ;
 
 fragment
