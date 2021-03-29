@@ -61,7 +61,7 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
     }
 
     @Override
-    public Fillered name(String name) {
+    public Selector name(String name) {
         this.name = name;
         return this;
     }

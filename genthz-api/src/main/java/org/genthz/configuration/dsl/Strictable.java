@@ -21,13 +21,6 @@ package org.genthz.configuration.dsl;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
 
-/**
- * Interface represents producer for {@linkplain NonStrict} selector.
- *
- * @author <a href="mailto:mathter@mail.ru">mathter</a>
- * @version 1.0.0
- * @since 1.0.0
- */
 public interface Strictable {
 
     default public <T> Selectable strict(InstanceBuilder<T> function) {

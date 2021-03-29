@@ -18,8 +18,6 @@
 package org.genthz.loly;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.genthz.Context;
-import org.genthz.InstanceBuilder;
 import org.genthz.ObjectFactory;
 import org.genthz.ObjectFactoryProducer;
 import org.genthz.configuration.dsl.Configuration;
@@ -46,15 +44,6 @@ public class ComplexTest {
         MANAGER_NAME_1 = RandomStringUtils.randomAlphanumeric(10);
         CONF = new DefaultConfiguration() {
             {
-                reg(
-                        nonstrict(new InstanceBuilder<String>() {
-                            @Override
-                            public String apply(Context<?> context) {
-                                return "Hi";
-                            }
-                        })
-                );
-
                 reg(
                         not(strict(Manager.class).path(".."))
                                 .strict(Employee.class)

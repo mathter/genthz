@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 class Dsl implements org.genthz.configuration.dsl.Dsl {
 
@@ -65,7 +66,7 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
     }
 
     public <T> InstanceBuilder nonstrict(org.genthz.InstanceBuilder<T> function, Class<T> clazz, Selector next) {
-        return this.instanceBuilder(function, this.nonstrict(clazz, next));
+        return this.instanceBuilder(function, this.nonstrict(clazz != null ? clazz : classOf(function), next));
     }
 
     @Override
@@ -91,7 +92,7 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
     }
 
     public <T> Filler nonstrict(org.genthz.Filler<? extends T> function, Class<T> clazz, Selector next) {
-        return this.filler(function, this.nonstrict(clazz, next));
+        return this.filler(function, this.nonstrict(clazz != null ? clazz : classOf(function), next));
     }
 
     @Override
@@ -172,5 +173,35 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
     @Override
     public Configuration configuration(Specification specification) {
         return new ConfigurationImpl(this, specification);
+    }
+
+    private <T> Class<T> classOf(org.genthz.InstanceBuilder<T> function) {
+        Class<T> clazz = (Class<T>) Stream
+                .of(function.getClass().getMethods())
+                .filter(m -> "apply".equals(m.getName()))
+                .findFirst()
+                .map(m -> m.getGenericReturnType())
+                .get();
+
+        if (Object.class.equals(clazz)) {
+            throw new IllegalStateException("Can't get object class of building by" + function);
+        } else {
+            return clazz;
+        }
+    }
+
+    private <T> Class<T> classOf(org.genthz.Filler<? extends T> function) {
+        Class<T> clazz = (Class<T>) Stream
+                .of(function.getClass().getMethods())
+                .filter(m -> "apply".equals(m.getName()))
+                .findFirst()
+                .map(m -> m.getGenericReturnType())
+                .get();
+
+        if (Object.class.equals(clazz)) {
+            throw new IllegalStateException("Can't get object class of building by" + function);
+        } else {
+            return clazz;
+        }
     }
 }

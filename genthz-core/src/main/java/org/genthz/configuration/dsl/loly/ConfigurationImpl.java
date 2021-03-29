@@ -77,20 +77,12 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public <T> Selectable nonstrict(InstanceBuilder<T> function, Class<T> clazz) {
-        return
-                this.dsl.nonstrict(
-                        Objects.requireNonNull(function),
-                        Objects.requireNonNull(clazz)
-                );
+        return this.dsl.nonstrict(function, clazz);
     }
 
     @Override
     public <T> Selectable nonstrict(org.genthz.Filler<? extends T> function, Class<T> clazz) {
-        return
-                this.dsl.nonstrict(
-                        Objects.requireNonNull(function),
-                        Objects.requireNonNull(clazz)
-                );
+        return this.dsl.nonstrict(function, clazz);
     }
 
     @Override
@@ -100,16 +92,12 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public org.genthz.configuration.dsl.Selector path(String path) {
-        return this.dsl.path(Objects.requireNonNull(path));
+        return this.dsl.path(path);
     }
 
     @Override
     public <T> Selectable strict(InstanceBuilder<T> function, Class<T> clazz) {
-        return
-                this.dsl.strict(
-                        Objects.requireNonNull(function),
-                        Objects.requireNonNull(clazz)
-                );
+        return this.dsl.strict(function, clazz);
     }
 
     @Override
@@ -119,16 +107,12 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public <T> Selectable strict(Filler<T> function, Class<T> clazz) {
-        return this.dsl.strict(
-                Objects.requireNonNull(function),
-                Objects.requireNonNull(clazz)
-
-        );
+        return this.dsl.strict(function, clazz);
     }
 
     @Override
     public Selector custom(Predicate<Context<?>> predicate) {
-        return this.dsl.custom(Objects.requireNonNull(predicate));
+        return this.dsl.custom(predicate);
     }
 
     @Override
