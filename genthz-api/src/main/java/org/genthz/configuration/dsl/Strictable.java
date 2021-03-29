@@ -21,19 +21,70 @@ package org.genthz.configuration.dsl;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
 
+/**
+ * Interface represents producer for {@linkplain NonStrict} selector.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Strictable {
 
+    /**
+     * Method creates new instance builder description for given {@linkplain Selector} or root selector.
+     *
+     * @param function instance builder function.
+     * @param <T>      type of the object to be created.
+     * @return instance builder description.
+     * @see #strict(InstanceBuilder, Class)
+     */
     default public <T> Selectable strict(InstanceBuilder<T> function) {
         return strict(function, null);
     }
 
+    /**
+     * Method creates new instance builder description for given {@linkplain Selector} or root one and
+     * specified classof the object to be created.
+     * If the clazz parameter is zero, the method uses the return value class of the apply method of
+     * the {@linkplain InstanceBuilder} interface.
+     *
+     * @param function instance builder function.
+     * @param <T>      type of the object to be created.
+     * @return instance builder description.
+     */
     public <T> Selectable strict(InstanceBuilder<T> function, Class<T> clazz);
 
-    public <T> Selector strict(Class<T> clazz);
+    /**
+     * Method creates new {@linkplain Filler} for given {@linkplain Selector} or root selector.
+     *
+     * @param function filler function.
+     * @param <T>      type of the object to be filled.
+     * @return filler.
+     * @see #strict(Filler, Class)
+     */
 
     default public <T> Selectable strict(Filler<T> function) {
         return strict(function, null);
     }
 
+    /**
+     * Method creates new filler description for given {@linkplain Selector} or root one and
+     * specified classof the object to be created.
+     * If the clazz parameter is zero, the method uses the return value class of the apply method of
+     * the {@linkplain Filler} interface.
+     *
+     * @param function filler function.
+     * @param <T>      type of the object to be created.
+     * @return instance builder description.
+     */
     public <T> Selectable strict(Filler<T> function, Class<T> clazz);
+
+    /**
+     * Method returns new class based selector.
+     *
+     * @param clazz class.
+     * @param <T>   type of the object to be created.
+     * @return class based selector.
+     */
+    public <T> Selector strict(Class<T> clazz);
 }

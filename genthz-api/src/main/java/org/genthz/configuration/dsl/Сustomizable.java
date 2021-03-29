@@ -21,7 +21,21 @@ import org.genthz.Context;
 
 import java.util.function.Predicate;
 
+/**
+ * Interface defines producer of the custom selector.
+ * Custom selector described by its {@linkplain Predicate}.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Сustomizable {
 
+    /**
+     * Method returns new {@linkplain Selector} defined by <code>predicate</code> parameter.
+     *
+     * @param predicate predcate.
+     * @return selector.
+     */
     public Selector custom(Predicate<Context<?>> predicate);
 }
