@@ -20,12 +20,33 @@ package org.genthz.configuration.dsl;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
 
+/**
+ * Interface represents producer for {@linkplain NonStrict} selector.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface NonStrictable {
 
+    /**
+     * Method creates new {@linkplain InstanceBuilder} for given {@linkplain Selector} or root selector.
+     *
+     * @param function instance builder function.
+     * @param <T>      type of the object to be created.
+     * @return instance builder description.
+     */
     public default <T> Selectable nonstrict(InstanceBuilder<T> function) {
         return nonstrict(function, null);
     }
 
+    /**
+     * Method creates new {@linkplain InstanceBuilder} for given {@linkplain Selector} or root selector.
+     *
+     * @param function instance builder function.
+     * @param <T>      type of the object to be created.
+     * @return instance builder description.
+     */
     public <T> Selectable nonstrict(InstanceBuilder<T> function, Class<T> clazz);
 
     public default <T> Selectable nonstrict(Filler<T> function) {

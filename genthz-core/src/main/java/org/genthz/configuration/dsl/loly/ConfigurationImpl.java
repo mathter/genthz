@@ -58,7 +58,7 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public Configuration reg(Collection<Selectable> selectables) {
-        selectables
+        Objects.requireNonNull(selectables)
                 .stream()
                 .forEach(e -> this.a(e));
 

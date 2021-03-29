@@ -22,6 +22,14 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Description of the object will be created.
+ *
+ * @param <T> type of the object.
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Spec<T> implements Context<T> {
     private final Class<T> clazz;
 
@@ -45,7 +53,7 @@ public class Spec<T> implements Context<T> {
     }
 
     public static <T, E> Spec<T> of(Class<T> clazz, Class<E> componentClazz, int size, Bindings bindings) {
-        return new SpecCollection(clazz, bindings, componentClazz, size);
+        return new SpecCollection(clazz, componentClazz, bindings, size);
     }
 
     @Override
@@ -88,7 +96,7 @@ public class Spec<T> implements Context<T> {
 
         private final int size;
 
-        private SpecCollection(Class<T> clazz, Bindings bindings, Class<E> componentClazz, int size) {
+        private SpecCollection(Class<T> clazz, Class<E> componentClazz, Bindings bindings, int size) {
             super(clazz, bindings);
             this.componentClazz = Objects.requireNonNull(componentClazz);
             this.size = size;

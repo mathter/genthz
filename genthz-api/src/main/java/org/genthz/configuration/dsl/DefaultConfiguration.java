@@ -31,6 +31,39 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+/**
+ * <p>
+ * This is the class of default configuration. There are several defenitions of simple base classes of java.
+ * This version of class includes next defenitions:
+ * <ui>
+ * <li>boolean</li>
+ * <li>{@linkplain Boolean}</li>
+ * <li>short</li>
+ * <li>{@linkplain Short}</li>
+ * <li>int</li>
+ * <li>{@linkplain Integer}</li>
+ * <li>long</li>
+ * <li>{@linkplain Long}</li>
+ * <li>float</li>
+ * <li>{@linkplain Float}</li>
+ * <li>double</li>
+ * <li>{@linkplain Double}</li>
+ * <li>{@linkplain String}</li>
+ * <li>{@linkplain UUID}</li>
+ * <li>{@linkplain Date}</li>
+ * <li>{@linkplain Collection}</li>
+ * <li>{@linkplain List}</li>
+ * <li>{@linkplain Set}</li>
+ * <li>{@linkplain Queue}</li>
+ * <li>{@linkplain Deque}</li>
+ * <li>Default deep generation breker, see {@linkplain #maxGenerationDeep()}</li>
+ * </ui>
+ * </p>
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class DefaultConfiguration extends AbstractConfiguration {
     {
         reg(

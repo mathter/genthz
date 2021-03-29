@@ -19,6 +19,13 @@ package org.genthz.configuration.dsl;
 
 import org.genthz.InstanceBuilder;
 
+/**
+ * Interface defines producer of the instance builder.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface InstanceBuildered {
     <T> Selectable instanceBuilder(InstanceBuilder<T> function);
 }

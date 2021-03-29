@@ -29,18 +29,38 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/**
+ * Abstract class to creation of custom generation configurations.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class AbstractConfiguration implements Configuration, Specification {
 
     private final Configuration configuration;
 
+    /**
+     * Create generation configuration using default {@linkplain Dsl} engine.
+     */
     public AbstractConfiguration() {
         this(DslFactory.dsl());
     }
 
+    /**
+     * Create generation configuration using specified {@linkplain Dsl} engine.
+     *
+     * @param dsl
+     */
     public AbstractConfiguration(Dsl dsl) {
         this(dsl.configuration());
     }
 
+    /**
+     * Create generation configuration using specified {@linkplain Configuration} as base.
+     *
+     * @param configuration
+     */
     public AbstractConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }

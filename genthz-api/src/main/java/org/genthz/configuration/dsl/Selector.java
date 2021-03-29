@@ -23,6 +23,13 @@ import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+/**
+ * Interface represents selector.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Selector extends
         Strictable,
         NonStrictable,
@@ -32,8 +39,7 @@ public interface Selector extends
         CollectionFillered,
         Fillered,
         InstanceBuildered,
-        Conditional
-{
+        Conditional {
     public static final Function<Context<?>, Long> METRICS_ZERO = (c) -> 0L;
 
     public static final Function<Context<?>, Long> METRICS_UNIT = (c) -> 1L;
@@ -46,13 +52,35 @@ public interface Selector extends
 
     public Selector next();
 
+    /**
+     * Method returns metrics function.
+     *
+     * @return metrics function.
+     */
     public default Function<Context<?>, Long> metrics() {
         return METRICS_UNIT;
     }
 
+    /**
+     * Method sets metrics function.
+     *
+     * @param metrics metrics function.
+     * @return itself.
+     */
     public Selector metrics(Function<Context<?>, Long> metrics);
 
+    /**
+     * The method sets the function that will be used to accumulate {@linkplain Selectable} that use this selector.
+     *
+     * @param consumer function.
+     * @return collection of {@linkplain Selectable}
+     */
     public Collection<Selectable> use(BiConsumer<Collection<Selectable>, Selector> consumer);
 
+    /**
+     * Method returns negate selector. All parent selectors are stay as origin.
+     *
+     * @return negate selector.
+     */
     public NegateSelector not();
 }

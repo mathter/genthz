@@ -17,7 +17,19 @@
  */
 package org.genthz.configuration.dsl;
 
+/**
+ * Interface represents {@linkplain Selector} a selector that triggers for specified path.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Path {
 
+    /**
+     * Method returns path.
+     *
+     * @return path.
+     */
     public String path();
 }

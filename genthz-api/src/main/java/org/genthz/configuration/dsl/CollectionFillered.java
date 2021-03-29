@@ -17,8 +17,24 @@
  */
 package org.genthz.configuration.dsl;
 
+/**
+ * Interface defines producer of the default collection fillers.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface CollectionFillered {
 
+    /**
+     * Method returns collection filler for specified parameters of the collection.
+     *
+     * @param componentClazz component class
+     * @param count          count of components in the collection.
+     * @param <T>            type of the collection.
+     * @param <C>            type of the collection component.
+     * @return defulat collection filler.
+     */
     default public <T, C> CollectionFiller<T, C> collectionFiller(
             Class<C> componentClazz,
             int count
@@ -26,6 +42,16 @@ public interface CollectionFillered {
         return this.collectionFiller(null, componentClazz, count);
     }
 
+    /**
+     * Method returns collection filler for specified parameters of the collection.
+     *
+     * @param collectionClazz collection class.
+     * @param componentClazz  component class
+     * @param count           count of components in the collection.
+     * @param <T>             type of the collection.
+     * @param <C>             type of the collection component.
+     * @return
+     */
     public <T, C> CollectionFiller<T, C> collectionFiller(
             Class<T> collectionClazz, Class<C> componentClazz,
             int count

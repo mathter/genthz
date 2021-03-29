@@ -20,6 +20,13 @@ package org.genthz.configuration.dsl;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * Interface describes object generation configuration.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Configuration extends Strictable, NonStrictable, Pathable, Сustomizable, Conditional {
 
     public Configuration reg(Selectable selectable);
@@ -30,9 +37,25 @@ public interface Configuration extends Strictable, NonStrictable, Pathable, Сus
         return this;
     }
 
+    /**
+     * Method to registration of {@linkplain Selectable} objects.
+     *
+     * @param selectables {@linkplain Selectable}, can't be null.
+     * @return itself.
+     */
     public Configuration reg(Collection<Selectable> selectables);
 
+    /**
+     * Method returns all {@linkplain Selectable} objects of this configuration.
+     *
+     * @return {@linkplain Selectable} objects.
+     */
     public Collection<Selectable> selectables();
 
+    /**
+     * Name of this configuration.
+     *
+     * @return configuration name.
+     */
     public String name();
 }

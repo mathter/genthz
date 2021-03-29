@@ -17,7 +17,20 @@
  */
 package org.genthz.configuration.dsl;
 
+/**
+ * Interface defines same method  for conditional selectors.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Conditional {
 
+    /**
+     * Method returns selector the selector is the reverse of the specified selector as parameter.
+     *
+     * @param selector selector with inverted logic.
+     * @return reverse selector.
+     */
     public Selector not(Selector selector);
 }

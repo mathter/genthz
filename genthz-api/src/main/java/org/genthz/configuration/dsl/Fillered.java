@@ -19,6 +19,20 @@ package org.genthz.configuration.dsl;
 
 import org.genthz.Filler;
 
+/**
+ * Interface defines producer of the fillers.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Fillered {
-    <T> Selectable filler(Filler<T> function);
+    /**
+     * Method construct filler for specified filler function.
+     *
+     * @param function filler function.
+     * @param <T>      type of the object filled by filler.
+     * @return filler.
+     */
+    public <T> Selectable filler(Filler<T> function);
 }

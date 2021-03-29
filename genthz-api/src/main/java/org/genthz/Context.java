@@ -17,9 +17,26 @@
  */
 package org.genthz;
 
+/**
+ * Сontext creation class. This root class contains the same information about the object to be created.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Context<T> extends Path<T, Context<?>> {
 
+    /**
+     * Bindings used for this context.
+     *
+     * @return bindings.
+     */
     public Bindings bindings();
 
+    /**
+     * Method returns {@linkplain ObjectFactory} used for this context.
+     *
+     * @return object factory.
+     */
     public ObjectFactory objectFactory();
 }

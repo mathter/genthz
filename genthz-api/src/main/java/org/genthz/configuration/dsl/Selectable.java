@@ -17,12 +17,34 @@
  */
 package org.genthz.configuration.dsl;
 
+/**
+ * This interface represents object that can be selected using {@linkplain Selector}.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Selectable {
 
+    /**
+     * {@linkplain Selector} for this object.
+     *
+     * @return
+     */
     public Selector selector();
 
+    /**
+     * Name of the this object.
+     *
+     * @return
+     */
     public String name();
 
+    /**
+     * Function represnted by this {@linkplain Selectable}.
+     *
+     * @return
+     */
     public Object function();
 
     public void simple();

@@ -19,9 +19,27 @@ package org.genthz;
 
 import java.util.function.Function;
 
+/**
+ * This class represents instance builder. Instance of this class used to produce objects of type <code>T</code>.
+ * By default builder create new instance only. Fields of the object filled by {@linkplain Filler}.
+ * There are <em>simple</em> objects such types of <code>String</code>, <code>Integer</code> and etc. Objects of this
+ * <em>simple</em> types filled directly by instance builder.
+ *
+ * @param <T> type of the object to be created.
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @FunctionalInterface
 public interface InstanceBuilder<T> extends Function<Context<?>, T> {
 
+    /**
+     * Instance builder of the empty object. This builder do not create object instance.
+     * This type of instance builder can be used if
+     * object will be created by {@linkplain Filler}.
+     *
+     * @param <T> type of the object to be created.
+     */
     public static class Empty<T> implements InstanceBuilder<T> {
         @Override
         public T apply(Context<?> context) {

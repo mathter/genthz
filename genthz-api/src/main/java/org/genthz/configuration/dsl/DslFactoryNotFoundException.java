@@ -19,20 +19,32 @@ package org.genthz.configuration.dsl;
 
 import org.genthz.GeneratedException;
 
+/**
+ * If {@linkplain DslFactory} not found.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class DslFactoryNotFoundException extends GeneratedException {
 
-    private final String factoryName;
+    private final String id;
 
-    public DslFactoryNotFoundException(String factoryName) {
-        super(message(factoryName), null, false, false);
-        this.factoryName = factoryName;
+    public DslFactoryNotFoundException(String id) {
+        super(message(id), null, false, false);
+        this.id = id;
     }
 
     private static String message(String factoryName) {
         return String.format("There is no factory with name equals to '%s'!", factoryName != null ? factoryName : "<null>");
     }
 
-    public String getFactoryName() {
-        return factoryName;
+    /**
+     * Factory identifier.
+     *
+     * @return Factory identifier.
+     */
+    public String getId() {
+        return id;
     }
 }

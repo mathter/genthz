@@ -27,6 +27,13 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.function.Supplier;
 
+/**
+ * Adapter for methods described in {@linkplain Specification}.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class SpecificationAdapter implements Specification {
     static final Supplier<Long> DEFAULT_MAX_GENERATION_DEEP = () -> 100L;
 

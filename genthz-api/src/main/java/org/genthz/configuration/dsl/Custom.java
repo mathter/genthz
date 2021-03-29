@@ -21,7 +21,19 @@ import org.genthz.Context;
 
 import java.util.function.Predicate;
 
+/**
+ * Interface of the custom {@linkplain Selector}.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Custom {
 
+    /**
+     * Method returns {@linkplain Predicate} of the selector.
+     *
+     * @return
+     */
     public Predicate<Context<?>> predicate();
 }

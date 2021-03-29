@@ -17,6 +17,13 @@
  */
 package org.genthz;
 
+/**
+ * If {@linkplain ObjectFactoryProducer} not found.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class ProducerNotFoundException extends GeneratedException {
     private final String id;
 

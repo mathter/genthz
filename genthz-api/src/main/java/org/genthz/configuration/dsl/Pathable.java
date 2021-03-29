@@ -17,7 +17,19 @@
  */
 package org.genthz.configuration.dsl;
 
+/**
+ * Interface represents producer for {@linkplain Path} selector.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Pathable {
 
+    /**
+     * Method returns new {@linkplain Path} selector.
+     * @param path string represents path.
+     * @return
+     */
     public Selector path(String path);
 }

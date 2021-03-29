@@ -17,7 +17,19 @@
  */
 package org.genthz.configuration.dsl;
 
+/**
+ * Interface represents {@linkplain Selector} that triggers a class comparison in the selector and context.
+ *
+ * @param <T> type of the object.
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Strict<T> {
-
+    /**
+     * Method returns class represented by this selector.
+     *
+     * @return class.
+     */
     public Class<T> clazz();
 }

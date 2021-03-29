@@ -19,5 +19,13 @@ package org.genthz;
 
 import java.util.function.Supplier;
 
+/**
+ * Context represents root object created by {@linkplain ObjectFactory}.
+ *
+ * @param <T> type of object represented by this context.
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface ObjectContext<T> extends Context<T>, Supplier<T> {
 }

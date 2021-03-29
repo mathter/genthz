@@ -17,6 +17,13 @@
  */
 package org.genthz;
 
+/**
+ * Root exception class for genthz project.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class GeneratedException extends RuntimeException {
 
     public GeneratedException() {

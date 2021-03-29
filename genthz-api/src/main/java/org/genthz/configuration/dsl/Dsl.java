@@ -17,11 +17,29 @@
  */
 package org.genthz.configuration.dsl;
 
+/**
+ * Class for creating generation configuration.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface Dsl extends Strictable, NonStrictable, Pathable, Сustomizable {
 
+    /**
+     * Method creates generation configuration using default {@linkplain Specification}.
+     *
+     * @return generation configuration.
+     */
     public default Configuration configuration() {
         return this.configuration(null);
     }
 
+    /**
+     * Method creates generation configuration using specified {@linkplain Specification}.
+     *
+     * @param specification specification.
+     * @return
+     */
     public Configuration configuration(Specification specification);
 }

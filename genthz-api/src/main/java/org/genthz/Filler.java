@@ -19,9 +19,22 @@ package org.genthz;
 
 import java.util.function.BiFunction;
 
+/**
+ * Interface represents filler of the object of type <code>T</code>.
+ *
+ * @param <T> type of object to be filled.
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 @FunctionalInterface
 public interface Filler<T> extends BiFunction<Context<T>, T, T> {
 
+    /**
+     * Unit filler class. This filler do not any work. This filler returns object as it.
+     *
+     * @param <T>
+     */
     public static class Unit<T> implements Filler<T> {
         @Override
         public T apply(Context<T> context, T value) {

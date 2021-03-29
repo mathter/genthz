@@ -20,27 +20,55 @@ package org.genthz.configuration.dsl;
 import java.util.ServiceLoader;
 import java.util.stream.StreamSupport;
 
+/**
+ * Factiry of the {@linkplain Dsl} engines.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public abstract class DslFactory {
     public static final String DEFAULT_FACTORY = "loly";
 
     protected DslFactory() {
     }
 
+    /**
+     * Method creates and return default {@linkplain Dsl} engine.
+     *
+     * @return {@linkplain Dsl} engine.
+     */
     public static final Dsl dsl() {
         return dsl(DEFAULT_FACTORY);
     }
 
-    public static final Dsl dsl(String factoryName) {
+    /**
+     * Method creates and return default {@linkplain Dsl} engine specified by <code>id</code> parameter.
+     *
+     * @param id factory identifier.
+     * @return {@linkplain Dsl} factory.
+     */
+    public static final Dsl dsl(String id) throws DslFactoryNotFoundException {
 
-        return factoryName != null ? StreamSupport
+        return id != null ? StreamSupport
                 .stream(ServiceLoader.load(DslFactory.class).spliterator(), false)
-                .filter(f -> factoryName.equals(f.id()))
+                .filter(f -> id.equals(f.id()))
                 .findAny()
-                .orElseThrow(() -> new DslFactoryNotFoundException(factoryName))
+                .orElseThrow(() -> new DslFactoryNotFoundException(id))
                 .newDsl() : dsl();
     }
 
+    /**
+     * Identifier of the factory.
+     *
+     * @return factory identifier.
+     */
     protected abstract String id();
 
+    /**
+     * Method create and return {@linkplain Dsl} engine.
+     *
+     * @return {@linkplain Dsl} engine.
+     */
     protected abstract Dsl newDsl();
 }

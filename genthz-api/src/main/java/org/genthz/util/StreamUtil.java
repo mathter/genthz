@@ -18,17 +18,31 @@
 package org.genthz.util;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
+/**
+ * Util class.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public final class StreamUtil {
 
     private StreamUtil() {
     }
 
+    /**
+     * Create {@linkplain java.util.stream.Stream} for <code>startElement</code> and generating function <code>next</code>.
+     *
+     * @param startElement start element of the stream.
+     * @param next         generation function.
+     * @param <T>          type of the objects.
+     * @return stream of objects.
+     */
     public static final <T> java.util.stream.Stream<T> of(T startElement, Function<T, T> next) {
         return StreamSupport.stream(new NextSpliterator(startElement, next), false);
     }

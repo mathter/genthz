@@ -17,7 +17,19 @@
  */
 package org.genthz.configuration.dsl;
 
+/**
+ * Interface defines producer of the default fillers.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public interface DefaultFillered {
 
+    /**
+     * Method returns new instance of the default filler.
+     *
+     * @return default filler.
+     */
     public DefaultFiller defaultFiller();
 }
