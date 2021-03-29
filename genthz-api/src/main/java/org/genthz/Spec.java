@@ -48,13 +48,13 @@ public class Spec<T> implements Context<T> {
         return new Spec(clazz, bindings);
     }
 
-    public static <T, E> Spec<T> of(Class<T> clazz, Class<E> componentClazz, int size) {
-        return Spec.of(clazz, componentClazz, size, null);
-    }
-
-    public static <T, E> Spec<T> of(Class<T> clazz, Class<E> componentClazz, int size, Bindings bindings) {
-        return new SpecCollection(clazz, componentClazz, bindings, size);
-    }
+//    public static <T, E> Spec<T> of(Class<T> clazz, Class<E> componentClazz, int size) {
+//        return Spec.of(clazz, componentClazz, size, null);
+//    }
+//
+//    public static <T, E> Spec<T> of(Class<T> clazz, Class<E> componentClazz, int size, Bindings bindings) {
+//        return new SpecCollection(clazz, componentClazz, bindings, size);
+//    }
 
     @Override
     public Bindings bindings() {
