@@ -21,6 +21,7 @@ import org.genthz.Context;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
@@ -86,12 +87,17 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public <T> Selectable nonstrict(InstanceBuilder<T> function, Class<T> clazz) {
+    public <T> Selectable byConstructor(Predicate<Constructor<T>> predicate) {
+        return this.configuration.byConstructor(predicate);
+    }
+
+    @Override
+    public <T> FunctionalInstanceBuilder<T> nonstrict(InstanceBuilder<T> function, Class<T> clazz) {
         return this.configuration.nonstrict(function, clazz);
     }
 
     @Override
-    public <T> Selectable nonstrict(Filler<? extends T> function, Class<T> clazz) {
+    public <T> FunctionalFiller<T> nonstrict(Filler<T> function, Class<T> clazz) {
         return this.configuration.nonstrict(function, clazz);
     }
 
@@ -106,7 +112,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public <T> Selectable strict(InstanceBuilder<T> function, Class<T> clazz) {
+    public <T> FunctionalInstanceBuilder<T> strict(InstanceBuilder<T> function, Class<T> clazz) {
         return this.configuration.strict(function, clazz);
     }
 
@@ -116,7 +122,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public <T> Selectable strict(Filler<T> function, Class<T> clazz) {
+    public <T> FunctionalFiller<T> strict(Filler<T> function, Class<T> clazz) {
         return this.strict(function, clazz);
     }
 

@@ -35,12 +35,7 @@ public class CollectionFiller<T, C> extends Selectable implements org.genthz.con
     public int count() {
         return this.count;
     }
-
-    @Override
-    public Object function() {
-        return this.function;
-    }
-
+    
     @Override
     public CollectionFiller<T, C> custom(org.genthz.Filler<T> function) {
         this.function = function;

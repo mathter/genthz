@@ -21,7 +21,10 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
 import org.genthz.configuration.dsl.Configuration;
+import org.genthz.configuration.dsl.ConstructorBasedInstanceBuilder;
 import org.genthz.configuration.dsl.Custom;
+import org.genthz.configuration.dsl.FunctionalFiller;
+import org.genthz.configuration.dsl.FunctionalInstanceBuilder;
 import org.genthz.configuration.dsl.NegateSelector;
 import org.genthz.configuration.dsl.NonStrict;
 import org.genthz.configuration.dsl.Path;
@@ -89,26 +92,29 @@ final class BConfiguration {
     private static Triple<Selector, InstanceBuilder, Filler> selectable(Selectable selectable) {
         final Triple<Selector, InstanceBuilder, Filler> result;
         final Selector selector = selector(selectable.selector()).get();
-        final Object function;
 
         if (selectable instanceof org.genthz.configuration.dsl.DefaultFiller) {
             result = Triple.of(selector, null, BConfiguration.build((org.genthz.configuration.dsl.DefaultFiller) selectable));
         } else if (selectable instanceof org.genthz.configuration.dsl.CollectionFiller) {
             result = Triple.of(selector, null, BConfiguration.build((org.genthz.configuration.dsl.CollectionFiller) selectable));
         } else {
-            function = selectable.function();
-
-            if (function instanceof InstanceBuilder) {
+            if (selectable instanceof FunctionalInstanceBuilder) {
                 if (selectable.isSimple()) {
-                    result = Triple.of(selector, (InstanceBuilder) function, new UnitFiller());
+                    result = Triple.of(selector, ((FunctionalInstanceBuilder<?>) selectable).function(), new UnitFiller());
                 } else {
-                    result = Triple.of(selector, (InstanceBuilder) function, null);
+                    result = Triple.of(selector, ((FunctionalInstanceBuilder<?>) selectable).function(), null);
                 }
-            } else if (function instanceof Filler) {
+            } else if (selectable instanceof ConstructorBasedInstanceBuilder) {
+                result = Triple.of(
+                        selector,
+                        BConfiguration.build((ConstructorBasedInstanceBuilder) selectable),
+                        selectable.isSimple() ? new UnitFiller() : null
+                );
+            } else if (selectable instanceof FunctionalFiller) {
                 if (selectable.isSimple()) {
                     result = Triple.of(selector, null, new UnitFiller());
                 } else {
-                    result = Triple.of(selector, null, (Filler) function);
+                    result = Triple.of(selector, null, ((FunctionalFiller<?>) selectable).function());
                 }
             } else {
                 throw new IllegalArgumentException();
@@ -199,6 +205,10 @@ final class BConfiguration {
                 collectionFiller.componentCustom(),
                 collectionFiller.count()
         );
+    }
+
+    private static <T> org.genthz.InstanceBuilder<T> build(ConstructorBasedInstanceBuilder<T> selectable) {
+        return new org.genthz.loly.CalculatedConstructorBasedInstanceBuilder(selectable.predicate(), selectable.description());
     }
 
     public Stream<Selector> getInstanceBuilderSelectors() {

@@ -47,11 +47,6 @@ class DefaultFiller extends Selectable implements org.genthz.configuration.dsl.D
     }
 
     @Override
-    public Object function() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String[] included() {
         return this.includedFieldNames;
     }

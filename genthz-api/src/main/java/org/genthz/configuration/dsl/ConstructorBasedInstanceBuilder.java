@@ -17,30 +17,22 @@
  */
 package org.genthz.configuration.dsl;
 
+import java.lang.reflect.Constructor;
+import java.util.function.Predicate;
+
 /**
- * This interface represents object that can be selected using {@linkplain Selector}.
+ * This interface represents instance builder based on object constructor.
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Selectable extends Descriptable {
+public interface ConstructorBasedInstanceBuilder<T> extends Selectable {
 
     /**
-     * {@linkplain Selector} for this object.
+     * Method returns {@linkplain Predicate} for selecting the constructor.
      *
-     * @return
+     * @return predicate.
      */
-    public Selector selector();
-
-    /**
-     * Name of the this object.
-     *
-     * @return
-     */
-    public String name();
-
-    public Selectable simple();
-
-    public boolean isSimple() throws SimpleSelectableException;
+    public Predicate<Constructor<T>> predicate();
 }

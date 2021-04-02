@@ -17,30 +17,24 @@
  */
 package org.genthz.configuration.dsl;
 
+import org.genthz.Description;
+
 /**
- * This interface represents object that can be selected using {@linkplain Selector}.
+ * This exception indicates that the constructor was not found.
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Selectable extends Descriptable {
+public class ConstructorNotFoundException extends ConstructorInstanceBuilderException {
+    private final Description description;
 
-    /**
-     * {@linkplain Selector} for this object.
-     *
-     * @return
-     */
-    public Selector selector();
+    public ConstructorNotFoundException(Description description) {
+        super("Constructor for selectable: " + description + " not found!");
+        this.description = description;
+    }
 
-    /**
-     * Name of the this object.
-     *
-     * @return
-     */
-    public String name();
-
-    public Selectable simple();
-
-    public boolean isSimple() throws SimpleSelectableException;
+    public Description getSelectable() {
+        return this.description;
+    }
 }

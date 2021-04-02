@@ -17,17 +17,17 @@
  */
 package org.genthz.configuration.dsl.loly;
 
-class InstanceBuilder<T> extends Selectable<T> {
+class FunctionalInstanceBuilder<T> extends Selectable<T> implements org.genthz.configuration.dsl.FunctionalInstanceBuilder<T> {
 
     private final org.genthz.InstanceBuilder<T> function;
 
-    public InstanceBuilder(org.genthz.InstanceBuilder<T> function, Selector selector) {
+    public FunctionalInstanceBuilder(org.genthz.InstanceBuilder<T> function, Selector selector) {
         super(selector);
         this.function = function;
     }
 
     @Override
-    public org.genthz.InstanceBuilder<?> function() {
+    public org.genthz.InstanceBuilder<T> function() {
         return this.function;
     }
 }

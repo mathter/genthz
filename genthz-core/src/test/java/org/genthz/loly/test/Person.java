@@ -29,6 +29,16 @@ public class Person {
 
     private Date birthDate;
 
+    public Person() {
+    }
+
+    public Person(UUID uuid, String name, String lastName, Date birthDate) {
+        this.uuid = uuid;
+        this.name = name;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

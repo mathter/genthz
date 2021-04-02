@@ -15,32 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.configuration.dsl;
+package org.genthz.configuration.dsl.loly;
 
-/**
- * This interface represents object that can be selected using {@linkplain Selector}.
- *
- * @author <a href="mailto:mathter@mail.ru">mathter</a>
- * @version 1.0.0
- * @since 1.0.0
- */
-public interface Selectable extends Descriptable {
+import org.genthz.configuration.dsl.SimpleSelectableException;
 
-    /**
-     * {@linkplain Selector} for this object.
-     *
-     * @return
-     */
-    public Selector selector();
+class FunctionalFiller<T> extends Selectable<T> implements org.genthz.configuration.dsl.FunctionalFiller<T> {
 
-    /**
-     * Name of the this object.
-     *
-     * @return
-     */
-    public String name();
+    final org.genthz.Filler<T> function;
 
-    public Selectable simple();
+    FunctionalFiller(org.genthz.Filler<T> function, Selector selector) {
+        super(selector);
+        this.function = function;
+    }
 
-    public boolean isSimple() throws SimpleSelectableException;
+    @Override
+    public org.genthz.Filler<T> function() {
+        return this.function;
+    }
+
+    @Override
+    public org.genthz.configuration.dsl.Selectable simple() {
+        throw new SimpleSelectableException(this);
+    }
 }

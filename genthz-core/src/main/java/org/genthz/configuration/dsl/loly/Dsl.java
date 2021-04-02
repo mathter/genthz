@@ -21,11 +21,14 @@ import org.genthz.Context;
 import org.genthz.configuration.dsl.CollectionFiller;
 import org.genthz.configuration.dsl.Configuration;
 import org.genthz.configuration.dsl.DefaultFiller;
+import org.genthz.configuration.dsl.FunctionalFiller;
+import org.genthz.configuration.dsl.Selectable;
 import org.genthz.configuration.dsl.Specification;
 import org.genthz.util.NameGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -33,6 +36,15 @@ import java.util.stream.Stream;
 class Dsl implements org.genthz.configuration.dsl.Dsl {
 
     private static final Logger LOG = LoggerFactory.getLogger(Dsl.class);
+
+    @Override
+    public <T> Selectable byConstructor(Predicate<Constructor<T>> predicate) {
+        throw new UnsupportedOperationException();
+    }
+
+    public <T> ConstructorBasedInstanceBuilder<T> byConstructor(Predicate<Constructor<T>> predicate, Selector next) {
+        return new ConstructorBasedInstanceBuilder<T>(next, predicate);
+    }
 
     @Override
     public Path path(String path) {
@@ -61,11 +73,11 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
     }
 
     @Override
-    public <T> InstanceBuilder nonstrict(org.genthz.InstanceBuilder<T> function, Class<T> clazz) {
+    public <T> FunctionalInstanceBuilder nonstrict(org.genthz.InstanceBuilder<T> function, Class<T> clazz) {
         return this.nonstrict(function, clazz, null);
     }
 
-    public <T> InstanceBuilder nonstrict(org.genthz.InstanceBuilder<T> function, Class<T> clazz, Selector next) {
+    public <T> FunctionalInstanceBuilder nonstrict(org.genthz.InstanceBuilder<T> function, Class<T> clazz, Selector next) {
         return this.instanceBuilder(function, this.nonstrict(clazz != null ? clazz : classOf(function), next));
     }
 
@@ -87,29 +99,29 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
     }
 
     @Override
-    public <T> Filler nonstrict(org.genthz.Filler<? extends T> function, Class<T> clazz) {
+    public <T> org.genthz.configuration.dsl.FunctionalFiller<T> nonstrict(org.genthz.Filler<T> function, Class<T> clazz) {
         return this.nonstrict(function, clazz, null);
     }
 
-    public <T> Filler nonstrict(org.genthz.Filler<? extends T> function, Class<T> clazz, Selector next) {
+    public <T> org.genthz.configuration.dsl.FunctionalFiller<T> nonstrict(org.genthz.Filler<T> function, Class<T> clazz, Selector next) {
         return this.filler(function, this.nonstrict(clazz != null ? clazz : classOf(function), next));
     }
 
     @Override
-    public <T> InstanceBuilder strict(org.genthz.InstanceBuilder<T> function, Class<T> clazz) {
+    public <T> FunctionalInstanceBuilder strict(org.genthz.InstanceBuilder<T> function, Class<T> clazz) {
         return this.strict(function, clazz, null);
     }
 
-    public <T> InstanceBuilder strict(org.genthz.InstanceBuilder<T> function, Class<T> clazz, Selector next) {
+    public <T> FunctionalInstanceBuilder strict(org.genthz.InstanceBuilder<T> function, Class<T> clazz, Selector next) {
         return this.instanceBuilder(function, this.strict(clazz, next));
     }
 
     @Override
-    public <T> Filler strict(org.genthz.Filler<T> function, Class<T> clazz) {
+    public <T> FunctionalFiller<T> strict(org.genthz.Filler<T> function, Class<T> clazz) {
         return this.strict(function, clazz, null);
     }
 
-    public <T> Filler strict(org.genthz.Filler<T> function, Class<T> clazz, Selector next) {
+    public <T> FunctionalFiller<T> strict(org.genthz.Filler<T> function, Class<T> clazz, Selector next) {
         return this.filler(function, this.strict(clazz, next));
     }
 
@@ -126,22 +138,22 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
         return new ClassSelector.Strict(this, name, next, clazz);
     }
 
-    public <T> Filler filler(org.genthz.Filler<T> function, Selector selector) {
+    public <T> org.genthz.configuration.dsl.FunctionalFiller<T> filler(org.genthz.Filler<T> function, Selector selector) {
         Objects.requireNonNull(function);
         Objects.requireNonNull(selector);
 
         final String name = NameGenerator.nextName();
         LOG.debug("Constract strict filler '{}' for '{}' with '{}'", name, function, selector);
-        return new org.genthz.configuration.dsl.loly.Filler(function, selector);
+        return new org.genthz.configuration.dsl.loly.FunctionalFiller(function, selector);
     }
 
-    public <T> InstanceBuilder instanceBuilder(org.genthz.InstanceBuilder<T> function, Selector selector) {
+    public <T> FunctionalInstanceBuilder instanceBuilder(org.genthz.InstanceBuilder<T> function, Selector selector) {
         Objects.requireNonNull(function);
         Objects.requireNonNull(selector);
 
         final String name = NameGenerator.nextName();
         LOG.debug("Constract strict instanceBuilder '{}' for '{}' with '{}'", name, function, selector);
-        return new InstanceBuilder(function, selector);
+        return new FunctionalInstanceBuilder(function, selector);
     }
 
     public DefaultFiller defaultFiller(Selector selector) {
@@ -173,6 +185,10 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
     @Override
     public Configuration configuration(Specification specification) {
         return new ConfigurationImpl(this, specification);
+    }
+
+    private <T> Class<T> classOf(Constructor<T> constructor) {
+        return constructor.getDeclaringClass();
     }
 
     private <T> Class<T> classOf(org.genthz.InstanceBuilder<T> function) {

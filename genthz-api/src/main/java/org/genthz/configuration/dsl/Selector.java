@@ -39,7 +39,9 @@ public interface Selector extends
         CollectionFillered,
         Fillered,
         InstanceBuildered,
-        Conditional {
+        Conditional,
+        InstanceBuilders,
+        Descriptable {
     public static final Function<Context<?>, Long> METRICS_ZERO = (c) -> 0L;
 
     public static final Function<Context<?>, Long> METRICS_UNIT = (c) -> 1L;

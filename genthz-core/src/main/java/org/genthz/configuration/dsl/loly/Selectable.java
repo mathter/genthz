@@ -17,6 +17,8 @@
  */
 package org.genthz.configuration.dsl.loly;
 
+import org.genthz.Description;
+
 abstract class Selectable<T> implements org.genthz.configuration.dsl.Selectable {
 
     private final Selector selector;
@@ -38,12 +40,24 @@ abstract class Selectable<T> implements org.genthz.configuration.dsl.Selectable 
     }
 
     @Override
-    public void simple() {
+    public org.genthz.configuration.dsl.Selectable simple() {
         this.isSimple = true;
+
+        return this;
     }
 
     @Override
     public boolean isSimple() {
         return this.isSimple;
+    }
+
+    @Override
+    public Description description() {
+        return new Description() {
+            @Override
+            public String toString() {
+                return Selectable.this.toString();
+            }
+        };
     }
 }

@@ -37,7 +37,7 @@ public interface NonStrictable {
      * @return instance builder description.
      * @see #nonstrict(InstanceBuilder, Class)
      */
-    public default <T> Selectable nonstrict(InstanceBuilder<T> function) {
+    public default <T> FunctionalInstanceBuilder<T> nonstrict(InstanceBuilder<T> function) {
         return nonstrict(function, null);
     }
 
@@ -51,7 +51,7 @@ public interface NonStrictable {
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
-    public <T> Selectable nonstrict(InstanceBuilder<T> function, Class<T> clazz);
+    public <T> FunctionalInstanceBuilder nonstrict(InstanceBuilder<T> function, Class<T> clazz);
 
     /**
      * Method creates new {@linkplain Filler} for given {@linkplain Selector} or root selector.
@@ -61,7 +61,7 @@ public interface NonStrictable {
      * @return filler.
      * @see #nonstrict(Filler, Class)
      */
-    public default <T> Selectable nonstrict(Filler<T> function) {
+    public default <T> FunctionalFiller<T> nonstrict(Filler<T> function) {
         return nonstrict(function, null);
     }
 
@@ -75,7 +75,7 @@ public interface NonStrictable {
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
-    public <T> Selectable nonstrict(Filler<? extends T> function, Class<T> clazz);
+    public <T> FunctionalFiller<T> nonstrict(Filler<T> function, Class<T> clazz);
 
     /**
      * Method returns new class based selector.

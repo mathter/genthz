@@ -17,30 +17,16 @@
  */
 package org.genthz.configuration.dsl;
 
+import org.genthz.Description;
+
 /**
- * This interface represents object that can be selected using {@linkplain Selector}.
+ * This interface indicates that class has {@linkplain Description}.
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Selectable extends Descriptable {
+public interface Descriptable {
 
-    /**
-     * {@linkplain Selector} for this object.
-     *
-     * @return
-     */
-    public Selector selector();
-
-    /**
-     * Name of the this object.
-     *
-     * @return
-     */
-    public String name();
-
-    public Selectable simple();
-
-    public boolean isSimple() throws SimpleSelectableException;
+    public Description description();
 }

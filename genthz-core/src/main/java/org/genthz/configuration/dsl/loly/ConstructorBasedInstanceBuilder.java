@@ -15,32 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.configuration.dsl;
+package org.genthz.configuration.dsl.loly;
 
-/**
- * This interface represents object that can be selected using {@linkplain Selector}.
- *
- * @author <a href="mailto:mathter@mail.ru">mathter</a>
- * @version 1.0.0
- * @since 1.0.0
- */
-public interface Selectable extends Descriptable {
+import java.lang.reflect.Constructor;
+import java.util.function.Predicate;
 
-    /**
-     * {@linkplain Selector} for this object.
-     *
-     * @return
-     */
-    public Selector selector();
+class ConstructorBasedInstanceBuilder<T> extends Selectable implements org.genthz.configuration.dsl.ConstructorBasedInstanceBuilder<T> {
 
-    /**
-     * Name of the this object.
-     *
-     * @return
-     */
-    public String name();
+    private final Predicate<Constructor<T>> predicate;
 
-    public Selectable simple();
+    public ConstructorBasedInstanceBuilder(Selector selector, Predicate<Constructor<T>> predicate) {
+        super(selector);
+        this.predicate = predicate;
+    }
 
-    public boolean isSimple() throws SimpleSelectableException;
+    @Override
+    public Predicate<Constructor<T>> predicate() {
+        return this.predicate;
+    }
 }

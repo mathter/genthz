@@ -15,32 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.configuration.dsl;
+package org.genthz;
 
 /**
- * This interface represents object that can be selected using {@linkplain Selector}.
+ * This is description of the element of the generating engine configuration.
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Selectable extends Descriptable {
-
-    /**
-     * {@linkplain Selector} for this object.
-     *
-     * @return
-     */
-    public Selector selector();
-
-    /**
-     * Name of the this object.
-     *
-     * @return
-     */
-    public String name();
-
-    public Selectable simple();
-
-    public boolean isSimple() throws SimpleSelectableException;
+public interface Description {
 }

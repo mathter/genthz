@@ -21,6 +21,8 @@ import org.genthz.Context;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
 import org.genthz.configuration.dsl.Configuration;
+import org.genthz.configuration.dsl.FunctionalFiller;
+import org.genthz.configuration.dsl.FunctionalInstanceBuilder;
 import org.genthz.configuration.dsl.Selectable;
 import org.genthz.configuration.dsl.Selector;
 import org.genthz.configuration.dsl.Specification;
@@ -29,6 +31,7 @@ import org.genthz.util.NameGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -76,12 +79,17 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public <T> Selectable nonstrict(InstanceBuilder<T> function, Class<T> clazz) {
+    public <T> Selectable byConstructor(Predicate<Constructor<T>> predicate) {
+        return this.dsl.byConstructor(predicate);
+    }
+
+    @Override
+    public <T> FunctionalInstanceBuilder<T> nonstrict(InstanceBuilder<T> function, Class<T> clazz) {
         return this.dsl.nonstrict(function, clazz);
     }
 
     @Override
-    public <T> Selectable nonstrict(org.genthz.Filler<? extends T> function, Class<T> clazz) {
+    public <T> FunctionalFiller<T> nonstrict(org.genthz.Filler<T> function, Class<T> clazz) {
         return this.dsl.nonstrict(function, clazz);
     }
 
@@ -96,7 +104,7 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public <T> Selectable strict(InstanceBuilder<T> function, Class<T> clazz) {
+    public <T> org.genthz.configuration.dsl.loly.FunctionalInstanceBuilder strict(InstanceBuilder<T> function, Class<T> clazz) {
         return this.dsl.strict(function, clazz);
     }
 
@@ -106,7 +114,7 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public <T> Selectable strict(Filler<T> function, Class<T> clazz) {
+    public <T> FunctionalFiller<T> strict(Filler<T> function, Class<T> clazz) {
         return this.dsl.strict(function, clazz);
     }
 

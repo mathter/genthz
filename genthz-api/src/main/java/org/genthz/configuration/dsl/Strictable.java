@@ -52,7 +52,7 @@ public interface Strictable {
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
-    public <T> Selectable strict(InstanceBuilder<T> function, Class<T> clazz);
+    public <T> FunctionalInstanceBuilder<T> strict(InstanceBuilder<T> function, Class<T> clazz);
 
     /**
      * Method creates new {@linkplain Filler} for given {@linkplain Selector} or root selector.
@@ -63,7 +63,7 @@ public interface Strictable {
      * @see #strict(Filler, Class)
      */
 
-    default public <T> Selectable strict(Filler<T> function) {
+    default public <T> FunctionalFiller<T> strict(Filler<T> function) {
         return strict(function, null);
     }
 
@@ -77,7 +77,7 @@ public interface Strictable {
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
-    public <T> Selectable strict(Filler<T> function, Class<T> clazz);
+    public <T> FunctionalFiller<T> strict(Filler<T> function, Class<T> clazz);
 
     /**
      * Method returns new class based selector.

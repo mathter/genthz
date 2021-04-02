@@ -15,26 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.configuration.dsl.loly;
+package org.genthz.configuration.dsl;
 
-import org.genthz.configuration.dsl.SimpleSelectableException;
+import org.genthz.Description;
 
-class Filler<T> extends Selectable<T> {
+/**
+ * This exception indicates that more then one constructors were found.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public class MoreThenOneConstructorFoundException extends ConstructorInstanceBuilderException {
+    private final Description description;
 
-    final org.genthz.Filler<T> function;
-
-    Filler(org.genthz.Filler<T> function, Selector selector) {
-        super(selector);
-        this.function = function;
+    public MoreThenOneConstructorFoundException(Description description) {
+        super("More then one constructor found for selectable: " + description + "!");
+        this.description = description;
     }
 
-    @Override
-    public org.genthz.Filler<?> function() {
-        return this.function;
-    }
-
-    @Override
-    public void simple() {
-        throw new SimpleSelectableException(this);
+    public Description getSelectable() {
+        return this.description;
     }
 }

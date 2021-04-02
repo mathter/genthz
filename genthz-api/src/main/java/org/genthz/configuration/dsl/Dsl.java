@@ -24,7 +24,7 @@ package org.genthz.configuration.dsl;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Dsl extends Strictable, NonStrictable, Pathable, Сustomizable {
+public interface Dsl extends Strictable, NonStrictable, Pathable, Сustomizable, InstanceBuilders {
 
     /**
      * Method creates generation configuration using default {@linkplain Specification}.

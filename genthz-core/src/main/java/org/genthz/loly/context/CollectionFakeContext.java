@@ -37,7 +37,6 @@ public class CollectionFakeContext<T, C> extends ValueContext<C> implements Cont
     private final int index;
     private final TripleConsumer<T, C> addTo;
     private C object;
-    private Stage stage = Stage.NEW;
 
     public CollectionFakeContext(
             ObjectFactory objectFactory,
@@ -92,14 +91,14 @@ public class CollectionFakeContext<T, C> extends ValueContext<C> implements Cont
     @Override
     public void setInstance(C value) {
         this.object = value;
-        this.stage = Stage.INITIALIZATION;
+        super.setStage(Stage.INITIALIZATION);
     }
 
     @Override
     public void setFilled(C value) {
         this.object = value;
         this.addTo.accept(this.collectionContext.node(), this.index, value);
-        this.stage = Stage.COMPLETE;
+        super.setStage(Stage.COMPLETE);
     }
 
     private TripleConsumer<T, C> addToCollection(T collection) {

@@ -27,7 +27,7 @@ import java.util.Collection;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Configuration extends Strictable, NonStrictable, Pathable, Сustomizable, Conditional {
+public interface Configuration extends Strictable, NonStrictable, Pathable, Сustomizable, Conditional, InstanceBuilders {
 
     public Configuration reg(Selectable selectable);
 
