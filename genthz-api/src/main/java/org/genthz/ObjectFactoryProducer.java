@@ -21,9 +21,11 @@ import java.util.ServiceLoader;
 import java.util.stream.StreamSupport;
 
 /**
+ * <p>
  * Entry class for access to generation engine. This class can be used to optain {@linkplain ObjectFactory}.
  * There is default engine can be accessed by {@linkplain #producer()} method or {@linkplain #producer(String)} with
  * parameter equals to <code>null</code>.
+ * </p>
  * <p>
  * Example:
  * <pre>
@@ -32,7 +34,6 @@ import java.util.stream.StreamSupport;
  *
  *     String value = factory.build(String.class);
  * </pre>
- * </p>
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
  * @version 1.0.0

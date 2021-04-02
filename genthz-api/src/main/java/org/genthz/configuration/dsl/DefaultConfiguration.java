@@ -32,10 +32,9 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
- * <p>
  * This is the class of default configuration. There are several defenitions of simple base classes of java.
  * This version of class includes next defenitions:
- * <ui>
+ * <ul>
  * <li>boolean</li>
  * <li>{@linkplain Boolean}</li>
  * <li>short</li>
@@ -57,8 +56,7 @@ import java.util.function.Supplier;
  * <li>{@linkplain Queue}</li>
  * <li>{@linkplain Deque}</li>
  * <li>Default deep generation breker, see {@linkplain #maxGenerationDeep()}</li>
- * </ui>
- * </p>
+ * </ul>
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
  * @version 1.0.0
