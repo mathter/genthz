@@ -19,9 +19,9 @@
     </parent>
 
     <scm>
-        <url>https://github.com/mathter/generated</url>
-        <connection>scm:git:https://github.com/mathter/generated.git</connection>
-        <developerConnection>scm:git:https://github.com/mathter/generated.git</developerConnection>
+        <url>https://github.com/mathter/genthz</url>
+        <connection>scm:git:https://github.com/mathter/genthz.git</connection>
+        <developerConnection>scm:git:https://github.com/mathter/genthz.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
