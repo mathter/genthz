@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="error" strict="true" name="XMLConfigTest"
-               packages="org.apache.logging.log4j.test">
+<Configuration status="debug" strict="true" name="XMLConfigTest"
+               packages="org.genthz">
     <Properties>
         <Property name="filename">target/test.log</Property>
     </Properties>
@@ -13,7 +13,7 @@
     </Appenders>
 
     <Loggers>
-        <Root level="error">
+        <Root level="debug">
             <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>
