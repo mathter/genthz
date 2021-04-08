@@ -42,7 +42,7 @@ final class LolyObjectFactory implements ObjectFactory {
 
     @Override
     public <T> org.genthz.ObjectContext<T> build(Spec<T> initContext) {
-        final ObjectContext context = new ObjectContext(this, initContext.bindings(), initContext.clazz());
+        final ObjectContext<T> context = new ObjectContext<T>(this, initContext.bindings(), initContext.clazz());
         final InstanceBuilder<T> instanceBuilder = this.instanceBuilder(context);
         final Filler<T> filler = this.filler(context);
         final T object = instanceBuilder.apply(context);

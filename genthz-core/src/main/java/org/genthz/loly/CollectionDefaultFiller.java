@@ -70,7 +70,7 @@ public class CollectionDefaultFiller<T, C> implements Filler<T> {
                 );
                 final InstanceBuilder<C> instanceBuilder = context.objectFactory().instanceBuilder(fakeContext);
                 final Filler<C> filler = context.objectFactory().filler(fakeContext);
-                final C component = instanceBuilder.apply(context);
+                final C component = instanceBuilder.apply(fakeContext);
 
                 ((Accessor<C>) fakeContext).setInstance(component);
 

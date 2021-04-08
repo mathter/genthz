@@ -17,20 +17,19 @@
  */
 package org.genthz.loly;
 
-import org.genthz.Context;
-import org.genthz.InstanceBuilder;
 import org.genthz.Util;
 
-class DefaultInstanceBuilder<T> implements InstanceBuilder<T> {
+import java.lang.reflect.Constructor;
+import java.util.function.Predicate;
 
-    private final Class<T> clazz;
+class DefaultInstanceBuilder<T> extends CalculatedConstructorBasedInstanceBuilder<T> {
 
-    public DefaultInstanceBuilder(Class<T> clazz) {
-        this.clazz = clazz;
+    public DefaultInstanceBuilder(final Class<T> clazz) {
+        super(DefaultInstanceBuilder.buildPredicate(clazz), null);
     }
 
-    @Override
-    public T apply(Context<?> context) {
-        return Util.newInstance(clazz);
+    private static <T> Predicate<Constructor<T>> buildPredicate(Class<T> clazz) {
+        final Constructor<T>[] constructors = Util.getConstructors(clazz);
+        return constructor -> constructors.length == 1 || constructor.getParameterCount() == 0;
     }
 }

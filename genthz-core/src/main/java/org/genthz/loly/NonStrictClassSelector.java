@@ -35,7 +35,9 @@ class NonStrictClassSelector<T, B> extends ClassSelector<T, NonStrictClassSelect
                 name,
                 metrics,
                 next,
-                (context) -> clazz.isAssignableFrom(context.clazz()),
+                (context) -> {
+                    return clazz.isAssignableFrom(context.clazz());
+                    },
                 () -> new NonStrictClassSelector(name + ".boxed", metrics, next, Util.getDual(clazz))
         );
     }

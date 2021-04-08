@@ -179,22 +179,19 @@ public final class Util {
         return result;
     }
 
-    public static <T> T newInstance(Class<T> clazz) {
-        final Constructor<T> constructor;
+    public static <T> T newInstance(Constructor<T> constructor, Object... parameters){
         final boolean originAccessibleState;
-
         try {
-            constructor = clazz.getDeclaredConstructor();
             originAccessibleState = constructor.isAccessible();
 
             try {
                 constructor.setAccessible(true);
-                return constructor.newInstance();
+                return constructor.newInstance(parameters);
             } finally {
                 constructor.setAccessible(originAccessibleState);
             }
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            throw new RuntimeException("Can't create object of class '" + clazz + "'!", e);
+        } catch (InstantiationException | IllegalAccessException  | InvocationTargetException e) {
+            throw new RuntimeException("Can't create object of class '" + constructor.getDeclaringClass() + "'!", e);
         }
     }
 
@@ -249,5 +246,9 @@ public final class Util {
         }
 
         return result;
+    }
+
+    public static <T> Constructor<T>[] getConstructors(Class<T> clazz){
+        return (Constructor<T>[]) clazz.getDeclaredConstructors();
     }
 }

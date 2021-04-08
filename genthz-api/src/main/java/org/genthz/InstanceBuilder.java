@@ -31,7 +31,7 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface InstanceBuilder<T> extends Function<Context<?>, T> {
+public interface InstanceBuilder<T> extends Function<Context<T>, T> {
 
     /**
      * Instance builder of the empty object. This builder do not create object instance.
@@ -42,7 +42,7 @@ public interface InstanceBuilder<T> extends Function<Context<?>, T> {
      */
     public static class Empty<T> implements InstanceBuilder<T> {
         @Override
-        public T apply(Context<?> context) {
+        public T apply(Context<T> context) {
             return null;
         }
     }

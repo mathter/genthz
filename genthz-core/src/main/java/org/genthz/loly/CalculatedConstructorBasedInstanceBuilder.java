@@ -4,6 +4,7 @@ import org.genthz.Context;
 import org.genthz.Description;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
+import org.genthz.Util;
 import org.genthz.configuration.dsl.ConstructorNotFoundException;
 import org.genthz.configuration.dsl.MoreThenOneConstructorFoundException;
 import org.genthz.loly.context.ConstructorContext;
@@ -18,30 +19,31 @@ import java.util.stream.Stream;
 
 class CalculatedConstructorBasedInstanceBuilder<T> implements InstanceBuilder<T> {
 
-    private final Predicate<Constructor<?>> predicate;
+    private final Predicate<Constructor<T>> predicate;
 
     private final Description description;
 
-    public CalculatedConstructorBasedInstanceBuilder(Predicate<Constructor<?>> predicate, Description description) {
+    public CalculatedConstructorBasedInstanceBuilder(Predicate<Constructor<T>> predicate, Description description) {
         this.predicate = predicate;
         this.description = description;
     }
 
     @Override
-    public T apply(Context<?> context) {
+    public T apply(Context<T> context) {
         final T object;
+        final Constructor<T> constructor = this.getConstructor(context);
         final Object[] params = Stream
-                .of(this.getConstructor((Context<T>) context).getParameterTypes())
+                .of(constructor.getParameterTypes())
                 .map(c -> new ConstructorContext(c, context.objectFactory(), (ValueContext<?>) context))
                 .map(c -> {
-                    final InstanceBuilder<T> instanceBuilder = c.objectFactory().instanceBuilder(c);
-                    final Filler<T> filler = c.objectFactory().filler(c);
+                    final InstanceBuilder instanceBuilder = c.objectFactory().instanceBuilder(c);
+                    final Filler filler = c.objectFactory().filler(c);
 
                     Optional
                             .ofNullable(instanceBuilder.apply(c))
                             .map(e -> {
-                                ((Accessor<T>) c).setInstance(e);
-                                ((Accessor<T>) c).setFilled((T) filler.apply(c, e));
+                                ((Accessor) c).setInstance(e);
+                                ((Accessor) c).setFilled(filler.apply(c, e));
                                 return c;
                             })
                             .get();
@@ -53,7 +55,7 @@ class CalculatedConstructorBasedInstanceBuilder<T> implements InstanceBuilder<T>
                 .toArray();
 
         try {
-            object = this.getConstructor((Context<T>) context).newInstance(params);
+            object = Util.newInstance(constructor, params);
         } catch (Exception e) {
             // TODO Change exception type.
             throw new RuntimeException("Can't constuct object for context: " + context, e);
@@ -63,8 +65,8 @@ class CalculatedConstructorBasedInstanceBuilder<T> implements InstanceBuilder<T>
     }
 
     private Constructor<T> getConstructor(Context<T> context) {
-        return (Constructor<T>) Optional.of(Stream
-                .of(context.clazz().getConstructors())
+        return Optional.of(Stream
+                .of(Util.getConstructors(context.clazz()))
                 .filter(this.predicate)
                 .collect(Collectors.toList()))
                 .map(c -> {
