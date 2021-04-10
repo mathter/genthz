@@ -87,7 +87,7 @@ public final class Util {
      * @return
      */
     public static final boolean isSimple(Class<?> clazz) {
-        return SIMPLE_CLASSES.contains(clazz);
+        return SIMPLE_CLASSES.contains(clazz) || Enum.class.isAssignableFrom(clazz);
     }
 
     /**

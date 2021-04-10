@@ -17,16 +17,46 @@
  */
 package org.genthz.loly;
 
+import org.genthz.Context;
 import org.genthz.Util;
 
 import java.lang.reflect.Constructor;
+import java.util.Optional;
+import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class DefaultInstanceBuilder<T> extends CalculatedConstructorBasedInstanceBuilder<T> {
+
+    private static final Random RANDOM = new Random();
 
     public DefaultInstanceBuilder(final Class<T> clazz) {
         super(DefaultInstanceBuilder.buildPredicate(clazz), null);
     }
+
+    @Override
+    public T apply(Context<T> context) {
+        final Class<T> clazz = context.clazz();
+
+        return Enum.class.isAssignableFrom(clazz) ? buildEnum(clazz) : super.apply(context);
+    }
+
+    private T buildEnum(Class<T> clazz) {
+        return Optional.of(Stream.of(clazz.getFields())
+                .filter(f -> clazz.equals(f.getType()))
+                .collect(Collectors.toList()))
+                .map(l -> l.get(RANDOM.nextInt(l.size())))
+                .map(f -> {
+                    try {
+                        return (T) f.get(clazz);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .get();
+    }
+
 
     private static <T> Predicate<Constructor<T>> buildPredicate(Class<T> clazz) {
         final Constructor<T>[] constructors = Util.getConstructors(clazz);
