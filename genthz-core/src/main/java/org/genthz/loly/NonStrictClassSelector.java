@@ -18,6 +18,7 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
+import org.genthz.Description;
 import org.genthz.Util;
 
 import java.util.Optional;
@@ -27,9 +28,10 @@ class NonStrictClassSelector<T, B> extends ClassSelector<T, NonStrictClassSelect
 
     public NonStrictClassSelector(
             String name,
-            Function<Context<?>,Long> metrics,
+            Function<Context<?>, Long> metrics,
             Optional<Selector> next,
-            Class<T> clazz
+            Class<T> clazz,
+            Description description
     ) {
         super(
                 name,
@@ -37,8 +39,9 @@ class NonStrictClassSelector<T, B> extends ClassSelector<T, NonStrictClassSelect
                 next,
                 (context) -> {
                     return clazz.isAssignableFrom(context.clazz());
-                    },
-                () -> new NonStrictClassSelector(name + ".boxed", metrics, next, Util.getDual(clazz))
+                },
+                () -> new NonStrictClassSelector(name + ".boxed", metrics, next, Util.getDual(clazz), description),
+                description
         );
     }
 }

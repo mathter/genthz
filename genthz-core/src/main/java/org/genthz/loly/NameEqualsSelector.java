@@ -18,13 +18,19 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
+import org.genthz.Description;
 
 import java.util.Optional;
 import java.util.function.Function;
 
 class NameEqualsSelector extends UpSelector {
 
-    public NameEqualsSelector(String name, Function<Context<?>, Long> metrics, Optional<Selector> next, String pathNameElement) {
-        super(name, metrics, next, (context -> pathNameElement.equals(context.name())));
+    public NameEqualsSelector(String name,
+                              Function<Context<?>,
+                                      Long> metrics,
+                              Optional<Selector> next,
+                              String pathNameElement,
+                              Description description) {
+        super(name, metrics, next, (context -> pathNameElement.equals(context.name())), description);
     }
 }

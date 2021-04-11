@@ -18,6 +18,7 @@
 package org.genthz.loly;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.genthz.NewInstanceException;
 import org.genthz.ObjectFactory;
 import org.genthz.ObjectFactoryProducer;
 import org.genthz.configuration.dsl.Configuration;
@@ -28,6 +29,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -120,5 +122,18 @@ public class ComplexTest {
         Assertions.assertEquals(MANAGER_NAME_1, value.getName());
         Assertions.assertNotNull(value.getLastName());
         Assertions.assertNotNull(value.getBirthDate());
+    }
+
+    @Test
+    public void testBigInteger() {
+        final ObjectFactory factory = ObjectFactoryProducer
+                .producer()
+                .factory(new DefaultConfiguration());
+
+        Assertions.assertThrows(NewInstanceException.class, () -> factory.build(A.class));
+    }
+
+    private static class A {
+        private BigInteger n;
     }
 }

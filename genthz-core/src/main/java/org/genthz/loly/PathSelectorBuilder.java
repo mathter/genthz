@@ -23,6 +23,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.genthz.Context;
+import org.genthz.Description;
 import org.genthz.configuration.dsl.Path;
 
 import java.util.Optional;
@@ -46,7 +47,8 @@ final class PathSelectorBuilder {
         final Listener listener = new Listener(
                 path.name(),
                 path.metrics(),
-                next != null ? next : Optional.empty()
+                next != null ? next : Optional.empty(),
+                ((Path) path).path()
         );
 
         walker.walk(listener, parser.path());
@@ -67,10 +69,13 @@ final class PathSelectorBuilder {
 
         private Optional<Selector> last;
 
-        public Listener(String name, Function<Context<?>, Long> metrics, Optional<Selector> next) {
+        private final String path;
+
+        public Listener(String name, Function<Context<?>, Long> metrics, Optional<Selector> next, String path) {
             this.name = name;
             this.metrics = metrics;
             this.last = next;
+            this.path = path;
         }
 
         @Override
@@ -79,7 +84,8 @@ final class PathSelectorBuilder {
                     new RootMatchSelector(
                             this.name,
                             this.metrics != null ? this.metrics : METRICS_UNIT,
-                            this.last
+                            this.last,
+                            new PathDescription(this.path)
                     )
             );
         }
@@ -91,7 +97,8 @@ final class PathSelectorBuilder {
                             this.name + (index++),
                             this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
                             this.last,
-                            ctx.getText()
+                            ctx.getText(),
+                            new PathDescription(this.path)
                     )
             );
         }
@@ -103,7 +110,8 @@ final class PathSelectorBuilder {
                             this.name + (index++),
                             this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
                             this.last,
-                            Pattern.compile(ctx.getText().replace("*", ".*"))
+                            Pattern.compile(ctx.getText().replace("*", ".*")),
+                            new PathDescription(this.path)
                     )
             );
         }
@@ -119,7 +127,8 @@ final class PathSelectorBuilder {
                             this.name + (index++),
                             this.metrics != null ? METRICS_ZERO : (c) -> this.skipCount,
                             this.last,
-                            this.skipCount
+                            this.skipCount,
+                            new PathDescription(this.path)
                     )
             );
 
@@ -138,6 +147,19 @@ final class PathSelectorBuilder {
         @Override
         public void visitErrorNode(ErrorNode node) {
             throw new RuntimeException("Unexpected string: '" + node.getText() + "'");
+        }
+    }
+
+    private static class PathDescription implements Description {
+        private final String path;
+
+        public PathDescription(String path) {
+            this.path = path;
+        }
+
+        @Override
+        public String toString() {
+            return new StringBuilder("Path[").append(this.path).append(']').toString();
         }
     }
 }

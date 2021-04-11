@@ -17,8 +17,6 @@
  */
 package org.genthz;
 
-import org.genthz.configuration.dsl.loly.ReflectionException;
-
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

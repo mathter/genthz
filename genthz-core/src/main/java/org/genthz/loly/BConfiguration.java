@@ -154,15 +154,15 @@ final class BConfiguration {
     }
 
     private static Selector buildStrict(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
-        return new StrictClassSelector(selector.name(), selector.metrics(), next, ((Strict<?>) selector).clazz());
+        return new StrictClassSelector(selector.name(), selector.metrics(), next, ((Strict<?>) selector).clazz(), selector.description());
     }
 
     private static Selector buildNonStrict(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
-        return new NonStrictClassSelector(selector.name(), selector.metrics(), next, ((NonStrict<?>) selector).clazz());
+        return new NonStrictClassSelector(selector.name(), selector.metrics(), next, ((NonStrict<?>) selector).clazz(), selector.description());
     }
 
     private static Selector buildCustom(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
-        return new CustomSelector(selector.name(), selector.metrics(), next, (Custom) selector);
+        return new CustomSelector(selector.name(), selector.metrics(), next, (Custom) selector, selector.description());
     }
 
     private static Selector buildNot(org.genthz.configuration.dsl.Selector selector, Optional<Selector> next) {
@@ -175,14 +175,16 @@ final class BConfiguration {
                     selector.name(),
                     selector.metrics(),
                     Optional.empty(),
-                    origin.negate()
+                    origin.negate(),
+                    selector.description()
             );
         } else {
             result = new org.genthz.loly.NegateSelector(
                     selector.name(),
                     selector.metrics(),
                     origin.next(),
-                    origin.predicate().negate()
+                    origin.predicate().negate(),
+                    selector.description()
             );
         }
 

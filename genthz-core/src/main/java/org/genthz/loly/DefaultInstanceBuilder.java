@@ -18,6 +18,8 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
+import org.genthz.Description;
+import org.genthz.NewInstanceException;
 import org.genthz.Util;
 
 import java.lang.reflect.Constructor;
@@ -51,12 +53,11 @@ class DefaultInstanceBuilder<T> extends CalculatedConstructorBasedInstanceBuilde
                     try {
                         return (T) f.get(clazz);
                     } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
+                        throw new NewInstanceException(clazz, e);
                     }
                 })
                 .get();
     }
-
 
     private static <T> Predicate<Constructor<T>> buildPredicate(Class<T> clazz) {
         final Constructor<T>[] constructors = Util.getConstructors(clazz);

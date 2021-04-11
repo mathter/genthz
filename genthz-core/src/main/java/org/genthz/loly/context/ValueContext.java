@@ -68,6 +68,22 @@ public abstract class ValueContext<T> implements Context<T>, Accessor<T> {
     public ObjectFactory objectFactory() {
         return this.objectFactory;
     }
+
+    protected StringBuilder info() {
+        final StringBuilder sb = new StringBuilder();
+        this.parent().ifPresent((c) -> sb.append(c.info()));
+        sb.append("/{name=" + this.name()).append(", class=" + this.clazz()).append(", value=" + this.node()).append('}');
+
+
+        return sb;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getSimpleName())
+                .append('[').append(this.info()).append(']')
+                .toString();
+    }
 }
 
 

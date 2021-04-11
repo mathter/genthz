@@ -41,4 +41,6 @@ abstract class ClassSelector<T> extends Selector implements org.genthz.configura
             super(dsl, name, next, clazz);
         }
     }
+
+
 }

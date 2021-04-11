@@ -18,6 +18,7 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
+import org.genthz.Description;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -36,16 +37,20 @@ abstract class Selector implements Predicate<Context<?>> {
 
     protected final Optional<Selector> next;
 
+    private final Description description;
+
     protected Selector(
             String name,
             Function<Context<?>, Long> metrics,
             Optional<Selector> next,
-            Predicate<Context<?>> predicate
+            Predicate<Context<?>> predicate,
+            Description description
     ) {
         this.name = Objects.requireNonNull(name);
         this.metrics = metrics;
         this.next = Objects.requireNonNull(next);
         this.predicate = Objects.requireNonNull(predicate);
+        this.description = description;
     }
 
     public String name() {

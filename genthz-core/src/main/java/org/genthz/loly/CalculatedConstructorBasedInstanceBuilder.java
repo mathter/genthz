@@ -4,9 +4,8 @@ import org.genthz.Context;
 import org.genthz.Description;
 import org.genthz.Filler;
 import org.genthz.InstanceBuilder;
+import org.genthz.NewInstanceException;
 import org.genthz.Util;
-import org.genthz.configuration.dsl.ConstructorNotFoundException;
-import org.genthz.configuration.dsl.MoreThenOneConstructorFoundException;
 import org.genthz.loly.context.ConstructorContext;
 import org.genthz.loly.context.ValueContext;
 import org.genthz.loly.reflect.Accessor;
@@ -57,8 +56,7 @@ class CalculatedConstructorBasedInstanceBuilder<T> implements InstanceBuilder<T>
         try {
             object = Util.newInstance(constructor, params);
         } catch (Exception e) {
-            // TODO Change exception type.
-            throw new RuntimeException("Can't constuct object for context: " + context, e);
+            throw new NewInstanceException(context, e);
         }
 
         return object;
@@ -71,9 +69,9 @@ class CalculatedConstructorBasedInstanceBuilder<T> implements InstanceBuilder<T>
                 .collect(Collectors.toList()))
                 .map(c -> {
                     if (c.size() == 0) {
-                        throw new ConstructorNotFoundException(this.description);
+                        throw new NewInstanceException(context, "Constructor not found!");
                     } else if (c.size() > 1) {
-                        throw new MoreThenOneConstructorFoundException(this.description);
+                        throw new NewInstanceException(context, "More then one constructor found using predicate="+this.predicate+"!");
                     } else {
                         return c.get(0);
                     }

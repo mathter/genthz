@@ -18,6 +18,7 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
+import org.genthz.Description;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -35,7 +36,9 @@ abstract class ClassSelector<T, B extends ClassSelector<?, ?>> extends Selector 
     private static Lock LOCK_READ = LOCK.readLock();
 
     private static Lock LOCK_WRITE = LOCK.writeLock();
+
     private final Supplier<B> boxedProducer;
+
     private B boxed;
 
     protected ClassSelector(
@@ -43,9 +46,10 @@ abstract class ClassSelector<T, B extends ClassSelector<?, ?>> extends Selector 
             Function<Context<?>, Long> metrics,
             Optional<Selector> next,
             Predicate<Context<?>> predicate,
-            Supplier<B> boxedProducer
+            Supplier<B> boxedProducer,
+            Description description
     ) {
-        super(name, metrics, next, predicate);
+        super(name, metrics, next, predicate, description);
 
         this.boxedProducer = Objects.requireNonNull(boxedProducer);
     }

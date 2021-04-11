@@ -18,6 +18,7 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
+import org.genthz.Description;
 import org.genthz.configuration.dsl.Custom;
 
 import java.util.Optional;
@@ -29,8 +30,9 @@ class CustomSelector extends Selector {
             String name,
             Function<Context<?>, Long> metrics,
             Optional<Selector> next,
-            Custom custom
+            Custom custom,
+            Description description
     ) {
-        super(name, metrics, next, custom.predicate());
+        super(name, metrics, next, custom.predicate(), description);
     }
 }

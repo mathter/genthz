@@ -18,6 +18,7 @@
 package org.genthz.loly;
 
 import org.genthz.Context;
+import org.genthz.Description;
 import org.genthz.Util;
 
 import java.util.Optional;
@@ -25,14 +26,18 @@ import java.util.function.Function;
 
 class StrictClassSelector<T, B> extends ClassSelector<T, StrictClassSelector<B, T>> {
 
-    private StrictClassSelector<B, T> boxed;
-
-    public StrictClassSelector(String name, Function<Context<?>, Long> metrics, Optional<Selector> next, Class<T> clazz) {
+    public StrictClassSelector(String name,
+                               Function<Context<?>,
+                                       Long> metrics,
+                               Optional<Selector> next,
+                               Class<T> clazz,
+                               Description description) {
         super(
                 name,
                 metrics,
                 next, (context) -> clazz.equals(context.clazz()),
-                () -> new StrictClassSelector(name + ".boxed", metrics, next, Util.getDual(clazz))
+                () -> new StrictClassSelector(name + ".boxed", metrics, next, Util.getDual(clazz), description),
+                description
         );
     }
 }
