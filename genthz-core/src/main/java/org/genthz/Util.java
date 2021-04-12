@@ -23,6 +23,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -72,6 +74,8 @@ public final class Util {
         simple.add(String.class);
         simple.add(UUID.class);
         simple.add(Date.class);
+        simple.add(BigDecimal.class);
+        simple.add(BigInteger.class);
         simple.addAll(BOXED_PRIMITIVE.keySet());
         simple.addAll(PRIMITIVE_BOXED.keySet());
 

@@ -22,6 +22,8 @@ import org.apache.commons.lang3.RandomUtils;
 import org.genthz.GeneratedException;
 import org.genthz.InstanceBuilder;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
@@ -30,6 +32,9 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
+
+import static org.genthz.configuration.dsl.Selector.METRICS_UNIT;
+import static org.genthz.configuration.dsl.Selector.METRICS_ZERO;
 
 /**
  * This is the class of default configuration. There are several defenitions of simple base classes of java.
@@ -66,41 +71,43 @@ public class DefaultConfiguration extends AbstractConfiguration {
     {
         reg(
                 // Common types.
-                nonstrict((c) -> RandomUtils.nextBoolean(), boolean.class),
-                nonstrict((c) -> RandomUtils.nextBytes(1)[0], byte.class),
-                nonstrict((c) -> (short) RandomUtils.nextInt(), short.class),
-                nonstrict((c) -> RandomUtils.nextInt(), int.class),
-                nonstrict((c) -> RandomUtils.nextLong(), long.class),
-                nonstrict((c) -> RandomUtils.nextFloat(), float.class),
-                nonstrict((c) -> RandomUtils.nextDouble(), double.class),
+                nonstrict(boolean.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextBoolean()),
+                nonstrict(byte.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextBytes(1)[0]),
+                nonstrict(short.class).metrics(METRICS_ZERO).instanceBuilder((c) -> (short) RandomUtils.nextInt()),
+                nonstrict(int.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextInt()),
+                nonstrict(long.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextLong()),
+                nonstrict(float.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextFloat()),
+                nonstrict(double.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextDouble()),
 
                 // Common boxed types.
-                nonstrict((c) -> RandomUtils.nextBoolean(), Boolean.class),
-                nonstrict((c) -> RandomUtils.nextBytes(1)[0], Byte.class),
-                nonstrict((c) -> (short) RandomUtils.nextInt(), Short.class),
-                nonstrict((c) -> RandomUtils.nextInt(), Integer.class),
-                nonstrict((c) -> RandomUtils.nextLong(), Long.class),
-                nonstrict((c) -> RandomUtils.nextFloat(), Float.class),
-                nonstrict((c) -> RandomUtils.nextDouble(), Double.class),
-                nonstrict((c) -> RandomStringUtils.randomAlphanumeric(10), String.class),
-                nonstrict((c) -> UUID.randomUUID(), UUID.class),
-                nonstrict((c) -> new Date(), Date.class),
+                nonstrict(Boolean.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextBoolean()),
+                nonstrict(Byte.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextBytes(1)[0]),
+                nonstrict(Short.class).metrics(METRICS_ZERO).instanceBuilder((c) -> (short) RandomUtils.nextInt()),
+                nonstrict(Integer.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextInt()),
+                nonstrict(Long.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextLong()),
+                nonstrict(Float.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextFloat()),
+                nonstrict(Double.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextDouble()),
+                nonstrict(String.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomStringUtils.randomAlphanumeric(10)),
+                nonstrict(UUID.class).metrics(METRICS_ZERO).instanceBuilder((c) -> UUID.randomUUID()),
+                nonstrict(Date.class).metrics(METRICS_ZERO).instanceBuilder((c) -> new Date()),
+                nonstrict(BigInteger.class).metrics(METRICS_ZERO).instanceBuilder((c)->BigInteger.valueOf(RandomUtils.nextLong())),
+                nonstrict(BigDecimal.class).metrics(METRICS_ZERO).instanceBuilder((c)->BigDecimal.valueOf(RandomUtils.nextLong())),
 
                 // Default collections.
                 nonstrict(Collection.class)
-                        .metrics(Selector.METRICS_UNIT)
+                        .metrics(METRICS_ZERO)
                         .instanceBuilder(collectionBuilder(defaultCollectionClass())),
                 nonstrict(List.class)
-                        .metrics(Selector.METRICS_TWO)
+                        .metrics(METRICS_UNIT)
                         .instanceBuilder(collectionBuilder(defaultListClass())),
                 nonstrict(Set.class)
-                        .metrics(Selector.METRICS_TWO)
+                        .metrics(METRICS_UNIT)
                         .instanceBuilder(collectionBuilder(defaultSetClass())),
                 nonstrict(Queue.class)
-                        .metrics(Selector.METRICS_TWO)
+                        .metrics(METRICS_UNIT)
                         .instanceBuilder(collectionBuilder(defaultQueueClass())),
                 nonstrict(Deque.class)
-                        .metrics(Selector.METRICS_TWO)
+                        .metrics(METRICS_UNIT)
                         .instanceBuilder(collectionBuilder(defaultDequeClass())),
 
                 // Terminate filler.

@@ -18,7 +18,6 @@
 package org.genthz.loly;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.genthz.NewInstanceException;
 import org.genthz.ObjectFactory;
 import org.genthz.ObjectFactoryProducer;
 import org.genthz.configuration.dsl.Configuration;
@@ -130,7 +129,7 @@ public class ComplexTest {
                 .producer()
                 .factory(new DefaultConfiguration());
 
-        Assertions.assertThrows(NewInstanceException.class, () -> factory.build(A.class));
+        Assertions.assertNotNull(factory.build(A.class).n);
     }
 
     private static class A {
