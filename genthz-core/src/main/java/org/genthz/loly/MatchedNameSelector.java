@@ -33,6 +33,11 @@ public class MatchedNameSelector extends UpSelector {
                                Pattern pattern,
                                Description description
     ) {
-        super(name, metrics, next, (context) -> pattern.matcher(context.name()).matches(), description);
+        super(name,
+                metrics,
+                next,
+                (context) -> Optional.ofNullable(context.name()).map(s -> pattern.matcher(s).matches()).orElse(false),
+                description
+        );
     }
 }
