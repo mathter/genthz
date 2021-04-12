@@ -78,12 +78,16 @@ final class PathSelectorBuilder {
             this.path = path;
         }
 
+        private Function<Context<?>, Long> getMetrics(Function<Context<?>, Long> metrics) {
+            return this.metrics != null && !this.last.isPresent() ? this.metrics : metrics;
+        }
+
         @Override
         public void enterRoot(PathParser.RootContext ctx) {
             this.last = Optional.of(
                     new RootMatchSelector(
                             this.name,
-                            this.metrics != null ? this.metrics : METRICS_UNIT,
+                            this.getMetrics(METRICS_UNIT),
                             this.last,
                             new PathDescription(this.path)
                     )
@@ -95,7 +99,7 @@ final class PathSelectorBuilder {
             this.last = Optional.of(
                     new NameEqualsSelector(
                             this.name + (index++),
-                            this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
+                            this.getMetrics(METRICS_ZERO),
                             this.last,
                             ctx.getText(),
                             new PathDescription(this.path)
@@ -108,7 +112,7 @@ final class PathSelectorBuilder {
             this.last = Optional.of(
                     new MatchedNameSelector(
                             this.name + (index++),
-                            this.metrics != null ? METRICS_ZERO : METRICS_UNIT,
+                            this.getMetrics(METRICS_ZERO),
                             this.last,
                             Pattern.compile(ctx.getText().replace("*", ".*")),
                             new PathDescription(this.path)
@@ -125,7 +129,7 @@ final class PathSelectorBuilder {
         public void exitSkip(PathParser.SkipContext ctx) {
             this.last = Optional.of(new SkipSelector(
                             this.name + (index++),
-                            this.metrics != null ? METRICS_ZERO : (c) -> this.skipCount,
+                            this.getMetrics( (c) -> this.skipCount),
                             this.last,
                             this.skipCount,
                             new PathDescription(this.path)
