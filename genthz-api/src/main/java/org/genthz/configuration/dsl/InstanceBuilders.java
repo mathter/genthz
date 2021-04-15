@@ -39,7 +39,7 @@ public interface InstanceBuilders {
         return c -> c.getParameterCount() == constructorArgumentCount;
     }
 
-    public static <T> Predicate<Constructor<T>> byArgumentTypes(final Class[] constructorArgumentTypes) {
+    public static <T> Predicate<Constructor<T>> byArgumentTypes(final Class... constructorArgumentTypes) {
         return c -> {
             try {
                 return c.getDeclaringClass().getConstructor(constructorArgumentTypes).equals(c);
