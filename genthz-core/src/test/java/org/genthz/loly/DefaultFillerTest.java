@@ -121,6 +121,18 @@ public class DefaultFillerTest {
         Assertions.assertNotNull(value.birthDate);
     }
 
+    @Test
+    public void testStaticAndFina() {
+        ObjectFactory objectFactory = ObjectFactoryProducer.producer().factory(new DefaultConfiguration());
+
+        B value = objectFactory.build(B.class);
+
+        Assertions.assertNotNull(value);
+        Assertions.assertEquals("S0", value.S0);
+        Assertions.assertEquals("f0", value.f0);
+        Assertions.assertNotNull(value.f1);
+    }
+
     private static class A {
         private UUID uuid;
 
@@ -129,5 +141,13 @@ public class DefaultFillerTest {
         private String lastName;
 
         private Date birthDate;
+    }
+
+    private static class B {
+        private static String S0 = "S0";
+
+        private final String f0 = "f0";
+
+        private String f1;
     }
 }

@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -41,6 +42,10 @@ class DefaultFiller<T> implements Filler<T> {
     private final Collection<String> includedFieldNames;
 
     private final Collection<String> excludedFieldNames;
+
+    private final boolean skipStaticFields = true;
+
+    private final boolean skipFinalFields = true;
 
     public DefaultFiller(
             Collection<String> includedFieldNames,
@@ -79,14 +84,19 @@ class DefaultFiller<T> implements Filler<T> {
     private <T> Stream<Accessor<?>> fieldAccessors(ValueContext<T> parent, Class<?> clazz) {
         return java.util.stream.Stream
                 .of(clazz.getDeclaredFields())
-                .filter(f -> Optional
-                        .of(f)
-                        .map(Field::getName)
-                        .map(e -> (this.includedFieldNames == null && this.excludedFieldNames == null)
-                                || (this.includedFieldNames != null && this.includedFieldNames.contains(e))
-                                || (this.excludedFieldNames != null && !this.excludedFieldNames.contains(e))
-                        )
-                        .get()
+                .filter(f -> {
+                            boolean b = Optional
+                                    .of(f)
+                                    .map(Field::getName)
+                                    .map(e -> (this.includedFieldNames == null && this.excludedFieldNames == null)
+                                            || (this.includedFieldNames != null && this.includedFieldNames.contains(e))
+                                            || (this.excludedFieldNames != null && !this.excludedFieldNames.contains(e))
+                                    )
+                                    .get()
+                                    && !f.isEnumConstant()
+                                    && !Optional.of(f.getModifiers()).map(m -> Modifier.isStatic(m) || Modifier.isFinal(m)).get();
+                            return b;
+                        }
                 )
                 .flatMap(f -> {
                             final Stream<Accessor<?>> result;
