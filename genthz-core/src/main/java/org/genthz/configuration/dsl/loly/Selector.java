@@ -36,7 +36,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-abstract class Selector implements org.genthz.configuration.dsl.Selector {
+abstract class Selector<T> implements org.genthz.configuration.dsl.Selector<T> {
 
     private final Dsl dsl;
 
@@ -135,7 +135,7 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
     }
 
     @Override
-    public Collection<Selectable> use(BiConsumer<Collection<Selectable>, org.genthz.configuration.dsl.Selector> consumer) {
+    public Collection<Selectable> use(BiConsumer<Collection<Selectable>, org.genthz.configuration.dsl.Selector<T>> consumer) {
         final Collection<Selectable> selectables = new ArrayList<>();
 
         consumer.accept(selectables, this);
@@ -144,7 +144,7 @@ abstract class Selector implements org.genthz.configuration.dsl.Selector {
     }
 
     @Override
-    public <T> Selectable filler(Filler<T> function) {
+    public Selectable filler(Filler<T> function) {
         return this.dsl.filler(function, this);
     }
 

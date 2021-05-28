@@ -32,5 +32,5 @@ public interface Conditional {
      * @param selector selector with inverted logic.
      * @return reverse selector.
      */
-    public Selector not(Selector selector);
+    public <T> Selector<T> not(Selector<T> selector);
 }

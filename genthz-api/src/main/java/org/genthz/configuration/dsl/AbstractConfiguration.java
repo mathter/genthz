@@ -117,7 +117,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public <T> Selector strict(Class<T> clazz) {
+    public <T> Selector<T> strict(Class<T> clazz) {
         return this.configuration.strict(clazz);
     }
 
@@ -127,7 +127,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public Selector custom(Predicate<Context<?>> predicate) {
+    public <T> Selector custom(Predicate<Context<?>> predicate) {
         return this.configuration.custom(predicate);
     }
 
@@ -172,7 +172,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public Selector not(Selector selector) {
+    public <T> Selector<T> not(Selector<T> selector) {
         return this.configuration.not(selector);
     }
 }

@@ -119,7 +119,7 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public Selector custom(Predicate<Context<?>> predicate) {
+    public <T> Selector custom(Predicate<Context<?>> predicate) {
         return this.dsl.custom(predicate);
     }
 

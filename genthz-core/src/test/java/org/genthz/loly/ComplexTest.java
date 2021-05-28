@@ -51,7 +51,7 @@ public class ComplexTest {
                                 .path("manager")
                                 .strict(Manager.class)
                                 .defaultFiller().excluding("employees")
-                                .<Manager>custom((context, manager) -> {
+                                .custom((context, manager) -> {
                                             manager.setName(MANAGER_NAME_0);
                                             manager.setEmployees(Collections.singletonList((Employee) context.parentNode().get()));
                                             return manager;

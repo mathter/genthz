@@ -19,7 +19,7 @@ package org.genthz.configuration.dsl.loly;
 
 import org.genthz.Filler;
 
-class DefaultFiller extends Selectable implements org.genthz.configuration.dsl.DefaultFiller {
+class DefaultFiller<T> extends Selectable implements org.genthz.configuration.dsl.DefaultFiller<T> {
     private String[] includedFieldNames;
 
     private String[] excludedFieldNames;
@@ -57,7 +57,7 @@ class DefaultFiller extends Selectable implements org.genthz.configuration.dsl.D
     }
 
     @Override
-    public <T> DefaultFiller custom(org.genthz.Filler<T> function) {
+    public DefaultFiller<T> custom(org.genthz.Filler<T> function) {
         this.function = function;
 
         return this;

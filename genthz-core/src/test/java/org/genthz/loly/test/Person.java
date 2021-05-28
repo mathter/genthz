@@ -70,4 +70,14 @@ public class Person {
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "uuid=" + uuid +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                '}';
+    }
 }

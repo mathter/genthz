@@ -17,8 +17,11 @@
  */
 package org.genthz.configuration.dsl;
 
+import org.genthz.Context;
+
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Predicate;
 
 /**
  * Interface describes object generation configuration.
@@ -27,7 +30,7 @@ import java.util.Collection;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Configuration extends Strictable, NonStrictable, Pathable, Сustomizable, Conditional, InstanceBuilders {
+public interface Configuration extends Strictable, NonStrictable, Pathable, Conditional, InstanceBuilders {
 
     public Configuration reg(Selectable selectable);
 
@@ -58,4 +61,9 @@ public interface Configuration extends Strictable, NonStrictable, Pathable, Сus
      * @return configuration name.
      */
     public String name();
+
+    /**
+     * @see Сustomizable#custom(Predicate)
+     */
+    public <T> Selector<T> custom(Predicate<Context<?>> predicate);
 }

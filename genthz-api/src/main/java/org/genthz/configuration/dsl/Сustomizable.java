@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Сustomizable {
+public interface Сustomizable<T> {
 
     /**
      * Method returns new {@linkplain Selector} defined by <code>predicate</code> parameter.
@@ -37,5 +37,5 @@ public interface Сustomizable {
      * @param predicate predcate.
      * @return selector.
      */
-    public Selector custom(Predicate<Context<?>> predicate);
+    public Selector<T> custom(Predicate<Context<?>> predicate);
 }

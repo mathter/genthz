@@ -60,7 +60,7 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
     }
 
     @Override
-    public Selector custom(Predicate<Context<?>> predicate) {
+    public <T> Selector custom(Predicate<Context<?>> predicate) {
         return this.custom(predicate, null);
     }
 

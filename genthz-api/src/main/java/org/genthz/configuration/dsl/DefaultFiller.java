@@ -26,7 +26,7 @@ import org.genthz.Filler;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface DefaultFiller extends Selectable {
+public interface DefaultFiller<T> extends Selectable {
 
     /**
      * The method specifies that the field should be filled in.
@@ -35,7 +35,7 @@ public interface DefaultFiller extends Selectable {
      * @param field name of the object field.
      * @return itself.
      */
-    public DefaultFiller including(String... field);
+    public DefaultFiller<T> including(String... field);
 
     /**
      * The method specifies that the field should be excluding from filling.
@@ -44,7 +44,7 @@ public interface DefaultFiller extends Selectable {
      * @param field
      * @return
      */
-    public DefaultFiller excluding(String... field);
+    public DefaultFiller<T> excluding(String... field);
 
     /**
      * Method returns collection of fields should be filled.
@@ -64,10 +64,10 @@ public interface DefaultFiller extends Selectable {
      * This method defines custom filler function. This function will be called after default fill is completed.
      *
      * @param function custom filler function.
-     * @param <T>      type of the object.
+//     * @param <T>      type of the object.
      * @return itself.
      */
-    public <T> DefaultFiller custom(Filler<T> function);
+    public DefaultFiller<T> custom(Filler<T> function);
 
     /**
      * Method returns custom filler.

@@ -26,13 +26,12 @@ import org.genthz.Filler;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Fillered {
+public interface Fillered<T> {
     /**
      * Method construct filler for specified filler function.
      *
      * @param function filler function.
-     * @param <T>      type of the object filled by filler.
      * @return filler.
      */
-    public <T> Selectable filler(Filler<T> function);
+    public Selectable filler(Filler<T> function);
 }

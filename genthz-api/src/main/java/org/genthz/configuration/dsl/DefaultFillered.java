@@ -24,12 +24,12 @@ package org.genthz.configuration.dsl;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface DefaultFillered {
+public interface DefaultFillered<T> {
 
     /**
      * Method returns new instance of the default filler.
      *
      * @return default filler.
      */
-    public DefaultFiller defaultFiller();
+    public DefaultFiller<T> defaultFiller();
 }

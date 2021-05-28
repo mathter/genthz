@@ -30,14 +30,14 @@ import java.util.function.Function;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Selector extends
+public interface Selector<T> extends
         Strictable,
         NonStrictable,
-        Pathable,
-        Сustomizable,
-        DefaultFillered,
+        Pathable<T>,
+        Сustomizable<T>,
+        DefaultFillered<T>,
         CollectionFillered,
-        Fillered,
+        Fillered<T>,
         InstanceBuildered,
         Conditional,
         InstanceBuilders,
@@ -69,7 +69,7 @@ public interface Selector extends
      * @param metrics metrics function.
      * @return itself.
      */
-    public Selector metrics(Function<Context<?>, Long> metrics);
+    public Selector<T> metrics(Function<Context<?>, Long> metrics);
 
     /**
      * The method sets the function that will be used to accumulate {@linkplain Selectable} that use this selector.
@@ -77,7 +77,7 @@ public interface Selector extends
      * @param consumer function.
      * @return collection of {@linkplain Selectable}
      */
-    public Collection<Selectable> use(BiConsumer<Collection<Selectable>, Selector> consumer);
+    public Collection<Selectable> use(BiConsumer<Collection<Selectable>, Selector<T>> consumer);
 
     /**
      * Method returns negate selector. All parent selectors are stay as origin.

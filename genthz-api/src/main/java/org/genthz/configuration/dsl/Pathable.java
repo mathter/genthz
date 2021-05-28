@@ -24,12 +24,12 @@ package org.genthz.configuration.dsl;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Pathable {
+public interface Pathable<T> {
 
     /**
      * Method returns new {@linkplain Path} selector.
      * @param path string represents path.
      * @return
      */
-    public Selector path(String path);
+    public Selector<T> path(String path);
 }

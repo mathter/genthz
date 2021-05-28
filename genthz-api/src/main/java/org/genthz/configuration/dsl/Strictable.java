@@ -86,5 +86,5 @@ public interface Strictable {
      * @param <T>   type of the object to be created.
      * @return class based selector.
      */
-    public <T> Selector strict(Class<T> clazz);
+    public <T> Selector<T> strict(Class<T> clazz);
 }
