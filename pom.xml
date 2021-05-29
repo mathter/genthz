@@ -4,7 +4,7 @@
 
     <groupId>org.genthz</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.7</version>
     <modules>
         <module>genthz-api</module>
         <module>genthz-core</module>
@@ -21,7 +21,7 @@
         <url>https://github.com/mathter/genthz</url>
         <connection>scm:git:https://github.com/mathter/genthz.git</connection>
         <developerConnection>scm:git:https://github.com/mathter/genthz.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>release/1.0.7</tag>
     </scm>
 
     <developers>
@@ -87,13 +87,13 @@
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-api</artifactId>
-                <version>1.0.7-SNAPSHOT</version>
+                <version>1.0.7</version>
             </dependency>
 
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-core</artifactId>
-                <version>1.0.7-SNAPSHOT</version>
+                <version>1.0.7</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
