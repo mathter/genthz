@@ -41,8 +41,8 @@ public interface DefaultFiller<T> extends Selectable {
      * The method specifies that the field should be excluding from filling.
      * If for same field
      *
-     * @param field
-     * @return
+     * @param field names of the fields to be excluded from filling phase.
+     * @return filler.
      */
     public DefaultFiller<T> excluding(String... field);
 
@@ -64,7 +64,6 @@ public interface DefaultFiller<T> extends Selectable {
      * This method defines custom filler function. This function will be called after default fill is completed.
      *
      * @param function custom filler function.
-//     * @param <T>      type of the object.
      * @return itself.
      */
     public DefaultFiller<T> custom(Filler<T> function);

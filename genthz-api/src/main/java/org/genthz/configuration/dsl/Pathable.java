@@ -28,8 +28,9 @@ public interface Pathable<T> {
 
     /**
      * Method returns new {@linkplain Path} selector.
+     *
      * @param path string represents path.
-     * @return
+     * @return selector for specified path.
      */
     public Selector<T> path(String path);
 }

@@ -51,7 +51,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     /**
      * Create generation configuration using specified {@linkplain Dsl} engine.
      *
-     * @param dsl
+     * @param dsl dsl engine to be used by this configuration.
      */
     public AbstractConfiguration(Dsl dsl) {
         this(dsl.configuration());
@@ -60,7 +60,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     /**
      * Create generation configuration using specified {@linkplain Configuration} as base.
      *
-     * @param configuration
+     * @param configuration configuration to be wrapped.
      */
     public AbstractConfiguration(Configuration configuration) {
         this.configuration = configuration;

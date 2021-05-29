@@ -36,7 +36,7 @@ public interface Specification {
     /**
      * Method defines max deep of hierarchy to be constructed.
      *
-     * @return
+     * @return {@linkplain Supplier} for calculating maxumum object nesting.
      */
     public Supplier<Long> maxGenerationDeep();
 
@@ -85,7 +85,7 @@ public interface Specification {
     /**
      * Method returns default type of the collection element.
      *
-     * @return
+     * @return default type of the collection element
      */
     public Supplier<Class<?>> defaultCollectionItemClass();
 }

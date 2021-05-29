@@ -48,6 +48,7 @@ public interface NonStrictable {
      * the {@linkplain InstanceBuilder} interface.
      *
      * @param function instance builder function.
+     * @param clazz    class of the object to be created.
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
@@ -72,6 +73,7 @@ public interface NonStrictable {
      * the {@linkplain Filler} interface.
      *
      * @param function filler function.
+     * @param clazz    class of the object to be created.
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
@@ -84,5 +86,5 @@ public interface NonStrictable {
      * @param <T>   type of the object to be created.
      * @return class based selector.
      */
-    public <T> Selector nonstrict(Class<T> clazz);
+    public <T> Selector<T> nonstrict(Class<T> clazz);
 }

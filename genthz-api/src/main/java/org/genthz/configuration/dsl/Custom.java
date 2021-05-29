@@ -33,7 +33,7 @@ public interface Custom {
     /**
      * Method returns {@linkplain Predicate} of the selector.
      *
-     * @return
+     * @return condition of the custom selector.
      */
     public Predicate<Context<?>> predicate();
 }

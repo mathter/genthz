@@ -29,14 +29,15 @@ public interface Selectable extends Descriptable {
     /**
      * {@linkplain Selector} for this object.
      *
-     * @return
+     * @param <T> type of the selector.
+     * @return selector.
      */
-    public Selector selector();
+    public <T> Selector<T> selector();
 
     /**
      * Name of the this object.
      *
-     * @return
+     * @return name of the selectable.
      */
     public String name();
 

@@ -63,6 +63,11 @@ public interface Configuration extends Strictable, NonStrictable, Pathable, Cond
     public String name();
 
     /**
+     * Method creates custom selector descriped by parameter.
+     *
+     * @param predicate condition of the selector.
+     * @param <T>       type used of the selector.
+     * @return selector descriped by method paraameter.
      * @see Сustomizable#custom(Predicate)
      */
     public <T> Selector<T> custom(Predicate<Context<?>> predicate);

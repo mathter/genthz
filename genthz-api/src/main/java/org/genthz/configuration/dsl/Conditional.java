@@ -30,6 +30,7 @@ public interface Conditional {
      * Method returns selector the selector is the reverse of the specified selector as parameter.
      *
      * @param selector selector with inverted logic.
+     * @param <T>      type of the object.
      * @return reverse selector.
      */
     public <T> Selector<T> not(Selector<T> selector);

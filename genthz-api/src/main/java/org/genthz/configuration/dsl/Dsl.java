@@ -43,11 +43,14 @@ public interface Dsl extends Strictable, NonStrictable, Pathable, InstanceBuilde
      * Method creates generation configuration using specified {@linkplain Specification}.
      *
      * @param specification specification.
-     * @return
+     * @return new configuration.
      */
     public Configuration configuration(Specification specification);
 
     /**
+     * @param predicate condition of the custom selector.
+     * @param <T>       type of the object represented by selector.
+     * @return selector.
      * @see Сustomizable#custom(Predicate)
      */
     public <T> Selector<T> custom(Predicate<Context<?>> predicate);

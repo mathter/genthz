@@ -12,7 +12,7 @@ public interface NegateSelector extends Selector {
     /**
      * The original selector to which the negation operation will be applied.
      *
-     * @return
+     * @return origin selector.
      */
     public Selector origin();
 
@@ -21,7 +21,7 @@ public interface NegateSelector extends Selector {
      * (all selectors chain {@linkplain #next()}.
      * <code>false</code> -negation operation will be applied to {@linkplain #origin()} selector only.
      *
-     * @return
+     * @return flag.
      */
     public boolean negateChain();
 }

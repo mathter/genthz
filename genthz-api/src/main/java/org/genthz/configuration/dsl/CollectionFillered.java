@@ -50,7 +50,7 @@ public interface CollectionFillered {
      * @param count           count of components in the collection.
      * @param <T>             type of the collection.
      * @param <C>             type of the collection component.
-     * @return
+     * @return collection filler.
      */
     public <T, C> CollectionFiller<T, C> collectionFiller(
             Class<T> collectionClazz, Class<C> componentClazz,

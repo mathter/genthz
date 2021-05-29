@@ -49,6 +49,7 @@ public interface Strictable {
      * the {@linkplain InstanceBuilder} interface.
      *
      * @param function instance builder function.
+     * @param clazz    class of the object to be created.
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
@@ -74,6 +75,7 @@ public interface Strictable {
      * the {@linkplain Filler} interface.
      *
      * @param function filler function.
+     * @param clazz    class of the object to be created.
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
