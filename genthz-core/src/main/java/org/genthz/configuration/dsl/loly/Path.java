@@ -17,6 +17,10 @@
  */
 package org.genthz.configuration.dsl.loly;
 
+import org.genthz.configuration.dsl.Selectable;
+
+import java.util.function.Predicate;
+
 class Path extends Selector implements org.genthz.configuration.dsl.Path {
 
     private final String path;

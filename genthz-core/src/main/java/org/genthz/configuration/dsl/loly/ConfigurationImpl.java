@@ -79,11 +79,6 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public <T> Selectable byConstructor(Predicate<Constructor<T>> predicate) {
-        return this.dsl.byConstructor(predicate);
-    }
-
-    @Override
     public <T> FunctionalInstanceBuilder<T> nonstrict(InstanceBuilder<T> function, Class<T> clazz) {
         return this.dsl.nonstrict(function, clazz);
     }

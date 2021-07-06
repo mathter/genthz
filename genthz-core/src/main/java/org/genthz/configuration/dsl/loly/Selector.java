@@ -89,11 +89,6 @@ abstract class Selector<T> implements org.genthz.configuration.dsl.Selector<T> {
     }
 
     @Override
-    public <T> Selectable byConstructor(Predicate<Constructor<T>> predicate) {
-        return this.dsl.byConstructor(predicate, this);
-    }
-
-    @Override
     public <T> FunctionalInstanceBuilder nonstrict(InstanceBuilder<T> function, Class<T> clazz) {
         return this.dsl.nonstrict(function, clazz, this);
     }
@@ -149,8 +144,13 @@ abstract class Selector<T> implements org.genthz.configuration.dsl.Selector<T> {
     }
 
     @Override
-    public <T> Selectable instanceBuilder(InstanceBuilder<T> function) {
+    public Selectable instanceBuilder(InstanceBuilder<T> function) {
         return this.dsl.instanceBuilder(function, this);
+    }
+
+    @Override
+    public Selectable byConstructor(Predicate<Constructor<T>> predicate) {
+        return this.dsl.byConstructor(predicate, this);
     }
 
     @Override

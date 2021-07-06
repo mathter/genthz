@@ -38,9 +38,9 @@ public interface Selector<T> extends
         DefaultFillered<T>,
         CollectionFillered,
         Fillered<T>,
-        InstanceBuildered,
+        InstanceBuildered<T>,
         Conditional,
-        InstanceBuilders,
+        InstanceBuilders<T>,
         Descriptable {
     public static final Function<Context<?>, Long> METRICS_ZERO = (c) -> 0L;
 

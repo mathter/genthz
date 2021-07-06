@@ -30,7 +30,7 @@ import java.util.function.Predicate;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Configuration extends Strictable, NonStrictable, Pathable, Conditional, InstanceBuilders {
+public interface Configuration extends Strictable, NonStrictable, Pathable, Conditional {
 
     public Configuration reg(Selectable selectable);
 

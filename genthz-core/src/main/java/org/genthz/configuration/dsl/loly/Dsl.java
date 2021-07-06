@@ -37,11 +37,6 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
 
     private static final Logger LOG = LoggerFactory.getLogger(Dsl.class);
 
-    @Override
-    public <T> Selectable byConstructor(Predicate<Constructor<T>> predicate) {
-        throw new UnsupportedOperationException();
-    }
-
     public <T> ConstructorBasedInstanceBuilder<T> byConstructor(Predicate<Constructor<T>> predicate, Selector next) {
         return new ConstructorBasedInstanceBuilder<T>(next, predicate);
     }

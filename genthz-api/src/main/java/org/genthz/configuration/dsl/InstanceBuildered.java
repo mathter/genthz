@@ -26,6 +26,6 @@ import org.genthz.InstanceBuilder;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface InstanceBuildered {
-    <T> Selectable instanceBuilder(InstanceBuilder<T> function);
+public interface InstanceBuildered<T> {
+    Selectable instanceBuilder(InstanceBuilder<T> function);
 }

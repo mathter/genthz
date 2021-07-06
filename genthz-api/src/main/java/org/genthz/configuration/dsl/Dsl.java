@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Dsl extends Strictable, NonStrictable, Pathable, InstanceBuilders {
+public interface Dsl extends Strictable, NonStrictable, Pathable {
 
     /**
      * Method creates generation configuration using default {@linkplain Specification}.
