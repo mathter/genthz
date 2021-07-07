@@ -27,6 +27,7 @@ class ConstructorBasedInstanceBuilder<T> extends Selectable implements org.genth
     public ConstructorBasedInstanceBuilder(Selector selector, Predicate<Constructor<T>> predicate) {
         super(selector);
         this.predicate = predicate;
+        this.simple();
     }
 
     @Override

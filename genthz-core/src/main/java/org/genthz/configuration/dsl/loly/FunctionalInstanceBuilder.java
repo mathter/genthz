@@ -24,6 +24,7 @@ class FunctionalInstanceBuilder<T> extends Selectable<T> implements org.genthz.c
     public FunctionalInstanceBuilder(org.genthz.InstanceBuilder<T> function, Selector selector) {
         super(selector);
         this.function = function;
+        this.simple();
     }
 
     @Override
