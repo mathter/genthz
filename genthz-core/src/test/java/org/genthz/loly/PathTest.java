@@ -12,8 +12,8 @@ public class PathTest {
     public void test() {
         ObjectFactory factory = ObjectFactoryProducer.producer().factory(new DefaultConfiguration() {
             {
-                reg(path("name").instanceBuilder(c -> "Ho").simple());
-                reg(path("*last*").instanceBuilder(c -> "Last").simple());
+                reg(path("name").instance(c -> "Ho").simple());
+                reg(path("*last*").instance(c -> "Last").simple());
             }
         });
 

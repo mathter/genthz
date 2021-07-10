@@ -27,9 +27,7 @@ import java.util.function.Predicate;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface InstanceBuilders<T> {
-
-    public Selectable byConstructor(Predicate<Constructor<T>> predicate);
+public interface InstanceBuilders {
 
     public static <T> Predicate<Constructor<T>> byConstructor(final Constructor<T> constructor) {
         return c -> constructor.equals(c);

@@ -144,7 +144,7 @@ abstract class Selector<T> implements org.genthz.configuration.dsl.Selector<T> {
     }
 
     @Override
-    public Selectable instanceBuilder(InstanceBuilder<T> function) {
+    public Selectable instance(InstanceBuilder<T> function) {
         return this.dsl.instanceBuilder(function, this);
     }
 

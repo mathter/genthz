@@ -19,6 +19,9 @@ package org.genthz.configuration.dsl;
 
 import org.genthz.InstanceBuilder;
 
+import java.lang.reflect.Constructor;
+import java.util.function.Predicate;
+
 /**
  * Interface defines producer of the instance builder.
  *
@@ -27,5 +30,7 @@ import org.genthz.InstanceBuilder;
  * @since 1.0.0
  */
 public interface InstanceBuildered<T> {
-    Selectable instanceBuilder(InstanceBuilder<T> function);
+    Selectable instance(InstanceBuilder<T> function);
+
+    Selectable byConstructor(Predicate<Constructor<T>> predicate);
 }

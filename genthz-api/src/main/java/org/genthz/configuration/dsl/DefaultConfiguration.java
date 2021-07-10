@@ -71,44 +71,44 @@ public class DefaultConfiguration extends AbstractConfiguration {
     {
         reg(
                 // Common types.
-                nonstrict(boolean.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextBoolean()),
-                nonstrict(byte.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextBytes(1)[0]),
-                nonstrict(short.class).metrics(METRICS_ZERO).instanceBuilder((c) -> (short) RandomUtils.nextInt()),
-                nonstrict(int.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextInt()),
-                nonstrict(long.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextLong()),
-                nonstrict(float.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextFloat()),
-                nonstrict(double.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextDouble()),
+                nonstrict(boolean.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextBoolean()),
+                nonstrict(byte.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextBytes(1)[0]),
+                nonstrict(short.class).metrics(METRICS_ZERO).instance((c) -> (short) RandomUtils.nextInt()),
+                nonstrict(int.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextInt()),
+                nonstrict(long.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextLong()),
+                nonstrict(float.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextFloat()),
+                nonstrict(double.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextDouble()),
 
                 // Common boxed types.
-                nonstrict(Boolean.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextBoolean()),
-                nonstrict(Byte.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextBytes(1)[0]),
-                nonstrict(Short.class).metrics(METRICS_ZERO).instanceBuilder((c) -> (short) RandomUtils.nextInt()),
-                nonstrict(Integer.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextInt()),
-                nonstrict(Long.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextLong()),
-                nonstrict(Float.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextFloat()),
-                nonstrict(Double.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomUtils.nextDouble()),
-                nonstrict(String.class).metrics(METRICS_ZERO).instanceBuilder((c) -> RandomStringUtils.randomAlphanumeric(10)),
-                nonstrict(UUID.class).metrics(METRICS_ZERO).instanceBuilder((c) -> UUID.randomUUID()),
-                nonstrict(Date.class).metrics(METRICS_ZERO).instanceBuilder((c) -> new Date()),
-                nonstrict(BigInteger.class).metrics(METRICS_ZERO).instanceBuilder((c)->BigInteger.valueOf(RandomUtils.nextLong())),
-                nonstrict(BigDecimal.class).metrics(METRICS_ZERO).instanceBuilder((c)->BigDecimal.valueOf(RandomUtils.nextLong())),
+                nonstrict(Boolean.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextBoolean()),
+                nonstrict(Byte.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextBytes(1)[0]),
+                nonstrict(Short.class).metrics(METRICS_ZERO).instance((c) -> (short) RandomUtils.nextInt()),
+                nonstrict(Integer.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextInt()),
+                nonstrict(Long.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextLong()),
+                nonstrict(Float.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextFloat()),
+                nonstrict(Double.class).metrics(METRICS_ZERO).instance((c) -> RandomUtils.nextDouble()),
+                nonstrict(String.class).metrics(METRICS_ZERO).instance((c) -> RandomStringUtils.randomAlphanumeric(10)),
+                nonstrict(UUID.class).metrics(METRICS_ZERO).instance((c) -> UUID.randomUUID()),
+                nonstrict(Date.class).metrics(METRICS_ZERO).instance((c) -> new Date()),
+                nonstrict(BigInteger.class).metrics(METRICS_ZERO).instance((c)->BigInteger.valueOf(RandomUtils.nextLong())),
+                nonstrict(BigDecimal.class).metrics(METRICS_ZERO).instance((c)->BigDecimal.valueOf(RandomUtils.nextLong())),
 
                 // Default collections.
                 nonstrict(Collection.class)
                         .metrics(METRICS_ZERO)
-                        .instanceBuilder(collectionBuilder(defaultCollectionClass())),
+                        .instance(collectionBuilder(defaultCollectionClass())),
                 nonstrict(List.class)
                         .metrics(METRICS_UNIT)
-                        .instanceBuilder(collectionBuilder(defaultListClass())),
+                        .instance(collectionBuilder(defaultListClass())),
                 nonstrict(Set.class)
                         .metrics(METRICS_UNIT)
-                        .instanceBuilder(collectionBuilder(defaultSetClass())),
+                        .instance(collectionBuilder(defaultSetClass())),
                 nonstrict(Queue.class)
                         .metrics(METRICS_UNIT)
-                        .instanceBuilder(collectionBuilder(defaultQueueClass())),
+                        .instance(collectionBuilder(defaultQueueClass())),
                 nonstrict(Deque.class)
                         .metrics(METRICS_UNIT)
-                        .instanceBuilder(collectionBuilder(defaultDequeClass())),
+                        .instance(collectionBuilder(defaultDequeClass())),
 
                 // Terminate filler.
                 custom((c) -> c.stream().count() > maxGenerationDeep().get())

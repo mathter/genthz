@@ -40,7 +40,6 @@ public interface Selector<T> extends
         Fillered<T>,
         InstanceBuildered<T>,
         Conditional,
-        InstanceBuilders<T>,
         Descriptable {
     public static final Function<Context<?>, Long> METRICS_ZERO = (c) -> 0L;
 
