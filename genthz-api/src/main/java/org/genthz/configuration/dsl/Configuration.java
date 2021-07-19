@@ -17,10 +17,12 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Context;
+import org.genthz.context.Context;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -48,12 +50,20 @@ public interface Configuration extends Strictable, NonStrictable, Pathable, Cond
      */
     public Configuration reg(Collection<Selectable> selectables);
 
+    public default <T extends Strictable & NonStrictable & Pathable & Conditional> Configuration reg(Function<T, Collection<Selectable>> producer) {
+        Optional.ofNullable(producer)
+                .map(e -> e.apply((T) this))
+                .ifPresent(this::reg);
+
+        return this;
+    }
+
     /**
      * Method returns all {@linkplain Selectable} objects of this configuration.
      *
      * @return {@linkplain Selectable} objects.
      */
-    public Collection<Selectable> selectables();
+    public Collection<? extends Selectable> selectables();
 
     /**
      * Name of this configuration.
@@ -61,6 +71,8 @@ public interface Configuration extends Strictable, NonStrictable, Pathable, Cond
      * @return configuration name.
      */
     public String name();
+
+    public Configuration name(String name);
 
     /**
      * Method creates custom selector descriped by parameter.
@@ -71,4 +83,6 @@ public interface Configuration extends Strictable, NonStrictable, Pathable, Cond
      * @see Сustomizable#custom(Predicate)
      */
     public <T> Selector<T> custom(Predicate<Context<?>> predicate);
+
+    public org.genthz.Configuration build();
 }

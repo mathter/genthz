@@ -15,7 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.context;
+
+import org.genthz.ObjectFactory;
 
 /**
  * Сontext creation class. This root class contains the same information about the object to be created.
@@ -39,4 +41,8 @@ public interface Context<T> extends Path<T, Context<?>> {
      * @return object factory.
      */
     public ObjectFactory objectFactory();
+
+    public Stage stage();
+
+    public void stage(Stage value);
 }

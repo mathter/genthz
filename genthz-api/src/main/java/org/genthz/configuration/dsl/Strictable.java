@@ -18,8 +18,12 @@
 package org.genthz.configuration.dsl;
 
 
-import org.genthz.Filler;
-import org.genthz.InstanceBuilder;
+import org.genthz.context.Context;
+import org.genthz.function.Filler;
+import org.genthz.function.InstanceBuilder;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Interface represents producer for {@linkplain NonStrict} selector.
@@ -36,9 +40,9 @@ public interface Strictable {
      * @param function instance builder function.
      * @param <T>      type of the object to be created.
      * @return instance builder description.
-     * @see #strict(InstanceBuilder, Class)
+     * @see #strict(Function, Class)
      */
-    default public <T> Selectable strict(InstanceBuilder<T> function) {
+    default public <T> Selectable<T> strict(Function<Context<T>, T> function) {
         return strict(function, null);
     }
 
@@ -53,7 +57,7 @@ public interface Strictable {
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
-    public <T> FunctionalInstanceBuilder<T> strict(InstanceBuilder<T> function, Class<T> clazz);
+    public <T> FunctionalInstanceBuilder<T> strict(Function<Context<T>, T> function, Class<T> clazz);
 
     /**
      * Method creates new {@linkplain Filler} for given {@linkplain Selector} or root selector.
@@ -61,10 +65,10 @@ public interface Strictable {
      * @param function filler function.
      * @param <T>      type of the object to be filled.
      * @return filler.
-     * @see #strict(Filler, Class)
+     * @see #strict(Function, Class)
      */
 
-    default public <T> FunctionalFiller<T> strict(Filler<T> function) {
+    default public <T> FunctionalFiller<T> strict(BiFunction<Context<T>, T, T> function) {
         return strict(function, null);
     }
 
@@ -79,7 +83,7 @@ public interface Strictable {
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
-    public <T> FunctionalFiller<T> strict(Filler<T> function, Class<T> clazz);
+    public <T> FunctionalFiller<T> strict(BiFunction<Context<T>, T, T> function, Class<T> clazz);
 
     /**
      * Method returns new class based selector.

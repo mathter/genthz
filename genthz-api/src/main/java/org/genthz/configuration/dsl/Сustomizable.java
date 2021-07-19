@@ -17,7 +17,7 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Context;
+import org.genthz.context.Context;
 
 import java.util.function.Predicate;
 

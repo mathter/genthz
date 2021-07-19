@@ -17,6 +17,9 @@
  */
 package org.genthz;
 
+import org.genthz.context.Context;
+import org.genthz.context.Spec;
+
 /**
  * This main interface of the engine. Object of this type is entry point for object generation.
  *
@@ -34,33 +37,15 @@ public interface ObjectFactory {
      * @return object instance type of <code>T</code>.
      */
     public default <T> T build(Class<T> clazz) {
-        return (T) this.build(Spec.of(clazz)).get();
+        return (T) this.build(Spec.of(clazz)).node();
     }
 
     /**
      * Method builds object of type represented according to {@linkplain Spec} description of the object to be created.
      *
-     * @param initContext description of the object to be create.
+     * @param context description of the object to be create.
      * @param <T>         type of the object.
      * @return object instance type of <code>T</code>.
      */
-    public <T> ObjectContext<T> build(Spec<T> initContext);
-
-    /**
-     * Method returns {@linkplain InstanceBuilder} corresponts to context or default instance builder.
-     *
-     * @param context context the context for the search to be performed.
-     * @param <T>     type of the object.
-     * @return instance builder.
-     */
-    public <T> InstanceBuilder<T> instanceBuilder(Context<T> context);
-
-    /**
-     * Method returns {@linkplain Filler} corresponts to context or default filler.
-     *
-     * @param context context the context for the search to be performed.
-     * @param <T>     type of the object.
-     * @return filler.
-     */
-    public <T> Filler<T> filler(Context<T> context);
+    public <T> Context<T> build(Context<T> context);
 }

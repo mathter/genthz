@@ -17,11 +17,13 @@
  */
 package org.genthz.configuration.dsl;
 
+import org.genthz.function.InstanceBuilder;
+
 import java.lang.reflect.Constructor;
 import java.util.function.Predicate;
 
 /**
- * Collection of the {@linkplain Selectable} for construct {@linkplain org.genthz.InstanceBuilder}.
+ * Collection of the {@linkplain Selectable} for construct {@linkplain InstanceBuilder}.
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
  * @version 1.0.0

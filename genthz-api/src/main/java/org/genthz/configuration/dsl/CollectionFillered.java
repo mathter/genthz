@@ -24,18 +24,17 @@ package org.genthz.configuration.dsl;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface CollectionFillered {
+public interface CollectionFillered<T> {
 
     /**
      * Method returns collection filler for specified parameters of the collection.
      *
      * @param componentClazz component class
      * @param count          count of components in the collection.
-     * @param <T>            type of the collection.
      * @param <C>            type of the collection component.
      * @return defulat collection filler.
      */
-    default public <T, C> CollectionFiller<T, C> collectionFiller(
+    default public <C> CollectionFiller<T, C> collectionFiller(
             Class<C> componentClazz,
             int count
     ) {
@@ -48,12 +47,12 @@ public interface CollectionFillered {
      * @param collectionClazz collection class.
      * @param componentClazz  component class
      * @param count           count of components in the collection.
-     * @param <T>             type of the collection.
      * @param <C>             type of the collection component.
      * @return collection filler.
      */
-    public <T, C> CollectionFiller<T, C> collectionFiller(
-            Class<T> collectionClazz, Class<C> componentClazz,
+    public <C> CollectionFiller<T, C> collectionFiller(
+            Class<T> collectionClazz,
+            Class<C> componentClazz,
             int count
     );
 }

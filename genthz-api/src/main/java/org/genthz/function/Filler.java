@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.function;
 
 import org.genthz.context.Context;
 
@@ -31,6 +31,7 @@ import java.util.function.BiFunction;
  */
 @FunctionalInterface
 public interface Filler<T> extends BiFunction<Context<T>, T, T> {
+    public static final Filler UNIT = new Unit();
 
     /**
      * Unit filler class. This filler do not any work. This filler returns object as it.

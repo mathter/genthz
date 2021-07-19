@@ -1,12 +1,14 @@
 package org.genthz.configuration.dsl;
 
-import org.genthz.InstanceBuilder;
+import org.genthz.context.Context;
 
-public interface FunctionalInstanceBuilder<T> extends Selectable {
+import java.util.function.Function;
+
+public interface FunctionalInstanceBuilder<T> extends Selectable<T> {
     /**
      * Function of instance builder represented by this {@linkplain Selectable}.
      *
      * @return instance builder function.
      */
-    public InstanceBuilder<T> function();
+    public Function<Context<T>, T> function();
 }

@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.context;
 
-import java.util.Collection;
-import java.util.Collections;
+import org.genthz.ObjectFactory;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,7 +30,7 @@ import java.util.Optional;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class Spec<T> implements Context<T> {
+public class Spec<T> implements RootContext<T> {
     private final Class<T> clazz;
 
     private final Bindings bindings;
@@ -83,6 +83,16 @@ public class Spec<T> implements Context<T> {
 
     @Override
     public ObjectFactory objectFactory() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Stage stage() {
+        return Stage.NEW;
+    }
+
+    @Override
+    public void stage(Stage value) {
         throw new UnsupportedOperationException();
     }
 

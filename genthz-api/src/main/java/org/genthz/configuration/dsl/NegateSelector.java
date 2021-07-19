@@ -7,14 +7,14 @@ package org.genthz.configuration.dsl;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface NegateSelector extends Selector {
+public interface NegateSelector<T> extends Selector<T> {
 
     /**
      * The original selector to which the negation operation will be applied.
      *
      * @return origin selector.
      */
-    public Selector origin();
+    public Selector<T> origin();
 
     /**
      * <code>true</code> - negation operation will be applied to {@linkplain #origin()} selector and its parent

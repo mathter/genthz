@@ -17,7 +17,9 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Filler;
+import org.genthz.context.Context;
+
+import java.util.function.BiFunction;
 
 /**
  * Defines collection filler.
@@ -28,7 +30,7 @@ import org.genthz.Filler;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface CollectionFiller<T, C> extends Selectable {
+public interface CollectionFiller<T, C> extends Selectable<T> {
 
     /**
      * Method returns type of the collection.
@@ -58,14 +60,14 @@ public interface CollectionFiller<T, C> extends Selectable {
      * @param function filler function.
      * @return itself.
      */
-    public CollectionFiller<T, C> custom(Filler<T> function);
+    public CollectionFiller<T, C> custom(BiFunction<Context<T>, T, T> function);
 
     /**
      * Method returns custom collection filler function.
      *
      * @return custom collection filler function.
      */
-    public Filler<T> custom();
+    public BiFunction<Context<T>, T, T> custom();
 
     /**
      * This method defines custom collection component filler function.
@@ -74,12 +76,12 @@ public interface CollectionFiller<T, C> extends Selectable {
      * @param function custom collection component function.
      * @return itself.
      */
-    public CollectionFiller<T, C> componentCustom(Filler<C> function);
+    public CollectionFiller<T, C> componentCustom(BiFunction<Context<C>, C, C> function);
 
     /**
      * Method returns custom collection component filler function.
      *
      * @return custom collection component filler function.
      */
-    public Filler<C> componentCustom();
+    public BiFunction<Context<C>, C, C> componentCustom();
 }

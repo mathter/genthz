@@ -24,15 +24,14 @@ package org.genthz.configuration.dsl;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Selectable extends Descriptable {
+public interface Selectable<T> extends Descriptable {
 
     /**
      * {@linkplain Selector} for this object.
      *
-     * @param <T> type of the selector.
      * @return selector.
      */
-    public <T> Selector<T> selector();
+    public Selector<T> selector();
 
     /**
      * Name of the this object.
@@ -40,6 +39,8 @@ public interface Selectable extends Descriptable {
      * @return name of the selectable.
      */
     public String name();
+
+    public Selectable<T> name(String name);
 
     public Selectable simple();
 

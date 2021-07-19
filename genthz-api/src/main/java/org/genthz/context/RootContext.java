@@ -15,11 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.context;
 
-import org.genthz.context.Context;
-
-import java.util.function.Supplier;
+import org.genthz.ObjectFactory;
 
 /**
  * Context represents root object created by {@linkplain ObjectFactory}.
@@ -29,5 +27,5 @@ import java.util.function.Supplier;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface RootContext<T> extends Context<T>, Supplier<T> {
+public interface RootContext<T> extends Context<T> {
 }

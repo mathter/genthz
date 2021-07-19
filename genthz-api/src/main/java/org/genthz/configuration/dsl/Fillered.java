@@ -17,7 +17,9 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Filler;
+import org.genthz.context.Context;
+
+import java.util.function.BiFunction;
 
 /**
  * Interface defines producer of the fillers.
@@ -33,5 +35,5 @@ public interface Fillered<T> {
      * @param function filler function.
      * @return filler.
      */
-    public Selectable filler(Filler<T> function);
+    public FunctionalFiller<T> filler(BiFunction<Context<T>, T, T> function);
 }

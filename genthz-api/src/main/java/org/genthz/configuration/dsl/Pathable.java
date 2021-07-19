@@ -24,7 +24,7 @@ package org.genthz.configuration.dsl;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Pathable<T> {
+public interface Pathable {
 
     /**
      * Method returns new {@linkplain Path} selector.
@@ -32,5 +32,5 @@ public interface Pathable<T> {
      * @param path string represents path.
      * @return selector for specified path.
      */
-    public Selector<T> path(String path);
+    public <T, P extends Selector<T>, Path> P path(String path);
 }

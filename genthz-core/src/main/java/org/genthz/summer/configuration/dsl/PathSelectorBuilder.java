@@ -1,3 +1,20 @@
+/*
+ * Generated - testing becomes easier
+ *
+ * Copyright (C) 2021 mathter@mail.ru
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.genthz.summer.configuration.dsl;
 
 import org.antlr.v4.runtime.CharStream;
@@ -5,9 +22,9 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.genthz.Context;
+import org.genthz.context.Context;
 import org.genthz.Description;
-import org.genthz.ObjectContext;
+import org.genthz.context.RootContext;
 import org.genthz.configuration.dsl.Path;
 import org.genthz.loly.PathBaseListener;
 import org.genthz.loly.PathLexer;
@@ -20,38 +37,34 @@ import java.util.regex.Pattern;
 
 import static org.genthz.configuration.dsl.Selector.METRICS_UNIT;
 
-class PathBuilder<P extends Selector<?> & Path> {
-    private final P path;
+class PathSelectorBuilder<T> {
+    private final Dsl dsl;
+
+    private final String path;
 
     private final Selector<?> next;
 
-    public PathBuilder(P path, Selector<?> next) {
+    public PathSelectorBuilder(Dsl dsl, String path, Selector<?> next) {
+        this.dsl = dsl;
         this.path = path;
         this.next = next;
     }
 
-    public Predicate<Context<?>> build() {
-        final CharStream stream = CharStreams.fromString(this.path.path());
+    public <T, P extends org.genthz.configuration.dsl.Selector<T>, Path> P build() {
+        final CharStream stream = CharStreams.fromString(this.path);
         final PathLexer lexer = new PathLexer(stream);
         final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         final PathParser parser = new PathParser(tokenStream);
         final ParseTreeWalker walker = new ParseTreeWalker();
-        final Listener listener = new Listener(
-                this.path.name(),
-                this.path.metrics(),
-                this.next,
-                this.path.path()
-        );
+        final Listener listener = new Listener(this.next);
 
         walker.walk(listener, parser.path());
 
-        return listener.last;
+        return (P) new PathSelector(this.dsl, listener.last, this.next, this.path);
     }
 
     private static class Listener extends PathBaseListener {
         private static final long UNDEFINED = -1;
-
-        private final String name;
 
         private Function<Context<?>, Long> metrics;
 
@@ -59,13 +72,8 @@ class PathBuilder<P extends Selector<?> & Path> {
 
         private Predicate<Context<?>> last;
 
-        private final String path;
-
-        public Listener(String name, Function<Context<?>, Long> metrics, Selector selector, String path) {
-            this.name = name;
-            this.metrics = metrics;
+        public Listener(Selector<?> selector) {
             this.last = selector;
-            this.path = path;
         }
 
         private void push(Predicate<Context<?>> predicate) {
@@ -138,7 +146,7 @@ class PathBuilder<P extends Selector<?> & Path> {
     private static class RootPredicate implements Predicate<Context<?>> {
         @Override
         public boolean test(Context<?> context) {
-            return ObjectContext.class.equals(context.getClass());
+            return RootContext.class.equals(context.getClass());
         }
 
         @Override
@@ -192,6 +200,20 @@ class PathBuilder<P extends Selector<?> & Path> {
                     .skip(count - 1)
                     .findFirst()
                     .isPresent();
+        }
+    }
+
+    private static class PathSelector<T> extends UpSelector<T> implements Path {
+        private final String path;
+
+        public PathSelector(Dsl dsl, Predicate<Context<?>> predicate, Selector<?> next, String path) {
+            super(dsl, predicate, next);
+            this.path = path;
+        }
+
+        @Override
+        public String path() {
+            return this.path;
         }
     }
 }

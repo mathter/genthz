@@ -27,7 +27,7 @@ import java.util.function.Predicate;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface ConstructorBasedInstanceBuilder<T> extends Selectable {
+public interface ConstructorBasedInstanceBuilder<T> extends Selectable<T> {
 
     /**
      * Method returns {@linkplain Predicate} for selecting the constructor.

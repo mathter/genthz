@@ -17,10 +17,6 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Context;
-
-import java.util.function.Predicate;
-
 /**
  * Class for creating generation configuration.
  *
@@ -28,7 +24,7 @@ import java.util.function.Predicate;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface Dsl extends Strictable, NonStrictable, Pathable {
+public interface Dsl {
 
     /**
      * Method creates generation configuration using default {@linkplain Specification}.
@@ -46,12 +42,4 @@ public interface Dsl extends Strictable, NonStrictable, Pathable {
      * @return new configuration.
      */
     public Configuration configuration(Specification specification);
-
-    /**
-     * @param predicate condition of the custom selector.
-     * @param <T>       type of the object represented by selector.
-     * @return selector.
-     * @see Сustomizable#custom(Predicate)
-     */
-    public <T> Selector<T> custom(Predicate<Context<?>> predicate);
 }

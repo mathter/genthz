@@ -20,7 +20,8 @@ package org.genthz.configuration.dsl;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.genthz.GeneratedException;
-import org.genthz.InstanceBuilder;
+import org.genthz.function.EnumInstanceBuilder;
+import org.genthz.function.InstanceBuilder;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -90,8 +91,9 @@ public class DefaultConfiguration extends AbstractConfiguration {
                 nonstrict(String.class).metrics(METRICS_ZERO).instance((c) -> RandomStringUtils.randomAlphanumeric(10)),
                 nonstrict(UUID.class).metrics(METRICS_ZERO).instance((c) -> UUID.randomUUID()),
                 nonstrict(Date.class).metrics(METRICS_ZERO).instance((c) -> new Date()),
-                nonstrict(BigInteger.class).metrics(METRICS_ZERO).instance((c)->BigInteger.valueOf(RandomUtils.nextLong())),
-                nonstrict(BigDecimal.class).metrics(METRICS_ZERO).instance((c)->BigDecimal.valueOf(RandomUtils.nextLong())),
+                nonstrict(BigInteger.class).metrics(METRICS_ZERO).instance((c) -> BigInteger.valueOf(RandomUtils.nextLong())),
+                nonstrict(BigDecimal.class).metrics(METRICS_ZERO).instance((c) -> BigDecimal.valueOf(RandomUtils.nextLong())),
+                nonstrict(Enum.class).metrics(METRICS_ZERO).instance(EnumInstanceBuilder.INSTANCE),
 
                 // Default collections.
                 nonstrict(Collection.class)
@@ -111,7 +113,7 @@ public class DefaultConfiguration extends AbstractConfiguration {
                         .instance(collectionBuilder(defaultDequeClass())),
 
                 // Terminate filler.
-                custom((c) -> c.stream().count() > maxGenerationDeep().get())
+                custom((c) -> c.stream().count() >= maxGenerationDeep().get())
                         .metrics((c) -> Long.MAX_VALUE / 2)
                         .nonstrict((c, o) -> o, Object.class));
     }

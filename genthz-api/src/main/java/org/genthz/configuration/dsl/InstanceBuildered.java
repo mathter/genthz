@@ -17,9 +17,10 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.InstanceBuilder;
+import org.genthz.context.Context;
 
 import java.lang.reflect.Constructor;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -30,7 +31,7 @@ import java.util.function.Predicate;
  * @since 1.0.0
  */
 public interface InstanceBuildered<T> {
-    Selectable instance(InstanceBuilder<T> function);
+    public Selectable<T> instance(Function<Context<T>, T> function);
 
-    Selectable byConstructor(Predicate<Constructor<T>> predicate);
+    public Selectable<T> byConstructor(Predicate<Constructor<T>> predicate);
 }

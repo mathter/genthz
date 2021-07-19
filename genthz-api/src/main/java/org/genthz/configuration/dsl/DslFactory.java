@@ -28,7 +28,7 @@ import java.util.stream.StreamSupport;
  * @since 1.0.0
  */
 public abstract class DslFactory {
-    public static final String DEFAULT_FACTORY = "loly";
+    public static final String DEFAULT_FACTORY = "summer";
 
     protected DslFactory() {
     }

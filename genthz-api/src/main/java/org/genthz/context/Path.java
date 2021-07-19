@@ -15,11 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.context;
 
 import org.genthz.util.StreamUtil;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 

@@ -17,8 +17,12 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Filler;
-import org.genthz.InstanceBuilder;
+import org.genthz.context.Context;
+import org.genthz.function.Filler;
+import org.genthz.function.InstanceBuilder;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Interface represents producer for {@linkplain NonStrict} selector.
@@ -52,7 +56,7 @@ public interface NonStrictable {
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
-    public <T> FunctionalInstanceBuilder nonstrict(InstanceBuilder<T> function, Class<T> clazz);
+    public <T> FunctionalInstanceBuilder<T> nonstrict(Function<Context<T>, T> function, Class<T> clazz);
 
     /**
      * Method creates new {@linkplain Filler} for given {@linkplain Selector} or root selector.
@@ -60,9 +64,9 @@ public interface NonStrictable {
      * @param function filler function.
      * @param <T>      type of the object to be filled.
      * @return filler.
-     * @see #nonstrict(Filler, Class)
+     * @see #nonstrict(BiFunction)
      */
-    public default <T> FunctionalFiller<T> nonstrict(Filler<T> function) {
+    public default <T> FunctionalFiller<T> nonstrict(BiFunction<Context<T>, T, T> function) {
         return nonstrict(function, null);
     }
 
@@ -77,7 +81,7 @@ public interface NonStrictable {
      * @param <T>      type of the object to be created.
      * @return instance builder description.
      */
-    public <T> FunctionalFiller<T> nonstrict(Filler<T> function, Class<T> clazz);
+    public <T> FunctionalFiller<T> nonstrict(BiFunction<Context<T>, T, T> function, Class<T> clazz);
 
     /**
      * Method returns new class based selector.

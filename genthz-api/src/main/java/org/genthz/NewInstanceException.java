@@ -17,6 +17,8 @@
  */
 package org.genthz;
 
+import org.genthz.context.Context;
+
 public class NewInstanceException extends GeneratedException {
     private final Class<?> clazz;
 

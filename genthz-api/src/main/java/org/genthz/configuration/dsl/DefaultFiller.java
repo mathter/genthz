@@ -17,7 +17,7 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Filler;
+import org.genthz.function.Filler;
 
 /**
  * Class for configuring default filling of objects.
@@ -26,7 +26,7 @@ import org.genthz.Filler;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface DefaultFiller<T> extends Selectable {
+public interface DefaultFiller<T> extends Selectable<T> {
 
     /**
      * The method specifies that the field should be filled in.

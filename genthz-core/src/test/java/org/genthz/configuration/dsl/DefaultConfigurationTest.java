@@ -15,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.loly;
+package org.genthz.configuration.dsl;
 
 import org.genthz.ObjectFactory;
-import org.genthz.ObjectFactoryProducer;
-import org.genthz.configuration.dsl.DefaultConfiguration;
-import org.genthz.configuration.dsl.DslFactory;
+import org.genthz.util.StreamUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -35,6 +33,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class DefaultConfigurationTest {
 
@@ -42,13 +41,12 @@ public class DefaultConfigurationTest {
 
     @BeforeAll
     private static void init() {
-        OBJECT_FACTORY = ObjectFactoryProducer
-                .producer()
-                .factory(
-                        new DefaultConfiguration(
-                                DslFactory.dsl()
-                        )
-                );
+        OBJECT_FACTORY = new DefaultConfiguration() {
+            @Override
+            public Supplier<Long> maxGenerationDeep() {
+                return () -> 100L;
+            }
+        }.build().factory();
     }
 
     @Test
@@ -184,5 +182,31 @@ public class DefaultConfigurationTest {
         Assertions.assertEquals(ArrayDeque.class, value.getClass());
 
         value.stream().forEach(e -> Assertions.assertNotNull(e));
+    }
+
+    @Test
+    public void testRecursion() {
+        Recursion value = OBJECT_FACTORY.build(Recursion.class);
+
+        Assertions.assertNotNull(value);
+        Assertions.assertEquals(100L, StreamUtil.of(value, e -> e.recursion).count());
+    }
+
+    @Test
+    public void testEnum(){
+        EnumClass value = OBJECT_FACTORY.build(EnumClass.class);
+
+        Assertions.assertNotNull(value);
+    }
+
+    private static class Recursion {
+        private Recursion recursion;
+    }
+
+    private static enum EnumClass {
+        ZERO,
+        ONE,
+        TWO,
+        THREE
     }
 }

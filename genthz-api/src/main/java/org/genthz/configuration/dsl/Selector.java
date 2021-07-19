@@ -17,10 +17,11 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Context;
+import org.genthz.context.Context;
 
 import java.util.Collection;
-import java.util.function.BiConsumer;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -33,13 +34,12 @@ import java.util.function.Function;
 public interface Selector<T> extends
         Strictable,
         NonStrictable,
-        Pathable<T>,
+        Pathable,
         Сustomizable<T>,
         DefaultFillered<T>,
-        CollectionFillered,
+        CollectionFillered<T>,
         Fillered<T>,
         InstanceBuildered<T>,
-        Conditional,
         Descriptable {
     public static final Function<Context<?>, Long> METRICS_ZERO = (c) -> 0L;
 
@@ -49,9 +49,9 @@ public interface Selector<T> extends
 
     public String name();
 
-    public Fillered name(String name);
+    public Selector<T> name(String name);
 
-    public Selector next();
+    public <NS> Selector<NS> next();
 
     /**
      * Method returns metrics function.
@@ -73,10 +73,18 @@ public interface Selector<T> extends
     /**
      * The method sets the function that will be used to accumulate {@linkplain Selectable} that use this selector.
      *
-     * @param consumer function.
+     * @param producer function for creating {@linkplain Selectable} using this selector passed as parameter.
      * @return collection of {@linkplain Selectable}
      */
-    public Collection<Selectable> use(BiConsumer<Collection<Selectable>, Selector<T>> consumer);
+    public default Collection<Selectable> use(Function<Selector<T>, Collection<Selectable>> producer) {
+        return Optional
+                .ofNullable(producer)
+                .map(e -> Optional
+                        .ofNullable(e.apply(this))
+                        .orElse(Collections.emptyList())
+                )
+                .orElse(Collections.emptyList());
+    }
 
     /**
      * Method returns negate selector. All parent selectors are stay as origin.

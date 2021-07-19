@@ -17,16 +17,16 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.Context;
-import org.genthz.Filler;
-import org.genthz.InstanceBuilder;
+import org.genthz.context.Context;
 
-import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -63,12 +63,12 @@ public class AbstractConfiguration implements Configuration, Specification {
      * @param configuration configuration to be wrapped.
      */
     public AbstractConfiguration(Configuration configuration) {
-        this.configuration = configuration;
+        this.configuration = Objects.requireNonNull(configuration);
     }
 
     @Override
     public Configuration reg(Selectable selectable) {
-        return this.configuration.reg(selectable);
+        return this.configuration.reg(Objects.requireNonNull(selectable));
     }
 
     @Override
@@ -77,7 +77,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public Collection<Selectable> selectables() {
+    public Collection<? extends Selectable> selectables() {
         return this.configuration.selectables();
     }
 
@@ -87,12 +87,18 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public <T> FunctionalInstanceBuilder<T> nonstrict(InstanceBuilder<T> function, Class<T> clazz) {
+    public Configuration name(String name) {
+        this.configuration.name(name);
+        return this;
+    }
+
+    @Override
+    public <T> FunctionalInstanceBuilder<T> nonstrict(Function<Context<T>, T> function, Class<T> clazz) {
         return this.configuration.nonstrict(function, clazz);
     }
 
     @Override
-    public <T> FunctionalFiller<T> nonstrict(Filler<T> function, Class<T> clazz) {
+    public <T> FunctionalFiller<T> nonstrict(BiFunction<Context<T>, T, T> function, Class<T> clazz) {
         return this.configuration.nonstrict(function, clazz);
     }
 
@@ -107,7 +113,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public <T> FunctionalInstanceBuilder<T> strict(InstanceBuilder<T> function, Class<T> clazz) {
+    public <T> FunctionalInstanceBuilder<T> strict(Function<Context<T>, T> function, Class<T> clazz) {
         return this.configuration.strict(function, clazz);
     }
 
@@ -117,7 +123,7 @@ public class AbstractConfiguration implements Configuration, Specification {
     }
 
     @Override
-    public <T> FunctionalFiller<T> strict(Filler<T> function, Class<T> clazz) {
+    public <T> FunctionalFiller<T> strict(BiFunction<Context<T>, T, T> function, Class<T> clazz) {
         return this.strict(function, clazz);
     }
 
@@ -169,5 +175,10 @@ public class AbstractConfiguration implements Configuration, Specification {
     @Override
     public <T> Selector<T> not(Selector<T> selector) {
         return this.configuration.not(selector);
+    }
+
+    @Override
+    public org.genthz.Configuration build() {
+        return this.configuration.build();
     }
 }

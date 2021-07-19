@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz;
+package org.genthz.util;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
@@ -109,7 +109,11 @@ public final class Util {
      * @return true if argument is is a boxing type.
      */
     public static final boolean isBoxing(Class<?> clazz) {
-        return BOXED_PRIMITIVE.containsKey(clazz);
+        return BOXED_PRIMITIVE.containsKey(clazz) || PRIMITIVE_BOXED.containsKey(clazz);
+    }
+
+    public static final <A, B> Class<B> boxed(Class<A> clazz) {
+        return (Class<B>) BOXED_PRIMITIVE.getOrDefault(clazz, PRIMITIVE_BOXED.get(clazz));
     }
 
     /**
@@ -164,24 +168,18 @@ public final class Util {
     }
 
     public static <T> T getFieldValue(Field field, Object object) {
-        final T result;
-
-        if (Util.isSimple(field.getType())) {
-            result = (T) object;
-        } else {
-            result = Util.apply(field, f -> {
-                try {
-                    return (T) f.get(object);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException("Can't get value of field " + f + " of object " + object + " !", e);
-                }
-            });
-        }
+        final T result = Util.apply(field, f -> {
+            try {
+                return (T) f.get(object);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Can't get value of field " + f + " of object " + object + " !", e);
+            }
+        });
 
         return result;
     }
 
-    public static <T> T newInstance(Constructor<T> constructor, Object... parameters){
+    public static <T> T newInstance(Constructor<T> constructor, Object... parameters) {
         final boolean originAccessibleState;
         try {
             originAccessibleState = constructor.isAccessible();
@@ -192,7 +190,7 @@ public final class Util {
             } finally {
                 constructor.setAccessible(originAccessibleState);
             }
-        } catch (InstantiationException | IllegalAccessException  | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Can't create object of class '" + constructor.getDeclaringClass() + "'!", e);
         }
     }
@@ -250,7 +248,7 @@ public final class Util {
         return result;
     }
 
-    public static <T> Constructor<T>[] getConstructors(Class<T> clazz){
+    public static <T> Constructor<T>[] getConstructors(Class<T> clazz) {
         return (Constructor<T>[]) clazz.getDeclaredConstructors();
     }
 }
