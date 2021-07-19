@@ -75,24 +75,12 @@ class Dsl implements org.genthz.configuration.dsl.Dsl {
         return ((Selector<T>) selector).not();
     }
 
-    public <T> DefaultFiller<T> defaultFiller(Selector<T> selector) {
-        return new DefaultFiller<>(selector);
-    }
-
     public <T> FunctionalFiller<T> filler(Selector<T> selector, BiFunction<Context<T>, T, T> function) {
         return new FunctionalFiller<>(selector, function);
     }
 
-    public <T, C> CollectionFiller<T, C> collectionFiller(Selector<T> selector, Class<T> collectionClazz, Class<C> componentClazz, int count) {
-        return new CollectionFiller<>(selector, collectionClazz, componentClazz, count);
-    }
-
     public <T> FunctionalInstanceBuilder<T> instance(Function<Context<T>, T> function, Selector<T> selector) {
         return new FunctionalInstanceBuilder<T>(selector, function);
-    }
-
-    public <T> ConstructorBasedInstanceBuilder<T> byConstructor(Predicate<Constructor<T>> predicate, Selector<T> selector) {
-        return new ConstructorBasedInstanceBuilder<T>(selector, predicate);
     }
 
     public <T> Selector<T> custom(Predicate<Context<?>> predicate, Selector<?> next) {

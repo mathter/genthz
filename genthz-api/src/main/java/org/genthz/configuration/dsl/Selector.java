@@ -36,8 +36,6 @@ public interface Selector<T> extends
         NonStrictable,
         Pathable,
         Сustomizable<T>,
-        DefaultFillered<T>,
-        CollectionFillered<T>,
         Fillered<T>,
         InstanceBuildered<T>,
         Descriptable {

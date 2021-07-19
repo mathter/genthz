@@ -18,7 +18,6 @@
 package org.genthz.summer.configuration.dsl;
 
 import org.genthz.Description;
-import org.genthz.configuration.dsl.CollectionFiller;
 import org.genthz.context.Context;
 
 import java.lang.reflect.Constructor;
@@ -45,11 +44,6 @@ class Selector<T> implements org.genthz.Selector, org.genthz.configuration.dsl.S
     }
 
     @Override
-    public DefaultFiller<T> defaultFiller() {
-        return this.dsl.defaultFiller(this);
-    }
-
-    @Override
     public Description description() {
         return null;
     }
@@ -60,18 +54,8 @@ class Selector<T> implements org.genthz.Selector, org.genthz.configuration.dsl.S
     }
 
     @Override
-    public <C> CollectionFiller<T, C> collectionFiller(Class<T> collectionClazz, Class<C> componentClazz, int count) {
-        return this.dsl.collectionFiller(this, collectionClazz, componentClazz, count);
-    }
-
-    @Override
     public FunctionalInstanceBuilder<T> instance(Function<Context<T>, T> function) {
         return this.dsl.instance(function, this);
-    }
-
-    @Override
-    public ConstructorBasedInstanceBuilder<T> byConstructor(Predicate<Constructor<T>> predicate) {
-        return this.dsl.byConstructor(predicate, this);
     }
 
     @Override
