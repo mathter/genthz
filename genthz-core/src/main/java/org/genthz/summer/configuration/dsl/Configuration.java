@@ -27,14 +27,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 class Configuration implements org.genthz.Configuration {
     private static final Logger LOG = LoggerFactory.getLogger(Configuration.class);
 
-    private final Collection<Selector> instanceBuilderSelectors = new ArrayList<>();
+    private final Collection<Selector> instanceBuilderSelectors = new HashSet<>();
 
-    private final Collection<Selector> fillerSelectors = new ArrayList<>();
+    private final Collection<Selector> fillerSelectors = new HashSet<>();
 
     private final Map<Selector, InstanceBuilder> instanceBuilders = new HashMap<>();
 

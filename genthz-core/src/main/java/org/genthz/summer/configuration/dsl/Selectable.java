@@ -29,7 +29,6 @@ abstract class Selectable<T> implements org.genthz.configuration.dsl.Selectable<
     }
 
     @Override
-
     public Description description() {
         return null;
     }
@@ -47,15 +46,5 @@ abstract class Selectable<T> implements org.genthz.configuration.dsl.Selectable<
     @Override
     public Selectable<T> name(String name) {
         return this;
-    }
-
-    @Override
-    public org.genthz.configuration.dsl.Selectable simple() {
-        return null;
-    }
-
-    @Override
-    public boolean isSimple() throws SimpleSelectableException {
-        return false;
     }
 }

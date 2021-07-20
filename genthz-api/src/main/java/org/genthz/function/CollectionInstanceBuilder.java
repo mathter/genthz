@@ -1,9 +1,11 @@
 package org.genthz.function;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.genthz.ObjectFactory;
 import org.genthz.context.Context;
 import org.genthz.context.IndexedContext;
 import org.genthz.context.def.CollectionIndexedContextImpl;
+import org.genthz.util.Constants;
 
 import java.lang.reflect.Array;
 import java.util.ArrayDeque;
@@ -103,5 +105,10 @@ public class CollectionInstanceBuilder<T, C> implements InstanceBuilder<T> {
 
     protected Class<? extends Deque> defaultDequeClass() {
         return ArrayDeque.class;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
     }
 }

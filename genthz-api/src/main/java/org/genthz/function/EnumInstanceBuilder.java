@@ -17,7 +17,9 @@
  */
 package org.genthz.function;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.genthz.context.Context;
+import org.genthz.util.Constants;
 import org.genthz.util.Util;
 
 import java.util.Optional;
@@ -41,5 +43,10 @@ public class EnumInstanceBuilder<T extends Enum<T>> implements InstanceBuilder<T
                         .map(f -> Util.<T>getFieldValue(f, clazz))
                         .get())
                 .get();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
     }
 }

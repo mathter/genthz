@@ -1,7 +1,7 @@
 /*
  * Generated - testing becomes easier
  *
- * Copyright (C) 2020 mathter@mail.ru
+ * Copyright (C) 2021 mathter@mail.ru
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.configuration.dsl;
+package org.genthz.configuration.dsl.data;
 
-/**
- * This interface represents object that can be selected using {@linkplain Selector}.
- *
- * @author <a href="mailto:mathter@mail.ru">mathter</a>
- * @version 1.0.0
- * @since 1.0.0
- */
-public interface Selectable<T> extends Descriptable {
+import java.util.UUID;
 
-    /**
-     * {@linkplain Selector} for this object.
-     *
-     * @return selector.
-     */
-    public Selector<T> selector();
+public class IdCard {
+    private UUID uuid;
 
-    /**
-     * Name of the this object.
-     *
-     * @return name of the selectable.
-     */
-    public String name();
+    private String name;
 
-    public Selectable<T> name(String name);
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

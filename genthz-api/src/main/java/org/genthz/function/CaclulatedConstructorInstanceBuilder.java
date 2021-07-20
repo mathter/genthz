@@ -17,8 +17,10 @@
  */
 package org.genthz.function;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.genthz.NewInstanceException;
 import org.genthz.context.Context;
+import org.genthz.util.Constants;
 
 import java.lang.reflect.Constructor;
 import java.util.Optional;
@@ -49,5 +51,10 @@ public class CaclulatedConstructorInstanceBuilder<T> extends AbstractConstructor
                     }
                 })
                 .get();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
     }
 }

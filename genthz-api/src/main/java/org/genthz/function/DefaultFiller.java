@@ -17,11 +17,13 @@
  */
 package org.genthz.function;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.genthz.ObjectFactory;
 import org.genthz.context.def.AbstractContext;
 import org.genthz.context.Accessor;
 import org.genthz.context.Context;
 import org.genthz.context.Stage;
+import org.genthz.util.Constants;
 import org.genthz.util.StreamUtil;
 import org.genthz.util.Util;
 
@@ -129,5 +131,15 @@ public class DefaultFiller<T> implements Filler<T> {
         public String name() {
             return this.field.getName();
         }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
     }
 }

@@ -20,6 +20,7 @@ package org.genthz.summer.configuration.dsl;
 import org.genthz.configuration.dsl.FunctionalFiller;
 import org.genthz.configuration.dsl.FunctionalInstanceBuilder;
 import org.genthz.context.Context;
+import org.genthz.function.Filler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,6 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 class DslConfiguration implements org.genthz.configuration.dsl.Configuration {
     private static final Logger LOG = LoggerFactory.getLogger(DslConfiguration.class);
@@ -53,18 +53,21 @@ class DslConfiguration implements org.genthz.configuration.dsl.Configuration {
     public DslConfiguration reg(org.genthz.configuration.dsl.Selectable selectable) {
         LOG.debug("Register " + selectable.description());
         this.selectables.add((Selectable) Objects.requireNonNull(selectable));
+
+        if (selectable instanceof FunctionalInstanceBuilder) {
+            this.selectables.add((Selectable) selectable.selector().filler(Filler.UNIT));
+        }
+
         return this;
     }
 
     @Override
     public DslConfiguration reg(Collection<org.genthz.configuration.dsl.Selectable> selectables) {
-        this.selectables.addAll(
-                Objects.requireNonNull(selectables)
-                        .stream()
-                        .peek(e -> LOG.debug("Register " + e.description()))
-                        .map(e -> (Selectable) e)
-                        .collect(Collectors.toList())
-        );
+        Objects.requireNonNull(selectables)
+                .stream()
+                .peek(e -> LOG.debug("Register " + e.description()))
+                .map(e -> (Selectable) e)
+                .forEach(e -> this.reg(e));
 
         return this;
     }

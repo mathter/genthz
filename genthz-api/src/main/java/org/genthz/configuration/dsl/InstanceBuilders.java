@@ -17,6 +17,8 @@
  */
 package org.genthz.configuration.dsl;
 
+import org.genthz.function.CaclulatedConstructorInstanceBuilder;
+import org.genthz.function.ConstructorInstanceBuilder;
 import org.genthz.function.InstanceBuilder;
 
 import java.lang.reflect.Constructor;
@@ -29,27 +31,34 @@ import java.util.function.Predicate;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface InstanceBuilders {
+public final class InstanceBuilders {
 
-    public static <T> Predicate<Constructor<T>> byConstructor(final Constructor<T> constructor) {
-        return c -> constructor.equals(c);
+    public static <T> InstanceBuilder<T> def() {
+        return InstanceBuilders.byConstructorArgCount(0);
     }
 
-    public static <T> Predicate<Constructor<T>> byArgumentCount(final int constructorArgumentCount) {
-        return c -> c.getParameterCount() == constructorArgumentCount;
+    public static <T> InstanceBuilder<T> byConstructor(final Constructor<T> constructor) {
+        return new ConstructorInstanceBuilder<>(constructor);
     }
 
-    public static <T> Predicate<Constructor<T>> byArgumentTypes(final Class... constructorArgumentTypes) {
-        return c -> {
+    public static <T> InstanceBuilder<T> byConstructorArgCount(final int constructorArgumentCount) {
+        return new CaclulatedConstructorInstanceBuilder<>(c -> c.getParameterCount() == constructorArgumentCount);
+    }
+
+    public static <T> InstanceBuilder<T> byArgumentTypes(final Class... constructorArgumentTypes) {
+        return new CaclulatedConstructorInstanceBuilder<>(c -> {
             try {
                 return c.getDeclaringClass().getConstructor(constructorArgumentTypes).equals(c);
             } catch (NoSuchMethodException e) {
                 return false;
             }
-        };
+        });
     }
 
     public static <T> Predicate<Constructor<T>> byDefaultConstructor() {
         return c -> c.getParameterCount() == 0;
+    }
+
+    private InstanceBuilders() {
     }
 }

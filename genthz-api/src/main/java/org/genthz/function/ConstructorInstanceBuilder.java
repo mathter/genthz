@@ -17,7 +17,9 @@
  */
 package org.genthz.function;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.genthz.context.Context;
+import org.genthz.util.Constants;
 
 import java.lang.reflect.Constructor;
 
@@ -31,5 +33,10 @@ public class ConstructorInstanceBuilder<T> extends AbstractConstructorInstanceBu
     @Override
     protected Constructor<T> getConstructor(Context<T> context) {
         return this.constructor;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
     }
 }

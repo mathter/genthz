@@ -44,4 +44,8 @@ public interface Filler<T> extends BiFunction<Context<T>, T, T> {
             return value;
         }
     }
+
+    default Filler<T> andThen(BiFunction<Context<T>, T, T> nextFiller) {
+        return (context, value) -> nextFiller.apply(context, this.apply(context, value));
+    }
 }

@@ -22,10 +22,10 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.genthz.context.Context;
 import org.genthz.Description;
-import org.genthz.context.RootContext;
 import org.genthz.configuration.dsl.Path;
+import org.genthz.context.Context;
+import org.genthz.context.RootContext;
 import org.genthz.loly.PathBaseListener;
 import org.genthz.loly.PathLexer;
 import org.genthz.loly.PathParser;
@@ -60,7 +60,7 @@ class PathSelectorBuilder<T> {
 
         walker.walk(listener, parser.path());
 
-        return (P) new PathSelector(this.dsl, listener.last, this.next, this.path);
+        return (P) new PathSelector(this.dsl, listener.last, this.next, this.path, listener.count);
     }
 
     private static class Listener extends PathBaseListener {
@@ -70,6 +70,8 @@ class PathSelectorBuilder<T> {
 
         private long skipCount = UNDEFINED;
 
+        private int count = 0;
+
         private Predicate<Context<?>> last;
 
         public Listener(Selector<?> selector) {
@@ -77,7 +79,15 @@ class PathSelectorBuilder<T> {
         }
 
         private void push(Predicate<Context<?>> predicate) {
-            this.last = this.last != null ? predicate.and(this.last) : predicate;
+            final Predicate<Context<?>> tmp = this.last;
+            final int skip = predicate instanceof SkipPredicate ? (int) ((SkipPredicate) predicate).count : 1;
+            this.count += skip;
+
+            this.last = tmp != null
+                    ? predicate.and(c -> c.stream().skip(skip).findFirst()
+                    .map(e -> tmp.test((Context<?>) e))
+                    .orElse(true))
+                    : predicate;
         }
 
         private void pushMetrics(Function<Context<?>, Long> metrics) {
@@ -146,7 +156,7 @@ class PathSelectorBuilder<T> {
     private static class RootPredicate implements Predicate<Context<?>> {
         @Override
         public boolean test(Context<?> context) {
-            return RootContext.class.equals(context.getClass());
+            return context instanceof RootContext;
         }
 
         @Override
@@ -182,7 +192,7 @@ class PathSelectorBuilder<T> {
 
         @Override
         public boolean test(Context<?> context) {
-            return this.pattern.matcher(context.name()).matches();
+            return context.name() != null ? this.pattern.matcher(context.name()).matches() : false;
         }
     }
 
@@ -197,7 +207,7 @@ class PathSelectorBuilder<T> {
         public boolean test(Context<?> context) {
             return context
                     .stream()
-                    .skip(count - 1)
+                    .skip(count)
                     .findFirst()
                     .isPresent();
         }
@@ -206,8 +216,8 @@ class PathSelectorBuilder<T> {
     private static class PathSelector<T> extends UpSelector<T> implements Path {
         private final String path;
 
-        public PathSelector(Dsl dsl, Predicate<Context<?>> predicate, Selector<?> next, String path) {
-            super(dsl, predicate, next);
+        public PathSelector(Dsl dsl, Predicate<Context<?>> predicate, Selector<?> next, String path, int count) {
+            super(dsl, predicate, next, count);
             this.path = path;
         }
 

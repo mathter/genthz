@@ -22,12 +22,23 @@ import org.genthz.context.Context;
 import java.util.function.Predicate;
 
 class UpSelector<T> extends Selector<T> {
-    public UpSelector(Dsl dsl, Predicate<Context<?>> predicate, Selector<?> next) {
+    private final int count;
+
+    public UpSelector(Dsl dsl, Predicate<Context<?>> predicate, Selector<?> next, int count) {
         super(dsl, predicate, next);
+        this.count = count;
     }
 
     @Override
     public boolean test(Context<?> context) {
-        return this.predicate.test(context) && (this.next == null || context.parent().map(e -> this.next.test(e)).orElse(false));
+        return this.predicate.test(context)
+                && (
+                this.next == null
+                        || context.stream()
+                        .skip(this.count)
+                        .findFirst()
+                        .map(e -> this.next.test((Context<?>) e))
+                        .orElse(false)
+        );
     }
 }

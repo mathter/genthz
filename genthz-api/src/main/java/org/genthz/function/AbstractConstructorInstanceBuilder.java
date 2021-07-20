@@ -17,10 +17,12 @@
  */
 package org.genthz.function;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.genthz.NewInstanceException;
 import org.genthz.ObjectFactory;
 import org.genthz.context.def.ConstructorIndexedContextImpl;
 import org.genthz.context.Context;
+import org.genthz.util.Constants;
 import org.genthz.util.Util;
 
 import java.lang.reflect.Constructor;
@@ -68,5 +70,10 @@ public abstract class AbstractConstructorInstanceBuilder<T> implements InstanceB
         final Context<T> parameterContext = new ConstructorIndexedContextImpl<>(objectFactory, parent, index, clazz);
 
         return objectFactory.build(parameterContext).node();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
     }
 }

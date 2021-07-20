@@ -17,6 +17,9 @@
  */
 package org.genthz.function;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.genthz.util.Constants;
+
 import java.lang.reflect.Constructor;
 import java.util.Comparator;
 import java.util.Optional;
@@ -35,5 +38,10 @@ public class DefaultInstanceBuilder<T> extends ConstructorInstanceBuilder<T> {
                 .orElse(Stream.empty())
                 .min(Comparator.comparing(e -> e.getParameterCount()))
                 .get();
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
     }
 }

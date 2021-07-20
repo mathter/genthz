@@ -17,6 +17,46 @@
  */
 package org.genthz.configuration.dsl;
 
-public class Fillers {
+import org.genthz.function.DefaultFiller;
+import org.genthz.function.Filler;
 
+import java.lang.reflect.Member;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public final class Fillers {
+    public static <T> Filler def() {
+        return new DefaultFiller();
+    }
+
+    public static <T> Filler<T> including(String... fieldNames) {
+        return new DefaultFiller<>(new IncludingPredicate(fieldNames));
+    }
+
+    public static <T> Filler<T> excluding(String... fieldNames) {
+        return new DefaultFiller<>(new IncludingPredicate(fieldNames).negate());
+    }
+
+    private static final class IncludingPredicate implements Predicate<Member> {
+        private final Set<String> fieldNames;
+
+        public IncludingPredicate(String... fieldNames) {
+            this.fieldNames = Optional
+                    .ofNullable(fieldNames)
+                    .map(Stream::of)
+                    .orElse(Stream.empty())
+                    .collect(Collectors.toSet());
+        }
+
+        @Override
+        public boolean test(Member member) {
+            return this.fieldNames.contains(member.getName());
+        }
+    }
+
+    private Fillers() {
+    }
 }

@@ -17,6 +17,7 @@
  */
 package org.genthz.summer.configuration.dsl;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.genthz.Description;
 import org.genthz.context.Context;
 
@@ -133,5 +134,10 @@ class Selector<T> implements org.genthz.Selector, org.genthz.configuration.dsl.S
     @Override
     public boolean test(Context<?> context) {
         return this.predicate.test(context) && (this.next == null || this.next.test(context));
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, Constants.TO_STRING_STYLE);
     }
 }

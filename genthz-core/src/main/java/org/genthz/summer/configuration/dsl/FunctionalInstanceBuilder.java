@@ -17,9 +17,10 @@
  */
 package org.genthz.summer.configuration.dsl;
 
+import org.genthz.configuration.dsl.Selector;
+import org.genthz.configuration.dsl.SimpleSelectableException;
 import org.genthz.context.Context;
 import org.genthz.function.InstanceBuilder;
-import org.genthz.configuration.dsl.Selector;
 
 import java.util.function.Function;
 
