@@ -39,7 +39,7 @@ public interface NonStrictable {
      * @param function instance builder function.
      * @param <T>      type of the object to be created.
      * @return instance builder description.
-     * @see #nonstrict(InstanceBuilder, Class)
+     * @see #nonstrict(Function, Class)
      */
     public default <T> FunctionalInstanceBuilder<T> nonstrict(InstanceBuilder<T> function) {
         return nonstrict(function, null);
