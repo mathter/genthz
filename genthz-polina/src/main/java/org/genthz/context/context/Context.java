@@ -1,0 +1,87 @@
+/*
+ * GenThz - testing becomes easier
+ *
+ * Copyright (C) 2020 mathter@mail.ru
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.genthz.context.context;
+
+import org.genthz.ObjectFactory;
+import org.genthz.util.StreamUtil;
+
+import java.util.stream.Stream;
+
+/**
+ * Сontext creation class. This root class contains the same information about the object to be created.
+ *
+ * @author <a href="mailto:mathter@mail.ru">mathter</a>
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public interface Context<T> {
+
+    /**
+     * Bindings used for this context.
+     *
+     * @return bindings.
+     */
+    public Bindings bindings();
+
+    /**
+     * Class of the object identified by this path.
+     *
+     * @return class of the object identified by this path.
+     */
+    public Class<T> clazz();
+
+    /**
+     * Object identified by this path.
+     *
+     * @return object identified by this path.
+     */
+    public T value();
+
+    /**
+     * Name of the object identified by this path.
+     *
+     * @return name of the object identified by this path.
+     */
+    public String name();
+
+    /**
+     * Parent path.
+     *
+     * @return parent path.
+     */
+    public Context<?> parent();
+
+    public default int length() {
+        return this.parent() != null ? this.parent().length() + 1 : 1;
+    }
+
+    /**
+     * Method returns {@linkplain ObjectFactory} used for this context.
+     *
+     * @return object factory.
+     */
+    public ObjectFactory objectFactory();
+
+    public default Object parentNode() {
+        return this.parent() != null ? this.parent().value() : null;
+    }
+
+    public default Stream<Context<?>> stream() {
+        return StreamUtil.of(this, e -> e.parent() != null ? e.parent() : null);
+    }
+}
