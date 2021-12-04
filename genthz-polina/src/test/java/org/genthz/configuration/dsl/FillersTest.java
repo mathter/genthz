@@ -25,6 +25,30 @@ import org.junit.jupiter.api.Test;
 
 public class FillersTest {
     @Test
+    public void test() {
+        final ObjectFactory objectFactory = new DefaultDsl() {
+            {
+                strict(Back.class).path("root")
+                        .strict(Root.class)
+                        .ib(c -> {
+                            Root r = new Root();
+                            return r;
+                        })
+                        .f((c, v) -> {
+                            v.setTag("inner");
+                            return v;
+                        });
+            }
+        }.objectFactory();
+        final Root root = objectFactory.build(Root.class);
+
+        Assertions.assertNotNull(root);
+        Assertions.assertNotNull(root.getBack());
+        Assertions.assertEquals("inner", root.getBack().getRoot().getTag());
+        Assertions.assertNull(root.getBack().getRoot().getBack());
+    }
+
+    @Test
     public void testBack() {
         final ObjectFactory objectFactory = new DefaultDsl() {
             {

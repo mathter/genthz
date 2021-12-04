@@ -17,9 +17,10 @@
  */
 package org.genthz.configuration.dsl.polina;
 
-import org.genthz.context.context.Context;
 import org.genthz.configuration.dsl.Selector;
+import org.genthz.context.context.Context;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 abstract class AbstractSelector<T> extends Abstract<T> implements org.genthz.configuration.dsl.Selector<T> {
@@ -34,13 +35,17 @@ abstract class AbstractSelector<T> extends Abstract<T> implements org.genthz.con
 
     @Override
     public org.genthz.configuration.dsl.Selector<T> metrics(Function<Context<?>, Integer> function) {
-        this.metrics = function;
+        if (this.prev != null) {
+            this.metrics = (c) -> Objects.requireNonNull(function).apply(c) + this.prev.metrics().apply(c);
+        } else {
+            this.metrics = Objects.requireNonNull(function);
+        }
 
         return this;
     }
 
     public Function<Context<?>, Integer> metrics() {
-        return metrics;
+        return this.metrics;
     }
 
     @Override

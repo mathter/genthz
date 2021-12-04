@@ -18,7 +18,17 @@
 package org.genthz.configuration.dsl.model;
 
 public class Root {
+    private String tag;
+
     private Back back;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public Back getBack() {
         return back;

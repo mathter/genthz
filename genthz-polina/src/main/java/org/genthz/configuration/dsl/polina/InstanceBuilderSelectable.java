@@ -17,14 +17,17 @@
  */
 package org.genthz.configuration.dsl.polina;
 
-import org.genthz.context.context.Context;
+import org.genthz.configuration.Filler;
 import org.genthz.configuration.InstanceBuilder;
 import org.genthz.configuration.dsl.Selector;
+import org.genthz.context.context.Context;
 
 class InstanceBuilderSelectable<T> extends AbstractSelectable<T> implements
         org.genthz.configuration.dsl.InstanceBuilderSelectable<T>,
         InstanceBuilder<T> {
     private final InstanceBuilder<T> function;
+
+    private boolean isSimple = true;
 
     public InstanceBuilderSelectable(Selector<T> selector, InstanceBuilder<T> function) {
         super(selector);
@@ -32,13 +35,32 @@ class InstanceBuilderSelectable<T> extends AbstractSelectable<T> implements
     }
 
     @Override
-    public
-    InstanceBuilderSelectable<T> ib(InstanceBuilder<T> instanceBuilder) {
+    public T apply(Context<T> context) {
+        return this.function.apply(context);
+    }
+
+    @Override
+    public InstanceBuilderSelectable<T> ib(InstanceBuilder<T> instanceBuilder) {
         throw new IllegalStateException();
     }
 
     @Override
-    public T apply(Context<T> context) {
-        return this.function.apply(context);
+    public FillerSelectable<T> f(Filler<T> filler) {
+        final FillerSelectable<T> fillerSelectable = super.f(filler);
+        this.isSimple = false;
+
+        return fillerSelectable;
+    }
+
+    public InstanceBuilder<T> getFunction() {
+        return function;
+    }
+
+    public boolean isSimple() {
+        return isSimple;
+    }
+
+    public void setSimple(boolean simple) {
+        isSimple = simple;
     }
 }

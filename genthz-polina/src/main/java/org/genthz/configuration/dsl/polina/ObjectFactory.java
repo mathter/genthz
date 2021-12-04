@@ -17,13 +17,13 @@
  */
 package org.genthz.configuration.dsl.polina;
 
-import org.genthz.context.context.Context;
 import org.genthz.configuration.Filler;
 import org.genthz.configuration.InstanceBuilder;
 import org.genthz.configuration.dsl.Defaults;
 import org.genthz.configuration.dsl.InstanceBuilders;
 import org.genthz.configuration.dsl.function.EnumInstanceBuilder;
 import org.genthz.context.Accessor;
+import org.genthz.context.context.Context;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,6 +48,11 @@ class ObjectFactory implements org.genthz.ObjectFactory {
 
     public void register(InstanceBuilderSelectable<?> selectable) {
         this.instanceBuilderSelectables.add(selectable);
+
+        if (selectable.isSimple()) {
+            this.register(new FillerSelectable<>(selectable.selector(), Filler.UNIT));
+        }
+
         LOG.log(Level.CONFIG, "Instance builder added. {}", selectable);
     }
 
@@ -108,7 +113,7 @@ class ObjectFactory implements org.genthz.ObjectFactory {
             if (candidtes.get(0).selector().metrics().apply(context) != candidtes.get(1).selector().metrics().apply(context)) {
                 result = (InstanceBuilder<T>) candidtes.get(0);
             } else {
-                throw new IllegalStateException("There are more then one instant builder! " + candidtes);
+                throw new IllegalStateException("There are more then one instant builder! " + candidtes + " for " + context);
             }
         }
 
@@ -139,7 +144,7 @@ class ObjectFactory implements org.genthz.ObjectFactory {
             if (candidtes.get(0).selector().metrics().apply(context) != candidtes.get(1).selector().metrics().apply(context)) {
                 result = (Filler<T>) candidtes.get(0);
             } else {
-                throw new IllegalStateException("There are more then one instant builder! " + candidtes);
+                throw new IllegalStateException("There are more then one instant builder! " + candidtes + " for " + context);
             }
         }
 

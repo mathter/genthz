@@ -17,9 +17,10 @@
  */
 package org.genthz.configuration.dsl.polina;
 
-import org.genthz.context.context.Context;
 import org.genthz.configuration.Filler;
+import org.genthz.configuration.InstanceBuilder;
 import org.genthz.configuration.dsl.Selector;
+import org.genthz.context.context.Context;
 
 class FillerSelectable<T> extends AbstractSelectable<T> implements
         org.genthz.configuration.dsl.FillerSelectable<T>,
@@ -32,12 +33,25 @@ class FillerSelectable<T> extends AbstractSelectable<T> implements
     }
 
     @Override
+    public T apply(Context<T> context, T t) {
+        return this.function.apply(context, t);
+    }
+
+    @Override
+    public InstanceBuilderSelectable<T> ib(InstanceBuilder<T> instanceBuilder) {
+        final InstanceBuilderSelectable<T> instanceBuilderSelectable = super.ib(instanceBuilder);
+
+        instanceBuilderSelectable.setSimple(false);
+
+        return instanceBuilderSelectable;
+    }
+
+    @Override
     public FillerSelectable<T> f(Filler<T> filler) {
         throw new IllegalStateException();
     }
 
-    @Override
-    public T apply(Context<T> context, T value) {
-        return this.function.apply(context, value);
+    public Filler<T> getFunction() {
+        return function;
     }
 }

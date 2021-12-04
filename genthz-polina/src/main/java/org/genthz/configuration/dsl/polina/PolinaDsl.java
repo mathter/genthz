@@ -18,7 +18,6 @@
 package org.genthz.configuration.dsl.polina;
 
 import org.genthz.ObjectFactory;
-import org.genthz.configuration.Filler;
 import org.genthz.configuration.dsl.Defaults;
 import org.genthz.configuration.dsl.DefaultsDefault;
 import org.genthz.configuration.dsl.Dsl;
@@ -26,11 +25,21 @@ import org.genthz.configuration.dsl.Path;
 import org.genthz.configuration.dsl.Selector;
 
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Predicate;
 
 class PolinaDsl implements Dsl {
+    private static final Class<?>[] INTERFACES = {
+            Selector.class,
+            Path.class,
+            org.genthz.configuration.dsl.InstanceBuilderSelectable.class,
+            org.genthz.configuration.dsl.FillerSelectable.class
+    };
 
-    private org.genthz.configuration.dsl.polina.ObjectFactory factory;
+    private final Collection<InstanceBuilderSelectable<?>> instanceBuilderSelectables = new ArrayList<>(100);
+
+    private final Collection<FillerSelectable<?>> fillerSelectables = new ArrayList<>(100);
 
     public PolinaDsl() {
         this.clear();
@@ -38,32 +47,43 @@ class PolinaDsl implements Dsl {
 
     @Override
     public <T> Path<T> path(String path) {
-        return this.proxy(Antrl4PathProcessor.process(null, path), Path.class);
+        return this.proxy(Antrl4PathProcessor.process(null, path));
     }
 
     @Override
     public <T> Selector<T> strict(Class<T> clazz) {
-        return this.proxy(new ClassStrictSelector<>(null, clazz), Selector.class);
+        return this.proxy(new ClassStrictSelector<>(null, clazz));
     }
 
     @Override
     public <T> Selector<T> unstrict(Class<T> clazz) {
-        return this.proxy(new ClassUnstrictSelector<>(null, clazz), Selector.class);
+        return this.proxy(new ClassUnstrictSelector<>(null, clazz));
     }
 
     @Override
     public Selector custom(Predicate predicate) {
-        return this.proxy(new CustomSelector(null, predicate), Selector.class);
+        return this.proxy(new CustomSelector(null, predicate));
     }
 
     @Override
     public ObjectFactory objectFactory() {
-        return this.factory;
+        final org.genthz.configuration.dsl.polina.ObjectFactory objectFactory = new org.genthz.configuration.dsl.polina.ObjectFactory(this.defaults());
+
+        for (InstanceBuilderSelectable<?> ibs : this.instanceBuilderSelectables) {
+            objectFactory.register(ibs);
+        }
+
+        for (FillerSelectable<?> fs : this.fillerSelectables) {
+            objectFactory.register(fs);
+        }
+
+        return objectFactory;
     }
 
     @Override
     public void clear() {
-        this.factory = new org.genthz.configuration.dsl.polina.ObjectFactory(this.defaults());
+        this.instanceBuilderSelectables.clear();
+        this.fillerSelectables.clear();
     }
 
     @Override
@@ -71,23 +91,24 @@ class PolinaDsl implements Dsl {
         return new DefaultsDefault();
     }
 
-    private <S extends Selector> S proxy(S selector, Class<S> clazz) {
+
+    private <S> S proxy(S object) {
         return (S) Proxy.newProxyInstance(
                 PolinaDsl.class.getClassLoader(),
-                new Class[]{clazz},
+                INTERFACES,
                 (proxy, method, args) -> {
-                    Object value = method.invoke(selector, args);
-                    final String methodName = method.getName();
+                    Object value = method.invoke(object, args);
 
                     if (value instanceof InstanceBuilderSelectable) {
-                        PolinaDsl.this.factory.register((InstanceBuilderSelectable<?>) value);
-                        PolinaDsl.this.factory.register(new FillerSelectable<>(((InstanceBuilderSelectable<?>) value).selector(), Filler.UNIT));
+                        this.instanceBuilderSelectables.add((InstanceBuilderSelectable<?>) value);
+                        value = this.proxy((S) value);
                     } else if (value instanceof FillerSelectable) {
-                        PolinaDsl.this.factory.register((FillerSelectable<?>) value);
+                        this.fillerSelectables.add((FillerSelectable<?>) value);
+                        value = this.proxy((S) value);
                     } else if (value instanceof Path) {
-                        value = this.proxy((Path) value, Path.class);
+                        value = this.proxy((S) value);
                     } else if (value instanceof Selector) {
-                        value = this.proxy((Selector) value, Selector.class);
+                        value = this.proxy((S) value);
                     }
 
                     return value;
