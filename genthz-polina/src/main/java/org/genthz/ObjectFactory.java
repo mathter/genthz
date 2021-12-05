@@ -17,7 +17,6 @@
  */
 package org.genthz;
 
-import org.genthz.configuration.dsl.Defaults;
 import org.genthz.context.context.Context;
 
 /**
@@ -46,6 +45,4 @@ public interface ObjectFactory {
      * @return object instance type of <code>T</code>.
      */
     public <T> Context<T> build(Context<T> context);
-
-    public Defaults defaults();
 }

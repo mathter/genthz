@@ -15,10 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.configuration.dsl;
+package org.genthz.configuration.dsl.polina;
 
 import org.genthz.configuration.Filler;
 import org.genthz.configuration.InstanceBuilder;
+import org.genthz.configuration.dsl.Defaults;
 import org.genthz.context.context.Context;
 
 import java.util.ArrayDeque;
@@ -31,7 +32,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.function.Function;
 
-public class DefaultsDefault implements Defaults {
+class DefaultsDefault implements Defaults {
+    private static final int OBJECT_METRICS = -1000000;
 
     @Override
     public InstanceBuilder<Collection> defaultCollectionInstanceBuilder() {
@@ -71,5 +73,10 @@ public class DefaultsDefault implements Defaults {
     @Override
     public Function<Context<?>, Integer> defaultDeep() {
         return c -> 100;
+    }
+
+    @Override
+    public int objectClassMetrics() {
+        return OBJECT_METRICS;
     }
 }

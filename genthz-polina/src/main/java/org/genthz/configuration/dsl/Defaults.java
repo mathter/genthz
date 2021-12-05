@@ -44,4 +44,6 @@ public interface Defaults {
     public <T extends Collection> Function<Context<T>, Integer> defaultCollectionSize(Context<T> context);
 
     public Function<Context<?>, Integer> defaultDeep();
+
+    public int objectClassMetrics();
 }

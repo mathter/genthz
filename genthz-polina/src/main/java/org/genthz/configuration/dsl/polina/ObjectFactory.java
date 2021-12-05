@@ -20,8 +20,6 @@ package org.genthz.configuration.dsl.polina;
 import org.genthz.configuration.Filler;
 import org.genthz.configuration.InstanceBuilder;
 import org.genthz.configuration.dsl.Defaults;
-import org.genthz.configuration.dsl.InstanceBuilders;
-import org.genthz.configuration.dsl.function.EnumInstanceBuilder;
 import org.genthz.context.Accessor;
 import org.genthz.context.context.Context;
 
@@ -81,11 +79,6 @@ class ObjectFactory implements org.genthz.ObjectFactory {
         return context;
     }
 
-    @Override
-    public Defaults defaults() {
-        return this.defaults;
-    }
-
     private <T> Accessor<T> accessor(Context<T> context) {
         return context instanceof Accessor ? (Accessor<T>) context : new ObjectContext(this, null, context.clazz(), null);
     }
@@ -106,7 +99,7 @@ class ObjectFactory implements org.genthz.ObjectFactory {
         final int size = candidtes.size();
 
         if (size == 0) {
-            result = this.defaultInstanceBuilder(context);
+            throw new IllegalStateException("Fuck! There is no appropriate instance builder! It's not possible!");
         } else if (size == 1) {
             result = (InstanceBuilder<T>) candidtes.get(0);
         } else {
@@ -137,7 +130,7 @@ class ObjectFactory implements org.genthz.ObjectFactory {
         final int size = candidtes.size();
 
         if (size == 0) {
-            result = this.defaultFiller(context);
+            throw new IllegalStateException("Fuck! There is no appropriate filler! It's not possible!");
         } else if (size == 1) {
             result = (Filler<T>) candidtes.get(0);
         } else {
@@ -149,22 +142,5 @@ class ObjectFactory implements org.genthz.ObjectFactory {
         }
 
         return result;
-    }
-
-    private <T> InstanceBuilder<T> defaultInstanceBuilder(Context<T> context) {
-        final InstanceBuilder<T> result;
-        final Class<T> clazz = context.clazz();
-
-        if (Enum.class.isAssignableFrom(clazz)) {
-            result = new EnumInstanceBuilder();
-        } else {
-            result = InstanceBuilders.minArgCount();
-        }
-
-        return result;
-    }
-
-    private <T> Filler<T> defaultFiller(Context<T> context) {
-        return new DefaultFiller();
     }
 }

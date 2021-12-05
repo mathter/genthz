@@ -19,7 +19,6 @@ package org.genthz.configuration.dsl.polina;
 
 import org.genthz.ObjectFactory;
 import org.genthz.configuration.dsl.Defaults;
-import org.genthz.configuration.dsl.DefaultsDefault;
 import org.genthz.configuration.dsl.Dsl;
 import org.genthz.configuration.dsl.Path;
 import org.genthz.configuration.dsl.Selector;

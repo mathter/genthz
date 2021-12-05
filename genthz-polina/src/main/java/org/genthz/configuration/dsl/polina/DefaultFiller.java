@@ -17,9 +17,10 @@
  */
 package org.genthz.configuration.dsl.polina;
 
-import org.genthz.context.context.Context;
 import org.genthz.ObjectFactory;
 import org.genthz.configuration.Filler;
+import org.genthz.configuration.dsl.Defaults;
+import org.genthz.context.context.Context;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -32,11 +33,17 @@ class DefaultFiller<T> implements Filler<T> {
 
     private final Predicate<Field> NON_STATIC_FIELD_PREDICATE = f -> !Modifier.isStatic(f.getModifiers());
 
+    private final Defaults defaults;
+
+    public DefaultFiller(Defaults defaults) {
+        this.defaults = defaults;
+    }
+
     @Override
     public T apply(Context<T> context, T value) {
         final ObjectFactory objectFactory = context.objectFactory();
 
-        if (context.length() < objectFactory.defaults().defaultDeep().apply(context)) {
+        if (context.length() < this.defaults.defaultDeep().apply(context)) {
             this.fieldStream(context.clazz())
                     .map(f -> new FieldContext<>(objectFactory, context, f))
                     .forEach(ctx -> {

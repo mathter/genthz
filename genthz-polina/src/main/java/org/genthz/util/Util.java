@@ -162,7 +162,7 @@ public final class Util {
                 f.set(object, value);
                 return null;
             } catch (Exception e) {
-                throw new IllegalStateException("Can't set value of " + f, e);
+                throw new IllegalStateException("Can't set value=" + value + " of " + f, e);
             }
         });
     }

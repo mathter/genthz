@@ -34,8 +34,9 @@ public class ObjectGenerationTest {
 
     @Test
     public void testDeep() {
-        final ObjectFactory objectFactory = new AbstractDsl().objectFactory();
-        final int deepLength = objectFactory.defaults().defaultDeep().apply(null);
+        final Dsl dsl = new AbstractDsl();
+        final ObjectFactory objectFactory = dsl.objectFactory();
+        final int deepLength = dsl.defaults().defaultDeep().apply(null);
         Deep deep = objectFactory.build(Deep.class);
 
 
