@@ -18,12 +18,13 @@
 package org.genthz.configuration.dsl;
 
 
-import org.genthz.context.context.Context;
 import org.genthz.configuration.InstanceBuilder;
 import org.genthz.configuration.dsl.function.ConstructorInstanceBuilder;
+import org.genthz.context.context.Context;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Predicate;
 
 public abstract class InstanceBuilders {
@@ -101,6 +102,10 @@ public abstract class InstanceBuilders {
             }
         };
     }
+
+//    public static <T extends Collection> InstanceBuilder<T> collectionInstanceBuilder() {
+//
+//    }
 
     public InstanceBuilders() {
     }

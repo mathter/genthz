@@ -24,8 +24,8 @@ import org.genthz.context.context.Context;
  * This main interface of the engine. Object of this type is entry point for object generation.
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
- * @version 1.0.0
- * @since 1.0.0
+ * @version 3.0.0
+ * @since 3.0.0
  */
 public interface ObjectFactory {
 

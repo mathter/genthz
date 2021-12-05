@@ -17,8 +17,9 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.context.context.Context;
+import org.genthz.configuration.Filler;
 import org.genthz.configuration.InstanceBuilder;
+import org.genthz.context.context.Context;
 
 import java.util.Collection;
 import java.util.Deque;
@@ -38,7 +39,9 @@ public interface Defaults {
 
     public InstanceBuilder<Deque> defaultDequeInstanceBuilder();
 
-    public Function<Context<?>, Integer> defaultCollectionSize();
+    public <T extends Collection> Filler<T> defaultCollectionFiller();
+
+    public <T extends Collection> Function<Context<T>, Integer> defaultCollectionSize(Context<T> context);
 
     public Function<Context<?>, Integer> defaultDeep();
 }

@@ -17,8 +17,9 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.context.context.Context;
+import org.genthz.configuration.Filler;
 import org.genthz.configuration.InstanceBuilder;
+import org.genthz.context.context.Context;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class DefaultsDefault implements Defaults {
 
     @Override
     public InstanceBuilder<Collection> defaultCollectionInstanceBuilder() {
-        return c -> new ArrayList();
+        return c -> new ArrayList(this.defaultCollectionSize(c).apply(c));
     }
 
     @Override
@@ -58,12 +59,17 @@ public class DefaultsDefault implements Defaults {
     }
 
     @Override
-    public Function<Context<?>, Integer> defaultCollectionSize() {
-        return c -> 5;
+    public <T extends Collection> Filler<T> defaultCollectionFiller() {
+        return null;
     }
 
     @Override
-    public  Function<Context<?>, Integer> defaultDeep() {
+    public <T extends Collection> Function<Context<T>, Integer> defaultCollectionSize(Context<T> c) {
+        return ctx -> 5;
+    }
+
+    @Override
+    public Function<Context<?>, Integer> defaultDeep() {
         return c -> 100;
     }
 }

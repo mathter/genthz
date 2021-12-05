@@ -50,7 +50,7 @@ public class DefaultDslTest {
             TestEnum.class
     })
     public void testSimple(Class<?> clazz) {
-        final ObjectFactory objectFactory = new DefaultDsl().objectFactory();
+        final ObjectFactory objectFactory = DslFactory.get().dsl().objectFactory();
         final Object result = objectFactory.build(clazz);
 
         Assertions.assertNotNull(result);

@@ -17,102 +17,61 @@
  */
 package org.genthz.configuration.dsl.polina;
 
-import org.genthz.ObjectFactory;
-import org.genthz.configuration.dsl.Defaults;
-import org.genthz.configuration.dsl.DefaultsDefault;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.genthz.configuration.dsl.Dsl;
-import org.genthz.configuration.dsl.Path;
 import org.genthz.configuration.dsl.Selector;
 
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
-import java.util.function.Predicate;
+import java.util.Date;
+import java.util.Deque;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.UUID;
 
-class PolinaDsl implements Dsl {
-    private static final Class<?>[] INTERFACES = {
-            Selector.class,
-            Path.class,
-            org.genthz.configuration.dsl.InstanceBuilderSelectable.class,
-            org.genthz.configuration.dsl.FillerSelectable.class
-    };
+class PolinaDsl extends BaseDsl {
+    {
+        strict(boolean.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextBoolean());
+        strict(byte.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextBytes(1)[0]);
+        strict(short.class).metrics(Selector.METRICS_ZERO).ib(c -> (short) RandomUtils.nextInt());
+        strict(int.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextInt());
+        strict(long.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextLong());
+        strict(float.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextFloat());
+        strict(double.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextDouble());
 
-    private final Collection<InstanceBuilderSelectable<?>> instanceBuilderSelectables = new ArrayList<>(100);
+        strict(Boolean.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextBoolean());
+        strict(Byte.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextBytes(1)[0]);
+        strict(Short.class).metrics(Selector.METRICS_ZERO).ib(c -> (short) RandomUtils.nextInt());
+        strict(Integer.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextInt());
+        strict(Long.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextLong());
+        strict(Float.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextFloat());
+        strict(Double.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomUtils.nextDouble());
 
-    private final Collection<FillerSelectable<?>> fillerSelectables = new ArrayList<>(100);
+        strict(BigDecimal.class).metrics(Selector.METRICS_ZERO).ib(c -> BigDecimal.valueOf(RandomUtils.nextLong()));
+        strict(BigInteger.class).metrics(Selector.METRICS_ZERO).ib(c -> BigInteger.valueOf(RandomUtils.nextLong()));
 
-    public PolinaDsl() {
-        this.clear();
-    }
+        strict(String.class).metrics(Selector.METRICS_ZERO).ib(c -> RandomStringUtils.randomAlphabetic(10));
+        strict(UUID.class).metrics(Selector.METRICS_ZERO).ib(c -> UUID.randomUUID());
 
-    @Override
-    public <T> Path<T> path(String path) {
-        return this.proxy(Antrl4PathProcessor.process(null, path));
-    }
+        strict(Date.class).metrics(Selector.METRICS_ZERO).ib(c -> new Date());
+        strict(Instant.class).metrics(Selector.METRICS_ZERO).ib(c -> Instant.now());
+        strict(ZonedDateTime.class).metrics(Selector.METRICS_ZERO).ib(c -> ZonedDateTime.now());
+        strict(ZoneId.class).metrics(Selector.METRICS_ZERO).ib(c -> ZoneId.systemDefault());
+        strict(LocalDate.class).metrics(Selector.METRICS_ZERO).ib(c -> LocalDate.now());
+        strict(LocalDateTime.class).metrics(Selector.METRICS_ZERO).ib(c -> LocalDateTime.now());
 
-    @Override
-    public <T> Selector<T> strict(Class<T> clazz) {
-        return this.proxy(new ClassStrictSelector<>(null, clazz));
-    }
-
-    @Override
-    public <T> Selector<T> unstrict(Class<T> clazz) {
-        return this.proxy(new ClassUnstrictSelector<>(null, clazz));
-    }
-
-    @Override
-    public Selector custom(Predicate predicate) {
-        return this.proxy(new CustomSelector(null, predicate));
-    }
-
-    @Override
-    public ObjectFactory objectFactory() {
-        final org.genthz.configuration.dsl.polina.ObjectFactory objectFactory = new org.genthz.configuration.dsl.polina.ObjectFactory(this.defaults());
-
-        for (InstanceBuilderSelectable<?> ibs : this.instanceBuilderSelectables) {
-            objectFactory.register(ibs);
-        }
-
-        for (FillerSelectable<?> fs : this.fillerSelectables) {
-            objectFactory.register(fs);
-        }
-
-        return objectFactory;
-    }
-
-    @Override
-    public void clear() {
-        this.instanceBuilderSelectables.clear();
-        this.fillerSelectables.clear();
-    }
-
-    @Override
-    public Defaults defaults() {
-        return new DefaultsDefault();
-    }
-
-
-    private <S> S proxy(S object) {
-        return (S) Proxy.newProxyInstance(
-                PolinaDsl.class.getClassLoader(),
-                INTERFACES,
-                (proxy, method, args) -> {
-                    Object value = method.invoke(object, args);
-
-                    if (value instanceof InstanceBuilderSelectable) {
-                        this.instanceBuilderSelectables.add((InstanceBuilderSelectable<?>) value);
-                        value = this.proxy((S) value);
-                    } else if (value instanceof FillerSelectable) {
-                        this.fillerSelectables.add((FillerSelectable<?>) value);
-                        value = this.proxy((S) value);
-                    } else if (value instanceof Path) {
-                        value = this.proxy((S) value);
-                    } else if (value instanceof Selector) {
-                        value = this.proxy((S) value);
-                    }
-
-                    return value;
-                }
-        );
+        unstrict(Collection.class).metrics(Selector.METRICS_ZERO).ib(defaults().defaultCollectionInstanceBuilder());
+        unstrict(List.class).metrics(Selector.METRICS_ONE).ib(defaults().defaultListInstanceBuilder());
+        unstrict(Set.class).metrics(Selector.METRICS_ONE).ib(defaults().defaultSetInstanceBuilder());
+        unstrict(Queue.class).metrics(Selector.METRICS_ONE).ib(defaults().defaultQueueInstanceBuilder());
+        unstrict(Deque.class).metrics(Selector.METRICS_TWO).ib(defaults().defaultDequeInstanceBuilder());
     }
 }

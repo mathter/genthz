@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 public class ObjectGenerationTest {
     @Test
     public void test() {
-        final ObjectFactory objectFactory = new DefaultDsl().objectFactory();
+        final ObjectFactory objectFactory = new AbstractDsl().objectFactory();
         final User user = objectFactory.build(User.class);
 
         Assertions.assertNotNull(user);
@@ -34,7 +34,7 @@ public class ObjectGenerationTest {
 
     @Test
     public void testDeep() {
-        final ObjectFactory objectFactory = new DefaultDsl().objectFactory();
+        final ObjectFactory objectFactory = new AbstractDsl().objectFactory();
         final int deepLength = objectFactory.defaults().defaultDeep().apply(null);
         Deep deep = objectFactory.build(Deep.class);
 

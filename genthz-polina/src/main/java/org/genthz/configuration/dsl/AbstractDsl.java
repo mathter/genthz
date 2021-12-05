@@ -17,8 +17,8 @@
  */
 package org.genthz.configuration.dsl;
 
-import org.genthz.context.context.Context;
 import org.genthz.ObjectFactory;
+import org.genthz.context.context.Context;
 
 import java.util.function.Predicate;
 
@@ -26,7 +26,7 @@ public class AbstractDsl implements Dsl {
     private final Dsl dsl;
 
     public AbstractDsl() {
-        this.dsl = DslFactory.get().dsl();
+        this(DslFactory.get().dsl());
     }
 
     public AbstractDsl(Dsl dsl) {

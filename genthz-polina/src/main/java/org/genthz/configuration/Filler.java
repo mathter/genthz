@@ -26,8 +26,8 @@ import java.util.function.BiFunction;
  *
  * @param <T> type of object to be filled.
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
- * @version 1.0.0
- * @since 1.0.0
+ * @version 3.0.0
+ * @since 3.0.0
  */
 @FunctionalInterface
 public interface Filler<T> extends BiFunction<Context<T>, T, T> {

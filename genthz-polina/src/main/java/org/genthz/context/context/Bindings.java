@@ -24,8 +24,8 @@ import java.util.Map;
  * Bindings for Generated Engine.
  *
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
- * @version 1.0.0
- * @since 1.0.0
+ * @version 3.0.0
+ * @since 3.0.0
  */
 public class Bindings {
     private final Bindings parent;

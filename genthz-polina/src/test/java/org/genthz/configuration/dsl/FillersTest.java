@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 public class FillersTest {
     @Test
     public void test() {
-        final ObjectFactory objectFactory = new DefaultDsl() {
+        final ObjectFactory objectFactory = new AbstractDsl() {
             {
                 strict(Back.class).path("root")
                         .strict(Root.class)
@@ -50,7 +50,7 @@ public class FillersTest {
 
     @Test
     public void testBack() {
-        final ObjectFactory objectFactory = new DefaultDsl() {
+        final ObjectFactory objectFactory = new AbstractDsl() {
             {
                 strict(Back.class).path("root").strict(Root.class).metrics(c -> 2).f(Fillers.back());
             }
@@ -64,7 +64,7 @@ public class FillersTest {
 
     @Test
     public void testBackNumberSteps() {
-        final ObjectFactory objectFactory = new DefaultDsl() {
+        final ObjectFactory objectFactory = new AbstractDsl() {
             {
                 strict(Back.class).path("root").strict(Root.class).metrics(c -> 2).f(Fillers.back(1));
             }

@@ -29,8 +29,8 @@ import java.util.function.Function;
  *
  * @param <T> type of the object to be created.
  * @author <a href="mailto:mathter@mail.ru">mathter</a>
- * @version 1.0.0
- * @since 1.0.0
+ * @version 3.0.0
+ * @since 3.0.0
  */
 @FunctionalInterface
 public interface InstanceBuilder<T> extends Function<Context<T>, T> {
