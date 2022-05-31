@@ -25,6 +25,22 @@ import org.junit.jupiter.api.Test;
 
 public class ObjectGenerationTest {
     @Test
+    public void a() {
+        final ObjectFactory objectFactory = new AbstractDsl().objectFactory();
+        B b = objectFactory.build(B.class);
+
+        System.out.println(b);
+    }
+
+    public static class B {
+        private A<String> a;
+    }
+
+    public static class A<T> {
+        private T value;
+    }
+
+    @Test
     public void test() {
         final ObjectFactory objectFactory = new AbstractDsl().objectFactory();
         final User user = objectFactory.build(User.class);

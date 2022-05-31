@@ -47,6 +47,7 @@ class DefaultFiller<T> implements Filler<T> {
             this.fieldStream(context.clazz())
                     .map(f -> new FieldContext<>(objectFactory, context, f))
                     .forEach(ctx -> {
+
                         objectFactory.build(ctx);
                     });
         }
