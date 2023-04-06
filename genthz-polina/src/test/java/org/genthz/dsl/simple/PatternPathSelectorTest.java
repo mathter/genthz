@@ -2,10 +2,7 @@ package org.genthz.dsl.simple;
 
 import org.genthz.context.ContextFactory;
 import org.genthz.context.ObjectContext;
-import org.genthz.dsl.simple.AbstractClassSelectorTest;
-import org.genthz.dsl.simple.FixedPathSelector;
-import org.genthz.dsl.simple.PatternPathSelector;
-import org.genthz.simple.SimpleContextFactory;
+import org.genthz.simple1.SimpleContextFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

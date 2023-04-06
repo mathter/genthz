@@ -4,7 +4,7 @@ import org.genthz.context.ContextFactory;
 import org.genthz.context.ObjectContext;
 import org.genthz.dsl.Selector;
 import org.genthz.reflection.GenericUtil;
-import org.genthz.simple.SimpleContextFactory;
+import org.genthz.simple1.SimpleContextFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

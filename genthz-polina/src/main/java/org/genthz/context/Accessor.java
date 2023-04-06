@@ -1,13 +1,27 @@
 package org.genthz.context;
 
 public interface Accessor<T> {
-    public T get();
-
-    public void set(T value);
-
     public Stage stage();
 
-    public void stage(Stage value);
+    /**
+     * Init accessor and set stage to {@linkplain Stage#CRETING}.
+     */
+    public void init();
 
-    public ContextFactory contextFactory();
+    /**
+     * The method returns value.
+     *
+     * @return
+     */
+    public T get();
+
+    /**
+     * Set value and set stage...
+     * First call move from {@linkplain Stage#CRETING} stage to {@linkplain Stage#CREATED} one.
+     * Second call move from {@linkplain Stage#CREATED} stage to {@linkplain Stage#COMPLETE} one.
+     *
+     * @param value new value of the object.
+     * @throws IllegalStateException if stage is invalid.
+     */
+    public void set(T value) throws IllegalStateException;
 }

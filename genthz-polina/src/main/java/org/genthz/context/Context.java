@@ -1,24 +1,14 @@
 package org.genthz.context;
 
-import org.genthz.Now;
-
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.util.Map;
+import java.util.stream.Stream;
 
-/**
- * Context of object creation.
- *
- * @param <T> type of the current object represented by the context.
- * @param <P> type of the parent context.
- * @param <N> type of the path node.
- */
-public interface Context<T, P extends Context<?, ?, ?>, N> extends Path<N, P> {
+public interface Context<T, N> extends Accessor<T>, Instance<T>, Node<N> {
     public Type type();
 
-    public Map<TypeVariable, Type> genericAtribution();
+    public <P, C extends Context<P, ?>> C up();
 
-    public Bindings bindings();
+    public Stream<Context> ups();
 
-    public Now now();
+    public ContextFactory contextFactory();
 }

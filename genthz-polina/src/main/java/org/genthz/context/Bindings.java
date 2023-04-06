@@ -3,9 +3,9 @@ package org.genthz.context;
 import java.util.Optional;
 
 public interface Bindings {
-    public Optional<Bindings> parent();
+    public Optional<Bindings> up();
 
-    public <V> V get(Object key);
+    public <T> T get(String key);
 
-    public <V> Bindings put(Object key, V value);
+    public <T> void put(String key, T value);
 }
