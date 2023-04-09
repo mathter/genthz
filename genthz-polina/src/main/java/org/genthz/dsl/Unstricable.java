@@ -4,7 +4,7 @@ public interface Unstricable {
     /**
      * The method is short alias for {@linkplain #unstrict(Class)} (Class)}.
      */
-    default public <T, S extends Selector & Pathable & Customable & Functions> S us(Class<T> clazz) {
+    default public <T, S extends Selector & Pathable & Customable & InstanceBuilderFirst & FillerFirst> S us(Class<T> clazz) {
         return this.unstrict(clazz);
     }
 
@@ -16,5 +16,5 @@ public interface Unstricable {
      * @param <S>   type of the selector.
      * @return selector.
      */
-    public <T, S extends Selector & Pathable & Customable & Functions> S unstrict(Class<T> clazz);
+    public <T, S extends Selector & Pathable & Customable & InstanceBuilderFirst & FillerFirst> S unstrict(Class<T> clazz);
 }

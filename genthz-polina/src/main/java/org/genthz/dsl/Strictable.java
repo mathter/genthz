@@ -4,7 +4,7 @@ public interface Strictable {
     /**
      * The method is short alias for {@linkplain #strict(Class)}.
      */
-    default public <T, S extends Selector & Pathable & Customable & Functions> S s(Class<T> clazz) {
+    default public <T, S extends Selector & Pathable & Customable & InstanceBuilderFirst & FillerFirst> S s(Class<T> clazz) {
         return this.strict(clazz);
     }
 
@@ -16,5 +16,5 @@ public interface Strictable {
      * @param <S>   type of the selector.
      * @return selector.
      */
-    public <T, S extends Selector & Pathable & Customable & Functions> S strict(Class<T> clazz);
+    public <T, S extends Selector & Pathable & Customable & InstanceBuilderFirst & FillerFirst> S strict(Class<T> clazz);
 }

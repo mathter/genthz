@@ -4,7 +4,12 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 public interface ContextFactory {
-    public <T> Context<T, Void> context(Class<T> type, Type... genericArgTypes);
+    <T> InstanceContext<T, Void> context(Class<T> type, Type... genericArgTypes);
 
-    public <T> Collection<Context> contexts(Context<T, ?> up);
+    <U> Collection<InstanceContext> contexts(InstanceContext<U, ?> up);
+
+    <U, T, N, L, LN> InstanceContext<T, N> context(InstanceContext<U, ?> up,
+                                                   int order,
+                                                   Class<T> type,
+                                                   InstanceContext<L, LN> left);
 }

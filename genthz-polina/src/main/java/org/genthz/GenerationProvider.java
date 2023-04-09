@@ -1,17 +1,15 @@
 package org.genthz;
 
-import org.genthz.context.ConstructorContext;
-import org.genthz.function.InstanceBuilder;
+import org.genthz.context.InstanceContext;
 import org.genthz.function.Filler;
+import org.genthz.function.InstanceBuilder;
 
-import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
 
 public interface GenerationProvider {
-    public <T> InstanceBuilder<T> instanceBuilder(ConstructorContext<T, ?, ?> context);
+    public <T> InstanceBuilder<T> instanceBuilder(InstanceContext context);
 
-    public <T> Filler<T> filler(ConstructorContext<T, ?, ?> context);
+    public <T> Filler<T> filler(InstanceContext context);
 
     public Optional<GenerationProvider> generationProvider();
 
