@@ -1,7 +1,9 @@
-package org.genthz.dsl;
+package org.genthz.function;
 
 import org.genthz.context.Context;
 import org.genthz.context.InstanceContext;
+import org.genthz.dsl.Metric;
+import org.genthz.dsl.Named;
 
 import java.util.Optional;
 import java.util.function.Predicate;

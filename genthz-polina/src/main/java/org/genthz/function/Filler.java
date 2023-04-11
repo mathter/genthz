@@ -1,8 +1,8 @@
 package org.genthz.function;
 
-import org.genthz.context.Context;
+import org.genthz.context.InstanceContext;
 
 @FunctionalInterface
 public interface Filler<T> {
-    public void fill(Context context);
+    public void fill(InstanceContext<T, ?> context);
 }

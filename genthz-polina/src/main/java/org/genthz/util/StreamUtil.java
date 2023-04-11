@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public final class StreamUtil {
@@ -20,7 +21,7 @@ public final class StreamUtil {
      * @return stream of objects.
      */
     public static final <T> java.util.stream.Stream<T> of(T startElement, Function<T, T> next) {
-        return StreamSupport.stream(new NextSpliterator(startElement, next), false);
+        return startElement != null ? StreamSupport.stream(new NextSpliterator(startElement, next), false) : Stream.empty();
     }
 
     private static final class NextSpliterator<T> implements Spliterator<T> {

@@ -1,7 +1,7 @@
 package org.genthz.dasha.dsl;
 
 import org.genthz.dsl.Metric;
-import org.genthz.dsl.Selector;
+import org.genthz.function.Selector;
 
 import java.util.Optional;
 

@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.genthz.dsl.Selector;
+import org.genthz.function.Selector;
 
 class Antrl4PathProcessor {
     public static final PathSelector path(Selector up, String path) {

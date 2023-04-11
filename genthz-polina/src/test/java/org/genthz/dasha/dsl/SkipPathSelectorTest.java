@@ -3,7 +3,7 @@ package org.genthz.dasha.dsl;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.context.DashaContextFactory;
-import org.genthz.dsl.Selector;
+import org.genthz.function.Selector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

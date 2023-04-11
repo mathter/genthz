@@ -1,11 +1,11 @@
 package org.genthz.dasha.dsl;
 
 import org.genthz.context.Context;
-import org.genthz.dsl.Selector;
+import org.genthz.function.Selector;
 
 import java.lang.reflect.Type;
 
-abstract class TypeSelector extends Able {
+abstract class TypeSelector extends AbstractSelector {
     protected final Type type;
 
     public TypeSelector(Selector parent, Type type) {

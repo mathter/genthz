@@ -1,6 +1,6 @@
 package org.genthz.dsl;
 
-public interface Metric<T extends Metric<T>> extends Comparable<Metric> {
+public interface Metric<T extends Metric<T>> extends Comparable<Metric<T>> {
 
     default public int m() {
         return this.metric();

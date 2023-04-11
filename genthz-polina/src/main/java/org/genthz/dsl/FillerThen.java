@@ -3,9 +3,9 @@ package org.genthz.dsl;
 import org.genthz.function.Filler;
 
 public interface FillerThen {
-    default public <T> Selectable f(Filler<T> function) {
-        return this.filler(function);
+    default public <T> void f(Filler<T> function) {
+        this.filler(function);
     }
 
-    public <T> Selectable filler(Filler<T> function);
+    public <T> void filler(Filler<T> function);
 }

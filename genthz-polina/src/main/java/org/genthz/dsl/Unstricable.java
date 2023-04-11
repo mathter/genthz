@@ -1,11 +1,13 @@
 package org.genthz.dsl;
 
+import java.lang.reflect.Type;
+
 public interface Unstricable {
     /**
-     * The method is short alias for {@linkplain #unstrict(Class)} (Class)}.
+     * The method is short alias for {@linkplain #unstrict(Type, Type...)}.
      */
-    default public <T, S extends Selector & Pathable & Customable & InstanceBuilderFirst & FillerFirst> S us(Class<T> clazz) {
-        return this.unstrict(clazz);
+    default public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst> S us(Type type, Type... genericTypeArgs) {
+        return this.unstrict(type, genericTypeArgs);
     }
 
     /**
@@ -16,5 +18,5 @@ public interface Unstricable {
      * @param <S>   type of the selector.
      * @return selector.
      */
-    public <T, S extends Selector & Pathable & Customable & InstanceBuilderFirst & FillerFirst> S unstrict(Class<T> clazz);
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst> S unstrict(Type type, Type... genericTypeArgs);
 }

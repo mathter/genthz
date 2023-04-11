@@ -1,7 +1,7 @@
 package org.genthz.dasha.dsl;
 
 import org.genthz.dsl.Selectable;
-import org.genthz.dsl.Selector;
+import org.genthz.function.Selector;
 
 abstract class AbstractSelectable<T, F> implements Selectable {
     protected final Selector selector;

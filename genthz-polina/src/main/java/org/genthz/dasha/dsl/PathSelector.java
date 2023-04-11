@@ -2,7 +2,7 @@ package org.genthz.dasha.dsl;
 
 
 import org.genthz.context.Context;
-import org.genthz.dsl.Selector;
+import org.genthz.function.Selector;
 
 public class PathSelector extends AbstractSelector {
 

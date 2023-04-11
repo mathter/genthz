@@ -1,9 +1,6 @@
 package org.genthz.dasha.dsl;
 
-import org.genthz.dasha.dsl.Antrl4PathProcessor;
-import org.genthz.dasha.dsl.FixedPathSelector;
-import org.genthz.dasha.dsl.PatternPathSelector;
-import org.genthz.dsl.Selector;
+import org.genthz.function.Selector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

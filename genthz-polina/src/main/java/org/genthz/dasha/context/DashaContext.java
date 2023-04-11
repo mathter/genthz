@@ -58,7 +58,7 @@ class DashaContext<T, N> implements InstanceContext<T, N> {
 
     @Override
     public Stream<Context> ups() {
-        return this.up != null ? StreamUtil.of(this.up, Context::up) : Stream.empty();
+        return StreamUtil.of(this.up, Context::up);
     }
 
     @Override

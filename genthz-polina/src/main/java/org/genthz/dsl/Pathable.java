@@ -8,5 +8,5 @@ public interface Pathable {
         return this.path(path);
     }
 
-    public <S extends Selector & Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst> S path(String path);
+    public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst> S path(String path);
 }
