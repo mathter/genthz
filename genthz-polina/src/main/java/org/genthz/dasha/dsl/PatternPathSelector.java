@@ -1,7 +1,7 @@
 package org.genthz.dasha.dsl;
 
 import org.genthz.context.Context;
-import org.genthz.context.InstanceContext;
+import org.genthz.context.NodeInstanceContext;
 import org.genthz.function.Selector;
 
 import java.util.Optional;
@@ -28,13 +28,13 @@ public class PatternPathSelector extends PathSelector {
     public boolean test(Context context) {
         boolean result;
 
-        if (context instanceof InstanceContext) {
+        if (context instanceof NodeInstanceContext) {
             // Check for root
             if ("/".equals(this.pattern.pattern())) {
                 result = context.up() == null;
             } else {
 
-                result = Optional.ofNullable(((InstanceContext) context).node())
+                result = Optional.ofNullable(((NodeInstanceContext) context).node())
                         .filter(e -> e instanceof CharSequence)
                         .map(Object::toString)
                         .map(e -> this.pattern.matcher(e).matches())

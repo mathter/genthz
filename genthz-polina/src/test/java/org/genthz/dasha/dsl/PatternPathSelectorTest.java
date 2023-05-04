@@ -16,12 +16,12 @@ public class PatternPathSelectorTest extends AbstractClassSelectorTest {
     @ParameterizedTest
     @MethodSource("data")
     public void testSub(String pattern) {
-        final InstanceContext<S, ?> context = this.factory.context(S.class);
+        final InstanceContext<S> context = this.factory.single(S.class);
 
         Assertions.assertTrue(
                 new PatternPathSelector(null, pattern)
                         .test(
-                                this.factory.contexts(context).stream()
+                                this.factory.byProperties(context).stream()
                                         .filter(e -> "stringField".equals(e.node()))
                                         .findFirst()
                                         .get()
@@ -39,12 +39,12 @@ public class PatternPathSelectorTest extends AbstractClassSelectorTest {
 
     @Test
     public void testChain() {
-        final InstanceContext<S, ?> context = this.factory.context(S.class);
+        final InstanceContext<S> context = this.factory.single(S.class);
 
         Assertions.assertTrue(
                 new PatternPathSelector(new FixedPathSelector(null, "/"), "stringField")
                         .test(
-                                this.factory.contexts(context).stream()
+                                this.factory.byProperties(context).stream()
                                         .filter(e -> "stringField".equals(e.node()))
                                         .findFirst()
                                         .get()

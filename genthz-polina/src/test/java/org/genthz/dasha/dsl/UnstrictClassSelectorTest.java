@@ -1,19 +1,21 @@
 package org.genthz.dasha.dsl;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.context.DashaContextFactory;
 import org.genthz.function.Selector;
-import org.genthz.reflection.GenericUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
 
 public class UnstrictClassSelectorTest extends AbstractClassSelectorTest {
     private ContextFactory contextFactory = new DashaContextFactory();
 
     @Test
     public void testOrdinal() {
-        InstanceContext<?, ?> context = this.contextFactory.context(S.class);
+        InstanceContext<?> context = this.contextFactory.single(S.class);
 
         final Selector selector = new UnstrictClassSelector(null, S.class);
 
@@ -22,9 +24,9 @@ public class UnstrictClassSelectorTest extends AbstractClassSelectorTest {
 
     @Test
     public void testGeneric() {
-        InstanceContext<?, ?> context = this.contextFactory.context(D0.class, String.class);
+        InstanceContext<?> context = this.contextFactory.single(D0.class, String.class);
 
-        Assertions.assertFalse(
+        Assertions.assertTrue(
                 new UnstrictClassSelector(null,
                         D.class
                 )
@@ -33,7 +35,7 @@ public class UnstrictClassSelectorTest extends AbstractClassSelectorTest {
 
         Assertions.assertTrue(
                 new UnstrictClassSelector(null,
-                        GenericUtil.resolve(D0.class, GenericUtil.attribution(D0.class, String.class))
+                        TypeUtils.parameterize(D.class, String.class)
                 )
                         .test(context)
         );

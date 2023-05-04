@@ -1,6 +1,7 @@
 package org.genthz;
 
 import org.genthz.context.Bindings;
+import org.genthz.context.InstanceContext;
 
 import java.lang.reflect.Type;
 
@@ -27,6 +28,8 @@ public interface ObjectFactory {
      * @return instance of {@linkplain Class}.
      */
     public <T> T get(final Bindings bindings, final Class<T> clazz, final Type... genericTypes);
+
+    public <T> InstanceContext<T> process(InstanceContext<T> context);
 
     public GenerationProvider generationProvider();
 }

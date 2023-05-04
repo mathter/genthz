@@ -1,7 +1,7 @@
 package org.genthz.dasha.context;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.ConstructorChoiceStrategy;
-import org.genthz.reflection.GenericUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
@@ -11,7 +11,7 @@ public class MinimalArgCountConstructorChoiceStrategy implements ConstructorChoi
     @Override
     public <T> Constructor<T> constructor(Type type) {
         final Constructor<T> result;
-        final Class<T> clazz = GenericUtil.rawType(type);
+        final Class<T> clazz = (Class<T>) TypeUtils.getRawType(type, Object.class);
 
         if (clazz.isInterface()) {
             result = null;

@@ -12,7 +12,7 @@ public class SkipPathSelectorTest extends AbstractClassSelectorTest {
 
     @Test
     public void test() {
-        final InstanceContext<S, Void> context = this.factory.context(S.class);
+        final InstanceContext<S> context = this.factory.single(S.class);
         final Selector selector = new SkipPathSelector(
                 new FixedPathSelector(null, "/"),
                 1
@@ -20,7 +20,7 @@ public class SkipPathSelectorTest extends AbstractClassSelectorTest {
 
         Assertions.assertTrue(
                 selector.test(
-                        this.factory.contexts(context).stream()
+                        this.factory.byProperties(context).stream()
                                 .filter(e -> "stringField".equals(e.node()))
                                 .findFirst()
                                 .get()

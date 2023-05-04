@@ -13,13 +13,13 @@ public abstract class AbstractAccessor<T> implements Accessor<T> {
 
     @Override
     public void init() {
-        this.stage = Stage.CRETING;
+        this.stage = Stage.CREATING;
     }
 
     @Override
     public void set(T value) throws IllegalStateException {
         switch (this.stage) {
-            case CRETING:
+            case CREATING:
                 this.stage = Stage.CREATED;
                 break;
             case CREATED:

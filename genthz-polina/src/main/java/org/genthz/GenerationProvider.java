@@ -11,8 +11,6 @@ public interface GenerationProvider {
 
     public <T> Filler<T> filler(InstanceContext context);
 
-    public Optional<GenerationProvider> generationProvider();
-
     public Defaults defaults();
 
     public Optional<GenerationProvider> up();

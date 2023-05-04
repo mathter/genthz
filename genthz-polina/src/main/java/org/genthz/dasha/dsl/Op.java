@@ -1,44 +1,25 @@
 package org.genthz.dasha.dsl;
 
-import org.genthz.dsl.Metric;
-import org.genthz.function.Selector;
-import org.genthz.util.StreamUtil;
+class Op<T extends Op<T>> {
+    private final T up;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
-abstract class Op implements Metric<Op> {
-    private final Optional<Op> up;
-
-    private int metric;
-
-    public Op(Op up) {
-        this.up = Optional.ofNullable(up);
+    public Op(T up) {
+        this.up = up;
     }
 
-    @Override
-    public int metric() {
-        return this.metric;
+    public T up() {
+        return up;
     }
 
-    @Override
-    public Op metric(int mertic) {
-        this.metric = mertic;
-        return this;
-    }
+    public DashaDsl dsl() {
+        final DashaDsl result;
 
-    @Override
-    public int compareTo(Metric<Op> o) {
-        return this.metric - o.metric();
-    }
+        if (this.up != null) {
+            result = this.up.dsl();
+        } else {
+            throw new IllegalStateException();
+        }
 
-    public Optional<Op> up() {
-        return this.up;
+        return result;
     }
-
-    public Stream<Op> ups() {
-        return StreamUtil.of(this.up.orElse(null), e -> e.up().orElse(null));
-    }
-
-    public abstract Selector selector();
 }

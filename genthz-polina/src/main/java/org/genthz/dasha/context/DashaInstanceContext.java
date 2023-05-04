@@ -1,5 +1,6 @@
 package org.genthz.dasha.context;
 
+import org.genthz.ObjectFactory;
 import org.genthz.context.*;
 import org.genthz.util.StreamUtil;
 
@@ -7,47 +8,30 @@ import java.lang.reflect.Type;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-class DashaContext<T, N> implements InstanceContext<T, N> {
+class DashaInstanceContext<T> implements InstanceContext<T> {
     private final ContextFactory contextFactory;
 
     private final InstanceAccessor<T> instanceAccessor;
-
-    private final Node<N> node;
 
     private final Context up;
 
     private final Type type;
 
-    private final InstanceContext left;
+    private final Bindings bindings;
 
     private Stage stage = Stage.NEW;
 
-    public DashaContext(ContextFactory contextFactory,
-                        InstanceAccessor<T> instanceAccessor,
-                        Node<N> node,
-                        Context up,
-                        Type type) {
-        this(
-                contextFactory,
-                instanceAccessor,
-                node,
-                up,
-                null,
-                type
-        );
-    }
+    private ObjectFactory objectFactory;
 
-    public DashaContext(ContextFactory contextFactory,
-                        InstanceAccessor<T> instanceAccessor,
-                        Node<N> node,
-                        Context up,
-                        InstanceContext left,
-                        Type type) {
+    public DashaInstanceContext(ContextFactory contextFactory,
+                                Bindings bindings,
+                                InstanceAccessor<T> instanceAccessor,
+                                Context up,
+                                Type type) {
         this.contextFactory = Objects.requireNonNull(contextFactory);
+        this.bindings = bindings;
         this.instanceAccessor = Objects.requireNonNull(instanceAccessor);
-        this.node = Objects.requireNonNull(node);
         this.up = up;
-        this.left = left;
         this.type = type;
     }
 
@@ -92,21 +76,26 @@ class DashaContext<T, N> implements InstanceContext<T, N> {
     }
 
     @Override
-    public N node() {
-        return this.node.node();
-    }
-
-    @Override
     public Type type() {
         return this.type;
     }
 
-    @Override
-    public <L, LN> InstanceContext<L, LN> left() {
-        return this.left;
-    }
-
     public InstanceAccessor<T> getInstanceAccessor() {
         return instanceAccessor;
+    }
+
+    @Override
+    public ObjectFactory objectFactory() {
+        return this.objectFactory;
+    }
+
+    @Override
+    public void objectFactory(ObjectFactory objectFactory) {
+        this.objectFactory = objectFactory;
+    }
+
+    @Override
+    public Bindings bindings() {
+        return this.bindings;
     }
 }

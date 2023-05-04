@@ -4,5 +4,5 @@ import org.genthz.context.InstanceContext;
 
 @FunctionalInterface
 public interface Filler<T> {
-    public void fill(InstanceContext<T, ?> context);
+    public void fill(InstanceContext<T> context);
 }

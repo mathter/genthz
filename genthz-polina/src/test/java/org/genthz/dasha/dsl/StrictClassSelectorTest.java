@@ -1,19 +1,21 @@
 package org.genthz.dasha.dsl;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.context.DashaContextFactory;
 import org.genthz.function.Selector;
-import org.genthz.reflection.GenericUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
 
 public class StrictClassSelectorTest extends AbstractClassSelectorTest {
     private ContextFactory contextFactory = new DashaContextFactory();
 
     @Test
     public void testOrdinal() {
-        InstanceContext<?, ?> context = this.contextFactory.context(S.class);
+        InstanceContext<S> context = this.contextFactory.single(S.class);
         final Selector selector = new StrictClassSelector(null, S.class);
 
         Assertions.assertTrue(selector.test(context));
@@ -21,7 +23,7 @@ public class StrictClassSelectorTest extends AbstractClassSelectorTest {
 
     @Test
     public void testGeneric() {
-        InstanceContext<?, ?> context = this.contextFactory.context(D0.class, String.class);
+        InstanceContext<D0> context = this.contextFactory.single(D0.class, String.class);
         Assertions.assertFalse(
                 new StrictClassSelector(null,
                         S0.class
@@ -31,7 +33,7 @@ public class StrictClassSelectorTest extends AbstractClassSelectorTest {
 
         Assertions.assertTrue(
                 new StrictClassSelector(null,
-                        GenericUtil.resolve(D0.class, GenericUtil.attribution(D0.class, String.class))
+                        TypeUtils.parameterize(D0.class, String.class)
                 )
                         .test(context)
         );

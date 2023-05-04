@@ -1,15 +1,7 @@
 package org.genthz.dasha.context;
 
-import org.genthz.context.Node;
-
-class ObjectInstanceAccessor<T, N> extends AbstractAccessor<T> implements InstanceAccessor<T>, Node<N> {
-    private final N node;
-
+class ObjectInstanceAccessor<T> extends AbstractAccessor<T> implements InstanceAccessor<T>{
     private T object;
-
-    public ObjectInstanceAccessor(N node) {
-        this.node = node;
-    }
 
     @Override
     public T get() {
@@ -20,10 +12,5 @@ class ObjectInstanceAccessor<T, N> extends AbstractAccessor<T> implements Instan
     public void set(T value) throws IllegalStateException {
         super.set(value);
         this.object = value;
-    }
-
-    @Override
-    public N node() {
-        return this.node;
     }
 }

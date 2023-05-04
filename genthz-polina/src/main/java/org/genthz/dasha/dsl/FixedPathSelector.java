@@ -1,7 +1,7 @@
 package org.genthz.dasha.dsl;
 
 import org.genthz.context.Context;
-import org.genthz.context.InstanceContext;
+import org.genthz.context.NodeInstanceContext;
 import org.genthz.function.Selector;
 
 class FixedPathSelector extends PathSelector {
@@ -19,13 +19,10 @@ class FixedPathSelector extends PathSelector {
     @Override
     public boolean test(Context context) {
         boolean result;
-        if (context instanceof InstanceContext) {
-            // Check for root
-            if ("/".equals(this.element)) {
-                result = context.up() == null;
-            } else {
-                result = this.element.equals(((InstanceContext) context).node());
-            }
+        if ("/".equals(this.element)) {
+            result = context.up() == null;
+        } else if (context instanceof NodeInstanceContext) {
+            result = this.element.equals(((NodeInstanceContext) context).node());
         } else {
             result = false;
         }

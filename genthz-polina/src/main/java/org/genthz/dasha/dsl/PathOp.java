@@ -16,17 +16,17 @@ import org.genthz.function.InstanceBuilder;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
-class PathOp extends Op implements Pathable, Strictable, Unstricable, Customable, InstanceBuilderFirst, FillerFirst {
+class PathOp extends SelectorOp implements Pathable, Strictable, Unstricable, Customable, InstanceBuilderFirst, FillerFirst {
     private final String path;
 
-    public PathOp(Op up, String path) {
+    public PathOp(SelectorOp up, String path) {
         super(up);
         this.path = path;
     }
 
     @Override
     public Selector selector() {
-        return Antrl4PathProcessor.path(this.up().map(Op::selector).orElse(null), this.path);
+        return Antrl4PathProcessor.path(this.up() != null ? this.up().selector() : null, this.path);
     }
 
     @Override

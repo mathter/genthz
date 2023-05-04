@@ -4,5 +4,5 @@ import org.genthz.context.InstanceContext;
 
 @FunctionalInterface
 public interface InstanceBuilder<T> {
-    public T instance(InstanceContext<T, ?> context);
+    public void instance(InstanceContext<T> context);
 }

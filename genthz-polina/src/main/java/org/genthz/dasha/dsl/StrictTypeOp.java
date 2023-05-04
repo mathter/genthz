@@ -13,13 +13,13 @@ import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 class StrictTypeOp extends TypeOp implements Pathable, Customable {
-    public StrictTypeOp(Op up, Type type, Type... genericTypeArgs) {
+    public StrictTypeOp(SelectorOp up, Type type, Type... genericTypeArgs) {
         super(up, type, genericTypeArgs);
     }
 
     @Override
     public Selector selector() {
-        return new StrictClassSelector(this.up().map(Op::selector).orElse(null), this.type);
+        return new StrictClassSelector(this.up() != null ? this.up().selector() : null, this.type);
     }
 
     @Override

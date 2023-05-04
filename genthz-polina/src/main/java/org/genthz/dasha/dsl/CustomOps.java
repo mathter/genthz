@@ -16,17 +16,17 @@ import org.genthz.function.InstanceBuilder;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
-public class CustomOps extends Op implements Pathable, Strictable, Unstricable, InstanceBuilderFirst, FillerFirst {
+public class CustomOps extends SelectorOp implements Pathable, Strictable, Unstricable, InstanceBuilderFirst, FillerFirst {
     private final Predicate<Context> predicate;
 
-    public CustomOps(Op up, Predicate<Context> predicate) {
+    public CustomOps(SelectorOp up, Predicate<Context> predicate) {
         super(up);
         this.predicate = predicate;
     }
 
     @Override
     public Selector selector() {
-        return new CustomSelector(this.up().map(Op::selector).orElse(null), this.predicate);
+        return new CustomSelector(this.up() != null ? this.up().selector() : null, this.predicate);
     }
 
     @Override

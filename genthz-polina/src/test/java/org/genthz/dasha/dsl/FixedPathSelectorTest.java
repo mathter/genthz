@@ -11,7 +11,7 @@ public class FixedPathSelectorTest extends AbstractClassSelectorTest {
 
     @Test
     public void testRoot() {
-        final InstanceContext<S, Void> context = this.factory.context(S.class);
+        final InstanceContext<S> context = this.factory.single(S.class);
 
         Assertions.assertTrue(
                 new FixedPathSelector(null, "/")
@@ -21,7 +21,7 @@ public class FixedPathSelectorTest extends AbstractClassSelectorTest {
         Assertions.assertFalse(
                 new FixedPathSelector(null, "/")
                         .test(
-                                this.factory.contexts(context).stream()
+                                this.factory.byProperties(context).stream()
                                         .filter(e -> "stringField".equals(e.node()))
                                         .findFirst()
                                         .get()
@@ -31,7 +31,7 @@ public class FixedPathSelectorTest extends AbstractClassSelectorTest {
         Assertions.assertTrue(
                 new FixedPathSelector(null, "/")
                         .test(
-                                this.factory.contexts(context).stream()
+                                this.factory.byProperties(context).stream()
                                         .filter(e -> "stringField".equals(e.node()))
                                         .findFirst()
                                         .get()
@@ -42,12 +42,12 @@ public class FixedPathSelectorTest extends AbstractClassSelectorTest {
 
     @Test
     public void testSub() {
-        final InstanceContext<S, Void> context = this.factory.context(S.class);
+        final InstanceContext<S> context = this.factory.single(S.class);
 
         Assertions.assertTrue(
                 new FixedPathSelector(null, "stringField")
                         .test(
-                                this.factory.contexts(context).stream()
+                                this.factory.byProperties(context).stream()
                                         .filter(e -> "stringField".equals(e.node()))
                                         .findFirst()
                                         .get()
@@ -57,12 +57,12 @@ public class FixedPathSelectorTest extends AbstractClassSelectorTest {
 
     @Test
     public void testChain() {
-        final InstanceContext<S, Void> context = this.factory.context(S.class);
+        final InstanceContext<S> context = this.factory.single(S.class);
 
         Assertions.assertTrue(
                 new FixedPathSelector(new FixedPathSelector(null, "/"), "stringField")
                         .test(
-                                this.factory.contexts(context).stream()
+                                this.factory.byProperties(context).stream()
                                         .filter(e -> "stringField".equals(e.node()))
                                         .findFirst()
                                         .get()

@@ -3,7 +3,7 @@ package org.genthz.dasha.context;
 import java.util.Collection;
 import java.util.Objects;
 
-class CollectionAccessor<T> extends ObjectInstanceAccessor<T, Integer> {
+class CollectionAccessor<T> extends NodeObjectInstanceAccessor<T, Integer> {
     private final Collection<T> container;
 
     public CollectionAccessor(Integer node, Collection<T> container) {
