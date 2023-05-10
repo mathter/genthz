@@ -7,11 +7,13 @@ import org.genthz.dsl.FillerThen;
 import org.genthz.dsl.InstanceBuilderFirst;
 import org.genthz.dsl.InstanceBuilderThen;
 import org.genthz.dsl.Pathable;
+import org.genthz.function.DefaultInstancebuilder;
 import org.genthz.function.Selector;
 import org.genthz.dsl.Strictable;
 import org.genthz.dsl.Unstricable;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
+import org.genthz.function.UnitFiller;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
@@ -31,34 +33,48 @@ public class CustomOps extends SelectorOp implements Pathable, Strictable, Unstr
 
     @Override
     public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst> S path(String path) {
-        return null;
+        return (S) new PathOp(this, path);
     }
 
     @Override
     public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst> S strict(Type type, Type... genericTypeArgs) {
-        return null;
+        return (S) new StrictTypeOp(null, type, genericTypeArgs);
     }
 
     @Override
     public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst> S unstrict(Type type, Type... genericTypeArgs) {
-        return null;
+        return (S) new UnstrictTypeOp(null, type, genericTypeArgs);
     }
 
     @Override
     public <T> InstanceBuilderThen filler(Filler<T> function) {
-        return null;
+        this.dsl().reg(this.up().selector(), function);
+
+        return new InstanceBuilderThenOp(this.up());
     }
 
     @Override
     public <T> FillerThen instanceBuilder(InstanceBuilder<T> function) {
-        return null;
+        this.dsl().reg(this.up().selector(), function);
+
+        return new FillerThenOp(this.up());
     }
 
     @Override
     public <T> void simple() {
+        final Selector selector = this.up().selector();
+        final DashaDsl dsl = this.dsl();
+
+        dsl.reg(selector, new DefaultInstancebuilder());
+        dsl.reg(selector, UnitFiller.INSTANCE);
     }
 
     @Override
     public <T> void simple(InstanceBuilder<T> function) {
+        final Selector selector = this.up().selector();
+        final DashaDsl dsl = this.dsl();
+
+        dsl.reg(selector, function);
+        dsl.reg(selector, UnitFiller.INSTANCE);
     }
 }
