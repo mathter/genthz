@@ -8,7 +8,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>genthz-polina</artifactId>
+    <artifactId>genthz-core</artifactId>
 
     <dependencies>
         <dependency>
