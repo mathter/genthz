@@ -56,6 +56,11 @@ class DashaInstanceContext<T> implements InstanceContext<T> {
     }
 
     @Override
+    public void stage(Stage stage) {
+        this.instanceAccessor.stage(stage);
+    }
+
+    @Override
     public T get() {
         return this.instanceAccessor.get();
     }
@@ -63,11 +68,6 @@ class DashaInstanceContext<T> implements InstanceContext<T> {
     @Override
     public void set(T value) {
         this.instanceAccessor.set(value);
-    }
-
-    @Override
-    public void init() {
-        this.instanceAccessor.init();
     }
 
     @Override

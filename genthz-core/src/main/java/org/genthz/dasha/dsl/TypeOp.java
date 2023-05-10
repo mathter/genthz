@@ -2,7 +2,7 @@ package org.genthz.dasha.dsl;
 
 import java.lang.reflect.Type;
 
-abstract class TypeOp extends SelectorOp {
+abstract class TypeOp<T extends TypeOp<T>> extends SelectorOp<T> {
     protected final Type type;
 
     protected final Type[] genericTypeArgs;

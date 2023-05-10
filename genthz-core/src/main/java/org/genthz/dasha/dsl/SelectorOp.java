@@ -3,7 +3,7 @@ package org.genthz.dasha.dsl;
 import org.genthz.dsl.Metric;
 import org.genthz.function.Selector;
 
-abstract class SelectorOp extends Op<SelectorOp> implements Metric<SelectorOp> {
+abstract class SelectorOp<THIS extends SelectorOp<THIS>> extends Op<SelectorOp<?>> implements Metric<THIS> {
 
     private int metric;
 
@@ -17,13 +17,13 @@ abstract class SelectorOp extends Op<SelectorOp> implements Metric<SelectorOp> {
     }
 
     @Override
-    public SelectorOp metric(int mertic) {
+    public THIS metric(int mertic) {
         this.metric = mertic;
-        return this;
+        return (THIS) this;
     }
 
     @Override
-    public int compareTo(Metric<SelectorOp> o) {
+    public int compareTo(Metric<THIS> o) {
         return this.metric - o.metric();
     }
 

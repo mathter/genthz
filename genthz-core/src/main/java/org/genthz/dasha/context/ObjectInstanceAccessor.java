@@ -10,7 +10,6 @@ class ObjectInstanceAccessor<T> extends AbstractAccessor<T> implements InstanceA
 
     @Override
     public void set(T value) throws IllegalStateException {
-        super.set(value);
         this.object = value;
     }
 }

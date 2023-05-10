@@ -25,7 +25,6 @@ public class FieldInstanceAccessor<T> extends AbstractAccessor<T>
 
     @Override
     public void set(T value) throws IllegalStateException {
-        super.set(value);
         Util.setFieldValue(this.field, this.upInstance.instance(), value);
     }
 

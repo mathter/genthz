@@ -63,4 +63,37 @@ public class Antrl4PathProcessorTest {
         Assertions.assertFalse(selector.up().isPresent());
         Assertions.assertEquals("/", ((FixedPathSelector) selector).getElement());
     }
+
+    @Test
+    public void testSkip() {
+        Selector selector = Antrl4PathProcessor.path(null, "/f/..2/..4/s");
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof FixedPathSelector);
+        Assertions.assertTrue(selector.up().isPresent());
+        Assertions.assertEquals("s", ((FixedPathSelector) selector).getElement());
+
+        selector = selector.up().get();
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof SkipPathSelector);
+        Assertions.assertTrue(selector.up().isPresent());
+        Assertions.assertEquals(4, ((SkipPathSelector) selector).getSkip());
+
+        selector = selector.up().get();
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof SkipPathSelector);
+        Assertions.assertTrue(selector.up().isPresent());
+        Assertions.assertEquals(2, ((SkipPathSelector) selector).getSkip());
+
+        selector = selector.up().get();
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof FixedPathSelector);
+        Assertions.assertTrue(selector.up().isPresent());
+        Assertions.assertEquals("f", ((FixedPathSelector) selector).getElement());
+
+        selector = selector.up().get();
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof FixedPathSelector);
+        Assertions.assertFalse(selector.up().isPresent());
+        Assertions.assertEquals("/", ((FixedPathSelector) selector).getElement());
+    }
 }

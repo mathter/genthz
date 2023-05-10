@@ -1,12 +1,15 @@
 package org.genthz.dasha.dsl;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Context;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.FillerFirst;
 import org.genthz.dsl.FillerThen;
 import org.genthz.dsl.InstanceBuilderFirst;
 import org.genthz.dsl.InstanceBuilderThen;
+import org.genthz.dsl.Metric;
 import org.genthz.dsl.Pathable;
+import org.genthz.dsl.Using;
 import org.genthz.function.DefaultInstancebuilder;
 import org.genthz.function.Selector;
 import org.genthz.dsl.Strictable;
@@ -16,9 +19,14 @@ import org.genthz.function.InstanceBuilder;
 import org.genthz.function.UnitFiller;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class CustomOps extends SelectorOp implements Pathable, Strictable, Unstricable, InstanceBuilderFirst, FillerFirst {
+public class CustomOps extends SelectorOp<CustomOps> implements Pathable, Strictable, Unstricable, InstanceBuilderFirst, FillerFirst, Using<CustomOps> {
     private final Predicate<Context> predicate;
 
     public CustomOps(SelectorOp up, Predicate<Context> predicate) {
@@ -32,41 +40,34 @@ public class CustomOps extends SelectorOp implements Pathable, Strictable, Unstr
     }
 
     @Override
-    public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst> S path(String path) {
+    public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(String path) {
         return (S) new PathOp(this, path);
     }
 
     @Override
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst> S strict(Type type, Type... genericTypeArgs) {
-        return (S) new StrictTypeOp(null, type, genericTypeArgs);
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs) {
+        return (S) new StrictTypeOp(this, type, genericTypeArgs);
     }
 
     @Override
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst> S unstrict(Type type, Type... genericTypeArgs) {
-        return (S) new UnstrictTypeOp(null, type, genericTypeArgs);
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs) {
+        return (S) new UnstrictTypeOp(this, type, genericTypeArgs);
     }
 
     @Override
     public <T> InstanceBuilderThen filler(Filler<T> function) {
-        this.dsl().reg(this.up().selector(), function);
-
-        return new InstanceBuilderThenOp(this.up());
+        return new InstanceBuilderThenOp(this, function);
     }
 
     @Override
     public <T> FillerThen instanceBuilder(InstanceBuilder<T> function) {
-        this.dsl().reg(this.up().selector(), function);
-
-        return new FillerThenOp(this.up());
+        return new FillerThenOp(this, function);
     }
 
     @Override
     public <T> void simple() {
         final Selector selector = this.up().selector();
-        final DashaDsl dsl = this.dsl();
-
-        dsl.reg(selector, new DefaultInstancebuilder());
-        dsl.reg(selector, UnitFiller.INSTANCE);
+        this.dsl().reg(new SimpleOp(this, new DefaultInstancebuilder<>(), UnitFiller.INSTANCE));
     }
 
     @Override
@@ -74,7 +75,16 @@ public class CustomOps extends SelectorOp implements Pathable, Strictable, Unstr
         final Selector selector = this.up().selector();
         final DashaDsl dsl = this.dsl();
 
-        dsl.reg(selector, function);
-        dsl.reg(selector, UnitFiller.INSTANCE);
+        this.dsl().reg(new SimpleOp(this, function, UnitFiller.INSTANCE));
+    }
+
+    @Override
+    public void use(Consumer<CustomOps> consumer) {
+        Objects.requireNonNull(consumer).accept(this);
+    }
+
+    @Override
+    public Collection<Pair<Selector, ?>> op() {
+        return Collections.emptyList();
     }
 }

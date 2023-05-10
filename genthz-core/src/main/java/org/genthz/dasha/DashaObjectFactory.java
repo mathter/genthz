@@ -5,6 +5,7 @@ import org.genthz.ObjectFactory;
 import org.genthz.context.Bindings;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
+import org.genthz.context.Stage;
 import org.genthz.dasha.context.DashaContextFactory;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
@@ -34,15 +35,52 @@ public class DashaObjectFactory implements ObjectFactory {
 
     @Override
     public <T> InstanceContext<T> process(InstanceContext<T> context) {
+        switch (context.stage()) {
+            case NEW:
+                this.processNew(context);
+                break;
+
+            case COMPLETE:
+                break;
+
+            default:
+                throw new IllegalStateException(
+                        String.format("Context %s stage error!", context)
+                );
+        }
+
+        return context;
+    }
+
+    private <T> void processNew(InstanceContext<T> context) {
         context.objectFactory(this);
 
         final InstanceBuilder<T> ib = this.generationProvider.instanceBuilder(context);
         final Filler<T> filler = this.generationProvider.filler(context);
 
-        ib.instance(context);
-        filler.fill(context);
+        try {
+            context.stage(Stage.CREATING);
+            ib.instance(context);
+            context.stage(Stage.CREATED);
+        } catch (Throwable t) {
+            context.stage(Stage.NEW);
+            throw new IllegalStateException(
+                    String.format("Can't create object instance for context %s", context),
+                    t
+            );
+        }
 
-        return context;
+        try {
+            context.stage(Stage.FILLING);
+            filler.fill(context);
+            context.stage(Stage.COMPLETE);
+        } catch (Throwable t) {
+            context.stage(Stage.CREATED);
+            throw new IllegalStateException(
+                    String.format("Can't create object instance for context %s", context),
+                    t
+            );
+        }
     }
 
     @Override

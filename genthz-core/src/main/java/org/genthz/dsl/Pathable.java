@@ -4,9 +4,9 @@ public interface Pathable {
     /**
      * The method is short alias for {@linkplain #path(String)}.
      */
-    default public <T extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst> T p(String path) {
+    default public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S p(String path) {
         return this.path(path);
     }
 
-    public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst> S path(String path);
+    public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(String path);
 }

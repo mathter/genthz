@@ -4,6 +4,7 @@ import org.genthz.ConstructorChoiceStrategy;
 import org.genthz.ObjectFactory;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
+import org.genthz.context.Stage;
 import org.genthz.dasha.context.MinimalArgCountConstructorChoiceStrategy;
 
 import java.lang.reflect.Constructor;
@@ -32,7 +33,10 @@ public class DefaultInstancebuilder<T> implements InstanceBuilder<T> {
                     .map(e -> objectFactory.process(e).instance())
                     .toArray(i -> new Object[i]));
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw new IllegalStateException(
+                    String.format("Can't create object instance for context %s", context),
+                    t
+            );
         }
 
         context.set(instance);

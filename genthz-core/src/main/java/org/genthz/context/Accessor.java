@@ -3,10 +3,7 @@ package org.genthz.context;
 public interface Accessor<T> {
     public Stage stage();
 
-    /**
-     * Init accessor and set stage to {@linkplain Stage#CREATING}.
-     */
-    public void init();
+    public void stage(Stage stage);
 
     /**
      * The method returns value.

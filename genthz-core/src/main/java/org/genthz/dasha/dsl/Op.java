@@ -1,6 +1,11 @@
 package org.genthz.dasha.dsl;
 
-class Op<T extends Op<T>> {
+import org.apache.commons.lang3.tuple.Pair;
+import org.genthz.function.Selector;
+
+import java.util.Collection;
+
+abstract class Op<T extends Op<T>> {
     private final T up;
 
     public Op(T up) {
@@ -10,6 +15,8 @@ class Op<T extends Op<T>> {
     public T up() {
         return up;
     }
+
+    public abstract Collection<Pair<Selector, ?>> op();
 
     public DashaDsl dsl() {
         final DashaDsl result;

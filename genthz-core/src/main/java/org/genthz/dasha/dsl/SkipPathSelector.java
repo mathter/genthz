@@ -4,12 +4,16 @@ import org.genthz.context.Context;
 import org.genthz.context.InstanceContext;
 import org.genthz.function.Selector;
 
-class SkipPathSelector extends AbstractSelector {
+class SkipPathSelector extends PathSelector {
     private final int skip;
 
     public SkipPathSelector(Selector parent, int skip) {
         super(parent);
         this.skip = skip;
+    }
+
+    public int getSkip() {
+        return skip;
     }
 
     @Override
