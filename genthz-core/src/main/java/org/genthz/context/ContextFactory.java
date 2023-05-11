@@ -6,11 +6,11 @@ import java.util.Collection;
 import java.util.List;
 
 public interface ContextFactory {
-    default <T> InstanceContext<T> single(Class<T> type, Type... genericArgTypes) {
+    default <T> InstanceContext<T> single(Class<T> type, Type... genericArgTypes) throws IllegalArgumentException {
         return this.single(null, type, genericArgTypes);
     }
 
-    public <T> InstanceContext<T> single(Bindings bindings, Class<T> type, Type... genericArgTypes);
+    public <T> InstanceContext<T> single(Bindings bindings, Class<T> type, Type... genericArgTypes) throws IllegalArgumentException;
 
     public <T> List<InstanceContext> byConstructor(InstanceContext<T> up, Constructor constructor);
 

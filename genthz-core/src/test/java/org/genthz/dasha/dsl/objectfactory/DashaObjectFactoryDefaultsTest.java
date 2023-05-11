@@ -1,8 +1,9 @@
-package org.genthz.dasha.dsl;
+package org.genthz.dasha.dsl.objectfactory;
 
 import org.genthz.ObjectFactory;
 import org.genthz.dasha.DashaObjectFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -32,6 +33,34 @@ public class DashaObjectFactoryDefaultsTest {
         final Object instance = this.objectFactory.get(clazz, typeArguments);
 
         Assertions.assertNotNull(instance);
+    }
+
+    @Test
+    public void testSimpleTestModel() {
+        final SimpleTestModel instance = this.objectFactory.get(SimpleTestModel.class);
+
+        Assertions.assertNotNull(instance);
+        Assertions.assertNotNull(instance.getName());
+        Assertions.assertNotNull(instance.getLastName());
+        Assertions.assertNotNull(instance.getBirthDay());
+        Assertions.assertNotNull(instance.getAge());
+    }
+
+    @Test
+    public void testSimpleGenericModel() {
+        final SimpleGenericModel instance = this.objectFactory.get(SimpleGenericModel.class, LocalDateTime.class, String.class);
+
+        Assertions.assertNotNull(instance);
+        Assertions.assertNotNull(instance.getName());
+        Assertions.assertNotNull(instance.getLastName());
+        Assertions.assertNotNull(instance.getBirthDay());
+        Assertions.assertNotNull(instance.getAge());
+
+        Assertions.assertNotNull(instance.getOtherNames());
+        Assertions.assertEquals(5, instance.getOtherNames().size());
+
+        instance.getOtherNames().stream()
+                .forEach(e -> Assertions.assertNotNull(e));
     }
 
     private static Stream<Arguments> data() {

@@ -32,7 +32,7 @@ class StrictTypeOp extends TypeOp<StrictTypeOp> implements Pathable, Customable,
 
     @Override
     public Selector selector() {
-        return new StrictClassSelector(this.up() != null ? this.up().selector() : null, this.type);
+        return this.setTo(new StrictClassSelector(this.up() != null ? this.up().selector() : null, this.type));
     }
 
     @Override

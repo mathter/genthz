@@ -37,7 +37,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class DashaDsl implements Dsl {
-    public static final int DEFAULT_METRIC = 1;
+    public static final int DEFAULT_METRIC = 0;
 
     public static final int DEFAULT_COLLECTION_METRIC = DEFAULT_METRIC;
 

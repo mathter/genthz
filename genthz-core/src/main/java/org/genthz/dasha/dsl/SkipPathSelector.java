@@ -10,6 +10,7 @@ class SkipPathSelector extends PathSelector {
     public SkipPathSelector(Selector parent, int skip) {
         super(parent);
         this.skip = skip;
+        this.metric(skip);
     }
 
     public int getSkip() {

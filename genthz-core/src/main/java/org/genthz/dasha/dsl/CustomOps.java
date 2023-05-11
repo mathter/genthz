@@ -36,7 +36,7 @@ public class CustomOps extends SelectorOp<CustomOps> implements Pathable, Strict
 
     @Override
     public Selector selector() {
-        return new CustomSelector(this.up() != null ? this.up().selector() : null, this.predicate);
+        return this.setTo(new CustomSelector(this.up() != null ? this.up().selector() : null, this.predicate));
     }
 
     @Override

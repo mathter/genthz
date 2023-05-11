@@ -35,7 +35,7 @@ class PathOp extends SelectorOp<PathOp> implements Pathable, Strictable, Unstric
 
     @Override
     public Selector selector() {
-        return Antrl4PathProcessor.path(this.up() != null ? this.up().selector() : null, this.path);
+        return this.setTo(Antrl4PathProcessor.path(this.up() != null ? this.up().selector() : null, this.path));
     }
 
     @Override

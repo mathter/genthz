@@ -12,5 +12,9 @@ public interface Metric<T extends Metric<T>> extends Comparable<Metric<T>> {
         return this.metric(metric);
     }
 
+    default public int effective() {
+        return this.metric();
+    }
+
     public T metric(int mertic);
 }

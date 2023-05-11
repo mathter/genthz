@@ -19,7 +19,11 @@ public class DashaObjectFactory implements ObjectFactory {
     private final GenerationProvider generationProvider;
 
     public DashaObjectFactory() {
-        this(new DashaContextFactory(), null);
+        this(null, null);
+    }
+
+    public DashaObjectFactory(GenerationProvider generationProvider) {
+        this(null, generationProvider);
     }
 
     public DashaObjectFactory(ContextFactory contextFactory, GenerationProvider generationProvider) {

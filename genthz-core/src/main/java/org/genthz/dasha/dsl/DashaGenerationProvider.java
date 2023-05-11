@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 class DashaGenerationProvider implements GenerationProvider {
-    private static final Comparator<Pair<Selector, ?>> COMPARATOR = Comparator.comparingInt(e -> e.getLeft().metric());
+    private static final Comparator<Pair<Selector, ?>> COMPARATOR = Comparator.comparingInt(e -> e.getLeft().effective());
 
     private final Optional<GenerationProvider> up;
 

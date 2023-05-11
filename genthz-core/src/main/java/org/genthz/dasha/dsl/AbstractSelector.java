@@ -23,12 +23,17 @@ abstract class AbstractSelector implements Selector {
 
     @Override
     public int compareTo(Metric o) {
-        return this.metric - o.metric();
+        return this.effective() - o.effective();
     }
 
     @Override
     public int metric() {
         return this.metric;
+    }
+
+    @Override
+    public int effective() {
+        return this.metric + this.up.map(e -> e.effective()).orElse(0);
     }
 
     @Override
