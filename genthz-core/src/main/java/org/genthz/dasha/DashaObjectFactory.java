@@ -7,6 +7,7 @@ import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.context.Stage;
 import org.genthz.dasha.context.DashaContextFactory;
+import org.genthz.dasha.dsl.DashaDsl;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 
@@ -22,8 +23,8 @@ public class DashaObjectFactory implements ObjectFactory {
     }
 
     public DashaObjectFactory(ContextFactory contextFactory, GenerationProvider generationProvider) {
-        this.contextFactory = contextFactory;
-        this.generationProvider = generationProvider;
+        this.contextFactory = contextFactory != null ? contextFactory : new DashaContextFactory();
+        this.generationProvider = generationProvider != null ? generationProvider : new DashaDsl().def().build();
     }
 
     @Override

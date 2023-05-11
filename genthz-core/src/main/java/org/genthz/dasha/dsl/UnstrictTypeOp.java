@@ -32,7 +32,7 @@ class UnstrictTypeOp extends TypeOp<UnstrictTypeOp> implements Pathable, Customa
 
     @Override
     public Selector selector() {
-        return new UnstrictClassSelector(this.up() != null ? this.up().selector() : null, this.type);
+        return new UnstrictClassSelector(this.up() != null ? this.up().selector() : null, this.type).m(this.metric());
     }
 
     @Override

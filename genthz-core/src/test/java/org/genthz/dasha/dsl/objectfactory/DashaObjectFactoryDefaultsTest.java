@@ -1,13 +1,7 @@
 package org.genthz.dasha.dsl;
 
-import org.genthz.GenerationProvider;
-import org.genthz.context.ContextFactory;
-import org.genthz.context.InstanceContext;
-import org.genthz.dasha.context.DashaContextFactory;
-import org.genthz.function.DefaultCollectionFiller;
-import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilder;
-import org.genthz.function.UnitFiller;
+import org.genthz.ObjectFactory;
+import org.genthz.dasha.DashaObjectFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,31 +23,15 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class DashaDslTest {
-    private final ContextFactory contextFactory = new DashaContextFactory();
-
-    private final DashaDsl dsl = new DashaDsl().def();
-
-    final GenerationProvider generationProvider = this.dsl.build();
+public class DashaObjectFactoryDefaultsTest {
+    private final ObjectFactory objectFactory = new DashaObjectFactory();
 
     @ParameterizedTest
     @MethodSource("data")
-    public void testDefauts(Class<?> clazz, Type... typeArguments) {
-        final InstanceContext context = this.contextFactory.single(clazz, typeArguments);
-        final InstanceBuilder ib = generationProvider.instanceBuilder(context);
-        final Filler filler = generationProvider.filler(context);
+    public void testDefaults(Class<?> clazz, Type... typeArguments) {
+        final Object instance = this.objectFactory.get(clazz, typeArguments);
 
-        Assertions.assertNotNull(ib);
-        Assertions.assertNotNull(filler);
-
-        if (Collection.class.isAssignableFrom(clazz)) {
-            Assertions.assertTrue(filler instanceof DefaultCollectionFiller);
-        } else {
-            Assertions.assertTrue(filler instanceof UnitFiller);
-        }
-
-        ib.instance(context);
-        Assertions.assertNotNull(context.instance());
+        Assertions.assertNotNull(instance);
     }
 
     private static Stream<Arguments> data() {

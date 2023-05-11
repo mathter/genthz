@@ -41,7 +41,7 @@ public class DashaDsl implements Dsl {
 
     public static final int DEFAULT_COLLECTION_METRIC = DEFAULT_METRIC;
 
-    public static final int DEFAULT_SUB_COLLECTION_METRIC = 2;
+    public static final int DEFAULT_SUB_COLLECTION_METRIC = DEFAULT_COLLECTION_METRIC + 1;
 
     private final Collection<Op> ops = new ArrayList<>();
 

@@ -21,9 +21,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DashaContextFactory implements ContextFactory {
+    private static final Type[] EMPTY_GENERIC_ARG_TYPE = new Type[0];
+
     @Override
     public <T> InstanceContext<T> single(Bindings bindings, Class<T> type, Type... genericArgTypes) {
-        final ParameterizedType parameterizedType = TypeUtils.parameterize(type, genericArgTypes);
+        final ParameterizedType parameterizedType = TypeUtils.parameterize(type, genericArgTypes != null ? genericArgTypes : EMPTY_GENERIC_ARG_TYPE);
         final ObjectInstanceAccessor<T> instanceAccessor = new ObjectInstanceAccessor<>();
         return new DashaInstanceContext(
                 this,
@@ -72,7 +74,7 @@ public class DashaContextFactory implements ContextFactory {
                         this,
                         instanceAccessor,
                         up,
-                        this.unrollType(variableTypeMap, Collection.class.getTypeParameters()[0]),
+                        this.unrollType(variableTypeMap, ((ParameterizedType) upType).getActualTypeArguments()[0]),
                         instanceAccessor
                 ));
             }
