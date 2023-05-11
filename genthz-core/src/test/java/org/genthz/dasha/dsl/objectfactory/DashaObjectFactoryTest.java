@@ -32,7 +32,7 @@ public class DashaObjectFactoryTest {
                         Optional.of(new DashaDsl().def())
                                 .map(e -> {
                                     e.path("name")
-                                            .simple(ctx -> ctx.set("Name"));
+                                            .simple(ctx -> "Name");
                                     return e;
                                 })
                                 .get(),
@@ -48,7 +48,7 @@ public class DashaObjectFactoryTest {
                                 .map(e -> {
                                     e.path("name")
                                             .strict(String.class)
-                                            .simple(ctx -> ctx.set("Name"));
+                                            .simple(ctx -> "Name");
                                     return e;
                                 })
                                 .get(),
@@ -64,7 +64,7 @@ public class DashaObjectFactoryTest {
                                 .map(e -> {
                                     e.strict(SimpleTestModel.class)
                                             .path("name")
-                                            .simple(ctx -> ctx.set("Name"));
+                                            .simple(ctx -> "Name");
                                     return e;
                                 })
                                 .get(),

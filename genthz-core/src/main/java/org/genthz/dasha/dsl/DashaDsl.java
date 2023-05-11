@@ -15,7 +15,7 @@ import org.genthz.dsl.Strictable;
 import org.genthz.dsl.Unstricable;
 import org.genthz.dsl.Using;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilder;
+import org.genthz.function.InstanceBuilderConsumer;
 import org.genthz.function.Selector;
 
 import java.lang.reflect.Type;
@@ -217,19 +217,19 @@ public class DashaDsl implements Dsl {
 
     @Override
     public GenerationProvider build(GenerationProvider parent) {
-        final Collection<Pair<Selector, InstanceBuilder>> instanceBuilders = new ArrayList<>();
+        final Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders = new ArrayList<>();
         final Collection<Pair<Selector, Filler>> fillers = new ArrayList<>();
 
         for (Op op : this.ops) {
             final Collection<Pair<Selector, ?>> list = op.op();
             list.forEach(e -> {
-                if (e.getRight() instanceof InstanceBuilder) {
-                    instanceBuilders.add((Pair<Selector, InstanceBuilder>) e);
+                if (e.getRight() instanceof InstanceBuilderConsumer) {
+                    instanceBuilders.add((Pair<Selector, InstanceBuilderConsumer>) e);
                 } else if (e.getRight() instanceof Filler) {
                     fillers.add((Pair<Selector, Filler>) e);
                 } else {
                     throw new IllegalStateException(
-                            String.format("%s is not valid! Must be %s or %s", e, InstanceBuilder.class, Filler.class)
+                            String.format("%s is not valid! Must be %s or %s", e, InstanceBuilderConsumer.class, Filler.class)
                     );
                 }
             });

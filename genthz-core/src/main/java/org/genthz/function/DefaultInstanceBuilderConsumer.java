@@ -4,19 +4,18 @@ import org.genthz.ConstructorChoiceStrategy;
 import org.genthz.ObjectFactory;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
-import org.genthz.context.Stage;
 import org.genthz.dasha.context.MinimalArgCountConstructorChoiceStrategy;
 
 import java.lang.reflect.Constructor;
 
-public class DefaultInstancebuilder<T> implements InstanceBuilder<T> {
+public class DefaultInstanceBuilderConsumer<T> implements InstanceBuilderConsumer<T> {
     private final ConstructorChoiceStrategy constructorChoiceStrategy;
 
-    public DefaultInstancebuilder() {
+    public DefaultInstanceBuilderConsumer() {
         this(new MinimalArgCountConstructorChoiceStrategy());
     }
 
-    public DefaultInstancebuilder(ConstructorChoiceStrategy constructorChoiceStrategy) {
+    public DefaultInstanceBuilderConsumer(ConstructorChoiceStrategy constructorChoiceStrategy) {
         this.constructorChoiceStrategy = constructorChoiceStrategy;
     }
 

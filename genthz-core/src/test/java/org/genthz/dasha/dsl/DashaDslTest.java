@@ -6,7 +6,7 @@ import org.genthz.context.InstanceContext;
 import org.genthz.dasha.context.DashaContextFactory;
 import org.genthz.function.DefaultCollectionFiller;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilder;
+import org.genthz.function.InstanceBuilderConsumer;
 import org.genthz.function.UnitFiller;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,7 +40,7 @@ public class DashaDslTest {
     @MethodSource("data")
     public void testDefauts(Class<?> clazz, Type... typeArguments) {
         final InstanceContext context = this.contextFactory.single(clazz, typeArguments);
-        final InstanceBuilder ib = generationProvider.instanceBuilder(context);
+        final InstanceBuilderConsumer ib = generationProvider.instanceBuilder(context);
         final Filler filler = generationProvider.filler(context);
 
         Assertions.assertNotNull(ib);

@@ -6,12 +6,11 @@ import org.genthz.GenerationProvider;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
 import org.genthz.function.DefaultFiller;
-import org.genthz.function.DefaultInstancebuilder;
+import org.genthz.function.DefaultInstanceBuilderConsumer;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilder;
+import org.genthz.function.InstanceBuilderConsumer;
 import org.genthz.function.Selector;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
@@ -24,12 +23,12 @@ class DashaGenerationProvider implements GenerationProvider {
 
     private final Defaults defaults;
 
-    private final Collection<Pair<Selector, InstanceBuilder>> instanceBuilders;
+    private final Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders;
 
     private final Collection<Pair<Selector, Filler>> filles;
 
     public DashaGenerationProvider(
-            Collection<Pair<Selector, InstanceBuilder>> instanceBuilders,
+            Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders,
             Collection<Pair<Selector, Filler>> filles) {
         this(null, null, instanceBuilders, filles);
     }
@@ -37,7 +36,7 @@ class DashaGenerationProvider implements GenerationProvider {
     public DashaGenerationProvider(
             GenerationProvider up,
             Defaults defaults,
-            Collection<Pair<Selector, InstanceBuilder>> instanceBuilders,
+            Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders,
             Collection<Pair<Selector, Filler>> filles) {
         this.up = Optional.ofNullable(up);
         this.defaults = defaults != null ? defaults : new DashaDefaults();
@@ -46,12 +45,12 @@ class DashaGenerationProvider implements GenerationProvider {
     }
 
     @Override
-    public <T> InstanceBuilder<T> instanceBuilder(InstanceContext context) {
+    public <T> InstanceBuilderConsumer<T> instanceBuilder(InstanceContext context) {
         return this.instanceBuilders.stream()
                 .filter(e -> e.getLeft().test(context))
                 .max(COMPARATOR)
                 .map(Pair::getRight)
-                .orElseGet(() -> this.up.map(e -> e.instanceBuilder(context)).orElseGet(() -> new DefaultInstancebuilder<>()));
+                .orElseGet(() -> this.up.map(e -> e.instanceBuilder(context)).orElseGet(() -> new DefaultInstanceBuilderConsumer<>()));
     }
 
     @Override

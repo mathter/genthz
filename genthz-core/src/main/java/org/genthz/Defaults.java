@@ -1,7 +1,7 @@
 package org.genthz;
 
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilder;
+import org.genthz.function.InstanceBuilderConsumer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,55 +20,55 @@ import java.util.Set;
 public interface Defaults {
     public int defaultCollectionSize();
 
-    public InstanceBuilder<Boolean> defBooleanInstanceBuilder();
+    public InstanceBuilderConsumer<Boolean> defBooleanInstanceBuilder();
 
-    public InstanceBuilder<Byte> defByteInstanceBuilder();
+    public InstanceBuilderConsumer<Byte> defByteInstanceBuilder();
 
-    public InstanceBuilder<Short> defShortInstanceBuilder();
+    public InstanceBuilderConsumer<Short> defShortInstanceBuilder();
 
-    public InstanceBuilder<Integer> defIntegerInstanceBuilder();
+    public InstanceBuilderConsumer<Integer> defIntegerInstanceBuilder();
 
-    public InstanceBuilder<Long> defLongInstanceBuilder();
+    public InstanceBuilderConsumer<Long> defLongInstanceBuilder();
 
-    public InstanceBuilder<Float> defFloatInstanceBuilder();
+    public InstanceBuilderConsumer<Float> defFloatInstanceBuilder();
 
-    public InstanceBuilder<Double> defDoubleInstanceBuilder();
+    public InstanceBuilderConsumer<Double> defDoubleInstanceBuilder();
 
-    public InstanceBuilder<String> defStringInstanceBuilder();
+    public InstanceBuilderConsumer<String> defStringInstanceBuilder();
 
-    public InstanceBuilder<Date> defDateInstanceBuilder();
+    public InstanceBuilderConsumer<Date> defDateInstanceBuilder();
 
-    public InstanceBuilder<LocalDate> defLocalDateInstanceBuilder();
+    public InstanceBuilderConsumer<LocalDate> defLocalDateInstanceBuilder();
 
-    public InstanceBuilder<LocalTime> defLocalTimeInstanceBuilder();
+    public InstanceBuilderConsumer<LocalTime> defLocalTimeInstanceBuilder();
 
-    public InstanceBuilder<LocalDateTime> defLocalDateTimeInstanceBuilder();
+    public InstanceBuilderConsumer<LocalDateTime> defLocalDateTimeInstanceBuilder();
 
-    public InstanceBuilder<OffsetTime> defOffsetTimeInstanceBuilder();
+    public InstanceBuilderConsumer<OffsetTime> defOffsetTimeInstanceBuilder();
 
-    public InstanceBuilder<OffsetDateTime> defOffsetDateTimeInstanceBuilder();
+    public InstanceBuilderConsumer<OffsetDateTime> defOffsetDateTimeInstanceBuilder();
 
-    public InstanceBuilder<ZonedDateTime> defZonedDateTimeInstanceBuilder();
+    public InstanceBuilderConsumer<ZonedDateTime> defZonedDateTimeInstanceBuilder();
 
-    public InstanceBuilder<ZoneId> defZoneIdInstanceBuilder();
+    public InstanceBuilderConsumer<ZoneId> defZoneIdInstanceBuilder();
 
-    public InstanceBuilder<Collection> defCollectionInstanceBuilder();
+    public InstanceBuilderConsumer<Collection> defCollectionInstanceBuilder();
 
     public Filler<Collection> defCollectionFiller();
 
-    public InstanceBuilder<List> defListInstanceBuilder();
+    public InstanceBuilderConsumer<List> defListInstanceBuilder();
 
     public Filler<List> defListFiller();
 
-    public InstanceBuilder<Queue> defQueueInstanceBuilder();
+    public InstanceBuilderConsumer<Queue> defQueueInstanceBuilder();
 
     public Filler<Queue> defQueueFiller();
 
-    public InstanceBuilder<Deque> defDequeInstanceBuilder();
+    public InstanceBuilderConsumer<Deque> defDequeInstanceBuilder();
 
     public Filler<Deque> defDequeFiller();
 
-    public InstanceBuilder<Set> defSetInstanceBuilder();
+    public InstanceBuilderConsumer<Set> defSetInstanceBuilder();
 
     public Filler<Set> defSetFiller();
 }

@@ -4,7 +4,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.genthz.Defaults;
 import org.genthz.function.DefaultCollectionFiller;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilder;
+import org.genthz.function.InstanceBuilderConsumer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,12 +38,12 @@ public class DashaDefaults implements Defaults {
     }
 
     @Override
-    public InstanceBuilder<Boolean> defBooleanInstanceBuilder() {
+    public InstanceBuilderConsumer<Boolean> defBooleanInstanceBuilder() {
         return ctx -> ctx.set(this.random.nextBoolean());
     }
 
     @Override
-    public InstanceBuilder<Byte> defByteInstanceBuilder() {
+    public InstanceBuilderConsumer<Byte> defByteInstanceBuilder() {
         final byte[] buf = new byte[1];
         this.random.nextBytes(buf);
 
@@ -53,77 +53,77 @@ public class DashaDefaults implements Defaults {
     }
 
     @Override
-    public InstanceBuilder<Short> defShortInstanceBuilder() {
+    public InstanceBuilderConsumer<Short> defShortInstanceBuilder() {
         return ctx -> ctx.set((short) this.random.nextInt());
     }
 
     @Override
-    public InstanceBuilder<Integer> defIntegerInstanceBuilder() {
+    public InstanceBuilderConsumer<Integer> defIntegerInstanceBuilder() {
         return ctx -> ctx.set(this.random.nextInt());
     }
 
     @Override
-    public InstanceBuilder<Long> defLongInstanceBuilder() {
+    public InstanceBuilderConsumer<Long> defLongInstanceBuilder() {
         return ctx -> ctx.set(this.random.nextLong());
     }
 
     @Override
-    public InstanceBuilder<Float> defFloatInstanceBuilder() {
+    public InstanceBuilderConsumer<Float> defFloatInstanceBuilder() {
         return ctx -> ctx.set(this.random.nextFloat());
     }
 
     @Override
-    public InstanceBuilder<Double> defDoubleInstanceBuilder() {
+    public InstanceBuilderConsumer<Double> defDoubleInstanceBuilder() {
         return ctx -> ctx.set(this.random.nextDouble());
     }
 
     @Override
-    public InstanceBuilder<String> defStringInstanceBuilder() {
+    public InstanceBuilderConsumer<String> defStringInstanceBuilder() {
         return ctx -> ctx.set(RandomStringUtils.randomAlphabetic(10));
     }
 
     @Override
-    public InstanceBuilder<Date> defDateInstanceBuilder() {
+    public InstanceBuilderConsumer<Date> defDateInstanceBuilder() {
         return ctx -> ctx.set(new Date());
     }
 
     @Override
-    public InstanceBuilder<LocalDate> defLocalDateInstanceBuilder() {
+    public InstanceBuilderConsumer<LocalDate> defLocalDateInstanceBuilder() {
         return ctx -> ctx.set(LocalDate.now());
     }
 
     @Override
-    public InstanceBuilder<LocalTime> defLocalTimeInstanceBuilder() {
+    public InstanceBuilderConsumer<LocalTime> defLocalTimeInstanceBuilder() {
         return ctx -> ctx.set(LocalTime.now());
     }
 
     @Override
-    public InstanceBuilder<LocalDateTime> defLocalDateTimeInstanceBuilder() {
+    public InstanceBuilderConsumer<LocalDateTime> defLocalDateTimeInstanceBuilder() {
         return ctx -> ctx.set(LocalDateTime.now());
     }
 
     @Override
-    public InstanceBuilder<OffsetTime> defOffsetTimeInstanceBuilder() {
+    public InstanceBuilderConsumer<OffsetTime> defOffsetTimeInstanceBuilder() {
         return ctx -> ctx.set(OffsetTime.now());
     }
 
     @Override
-    public InstanceBuilder<OffsetDateTime> defOffsetDateTimeInstanceBuilder() {
+    public InstanceBuilderConsumer<OffsetDateTime> defOffsetDateTimeInstanceBuilder() {
         return ctx -> ctx.set(OffsetDateTime.now());
     }
 
     @Override
-    public InstanceBuilder<ZonedDateTime> defZonedDateTimeInstanceBuilder() {
+    public InstanceBuilderConsumer<ZonedDateTime> defZonedDateTimeInstanceBuilder() {
         return ctx -> ctx.set(ZonedDateTime.now());
     }
 
     @Override
-    public InstanceBuilder<ZoneId> defZoneIdInstanceBuilder() {
+    public InstanceBuilderConsumer<ZoneId> defZoneIdInstanceBuilder() {
         return ctx -> ctx.set(ZoneId.systemDefault());
     }
 
     @Override
-    public InstanceBuilder<Collection> defCollectionInstanceBuilder() {
+    public InstanceBuilderConsumer<Collection> defCollectionInstanceBuilder() {
         return ctx -> ctx.set(new ArrayList<>());
     }
 
@@ -133,7 +133,7 @@ public class DashaDefaults implements Defaults {
     }
 
     @Override
-    public InstanceBuilder<List> defListInstanceBuilder() {
+    public InstanceBuilderConsumer<List> defListInstanceBuilder() {
         return ctx -> ctx.set(new ArrayList<>());
     }
 
@@ -143,7 +143,7 @@ public class DashaDefaults implements Defaults {
     }
 
     @Override
-    public InstanceBuilder<Queue> defQueueInstanceBuilder() {
+    public InstanceBuilderConsumer<Queue> defQueueInstanceBuilder() {
         return ctx -> ctx.set(new ArrayDeque());
     }
 
@@ -153,7 +153,7 @@ public class DashaDefaults implements Defaults {
     }
 
     @Override
-    public InstanceBuilder<Deque> defDequeInstanceBuilder() {
+    public InstanceBuilderConsumer<Deque> defDequeInstanceBuilder() {
         return ctx -> ctx.set(new ArrayDeque());
     }
 
@@ -163,7 +163,7 @@ public class DashaDefaults implements Defaults {
     }
 
     @Override
-    public InstanceBuilder<Set> defSetInstanceBuilder() {
+    public InstanceBuilderConsumer<Set> defSetInstanceBuilder() {
         return ctx -> ctx.set(new HashSet());
     }
 
