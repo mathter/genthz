@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -101,7 +102,31 @@ public class DashaContextFactory implements ContextFactory {
 
     @Override
     public <T, E> List<NodeInstanceContext<E, Integer>> byArray(InstanceContext<T> up, int count) {
-        return null;
+        final List<NodeInstanceContext<E, Integer>> result;
+        final Type upType = up.type();
+        final Map<TypeVariable<?>, Type> variableTypeMap = upType instanceof ParameterizedType
+                ? TypeUtils.getTypeArguments((ParameterizedType) upType)
+                : Collections.emptyMap();
+
+        if (TypeUtils.isArrayType(upType)) {
+            final Type componentType = TypeUtils.getArrayComponentType(upType);
+            result = new ArrayList<>(count);
+
+            for (int i = 0; i < count; i++) {
+                CollectionAccessor instanceAccessor = new CollectionAccessor(i, (Collection) up.instance());
+                result.add(new DashaNodeInstanceContext(
+                        this,
+                        instanceAccessor,
+                        up,
+                        this.unrollType(null, componentType),
+                        instanceAccessor
+                ));
+            }
+        } else {
+            throw new IllegalStateException("Up context class must be instance of array!");
+        }
+
+        return result;
     }
 
     @Override
