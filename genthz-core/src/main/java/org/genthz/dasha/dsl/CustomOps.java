@@ -9,13 +9,13 @@ import org.genthz.dsl.InstanceBuilderFirst;
 import org.genthz.dsl.InstanceBuilderThen;
 import org.genthz.dsl.Metric;
 import org.genthz.dsl.Pathable;
-import org.genthz.dsl.Using;
-import org.genthz.function.DefaultInstanceBuilderConsumer;
-import org.genthz.function.Selector;
 import org.genthz.dsl.Strictable;
 import org.genthz.dsl.Unstricable;
+import org.genthz.dsl.Using;
+import org.genthz.function.DefaultInstanceBuilderConsumer;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.Selector;
 import org.genthz.function.UnitFiller;
 
 import java.lang.reflect.Type;

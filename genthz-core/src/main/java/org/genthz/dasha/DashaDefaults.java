@@ -2,9 +2,13 @@ package org.genthz.dasha;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.genthz.Defaults;
+import org.genthz.function.DefaultArrayFiller;
+import org.genthz.function.DefaultArrayInstanceBuilderConsumer;
 import org.genthz.function.DefaultCollectionFiller;
+import org.genthz.function.DefaultInstanceBuilderConsumer;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.reflection.GenericUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +31,9 @@ import java.util.Set;
 public class DashaDefaults implements Defaults {
 
     private final Filler<?> defaultCollectionFiller = new DefaultCollectionFiller<>();
+
+    private final InstanceBuilderConsumer<?> defaultArrayInstanceBuilder = new DefaultArrayInstanceBuilderConsumer<>(new GenericUtil(false));
+    private final Filler<?> defaultArrayFiller = new DefaultArrayFiller<>();
 
     private int defaultCollectionSize = 5;
 
@@ -170,5 +177,15 @@ public class DashaDefaults implements Defaults {
     @Override
     public Filler<Set> defSetFiller() {
         return (Filler<Set>) this.defaultCollectionFiller;
+    }
+
+    @Override
+    public InstanceBuilderConsumer<?> defArrayInstanceBuilder() {
+        return this.defaultArrayInstanceBuilder;
+    }
+
+    @Override
+    public Filler<?> defArrayFiller() {
+        return this.defaultArrayFiller;
     }
 }

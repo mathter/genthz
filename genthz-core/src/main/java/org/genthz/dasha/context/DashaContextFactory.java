@@ -35,7 +35,7 @@ public class DashaContextFactory implements ContextFactory {
 
     @Override
     public <T> InstanceContext<T> single(Bindings bindings, Class<T> type, Type... genericArgTypes) {
-        final ParameterizedType parameterizedType = this.genericUtil.parameterize(type, genericArgTypes);
+        final Type parameterizedType = this.genericUtil.parameterize(type, genericArgTypes);
         final ObjectInstanceAccessor<T> instanceAccessor = new ObjectInstanceAccessor<>();
         return new DashaInstanceContext(
                 this,
@@ -107,7 +107,7 @@ public class DashaContextFactory implements ContextFactory {
             result = new ArrayList<>(count);
 
             for (int i = 0; i < count; i++) {
-                CollectionAccessor instanceAccessor = new CollectionAccessor(i, (Collection) up.instance());
+                ArrayAccessor instanceAccessor = new ArrayAccessor(i, (T[]) up.instance());
                 result.add(new DashaNodeInstanceContext(
                         this,
                         instanceAccessor,

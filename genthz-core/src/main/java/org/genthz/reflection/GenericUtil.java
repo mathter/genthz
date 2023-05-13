@@ -19,6 +19,22 @@ public class GenericUtil {
         this.strict = strict;
     }
 
+    public Class getRawClass(Map<TypeVariable<?>, Type> variableTypeMap, Type type) {
+        final Type unrolled = TypeUtils.unrollVariables(variableTypeMap, type);
+
+        if (!(unrolled instanceof Class)) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "Can't get raw type of %s. Unroll result is %s",
+                            type,
+                            unrolled
+                    )
+            );
+        }
+
+        return (Class) unrolled;
+    }
+
     public Map<TypeVariable<?>, Type> getActualTypeArguments(Type type) {
         final Map<TypeVariable<?>, Type> result;
 
@@ -53,12 +69,14 @@ public class GenericUtil {
         return result;
     }
 
-    public ParameterizedType parameterize(Class clazz, Type... typeArguments) throws IllegalArgumentException {
-        final ParameterizedType result;
+    public Type parameterize(Class clazz, Type... typeArguments) throws IllegalArgumentException {
+        final Type result;
         final TypeVariable<?>[] typeParameters = clazz.getTypeParameters();
 
-        if ((typeArguments == null || typeArguments.length == 0) && typeParameters.length != 0) {
-            if (this.strict) {
+        if (typeParameters.length == 0) {
+            if (typeArguments == null || typeArguments.length == 0) {
+                result = clazz;
+            } else {
                 throw new IllegalArgumentException(
                         String.format(
                                 "Invalid count of parameters specified for class %s: expected %d, got %s ",
@@ -67,14 +85,27 @@ public class GenericUtil {
                                 typeArguments != null ? typeArguments.length : null
                         )
                 );
-            } else {
-                typeArguments = IntStream.range(0, typeParameters.length)
-                        .mapToObj(i -> Object.class)
-                        .toArray(i -> new Type[i]);
             }
-        }
+        } else {
+            if (typeArguments == null || typeArguments.length == 0) {
+                if (this.strict) {
+                    throw new IllegalArgumentException(
+                            String.format(
+                                    "Invalid count of parameters specified for class %s: expected %d, got %s ",
+                                    clazz,
+                                    typeParameters.length,
+                                    typeArguments != null ? typeArguments.length : null
+                            )
+                    );
+                } else {
+                    typeArguments = IntStream.range(0, typeParameters.length)
+                            .mapToObj(i -> Object.class)
+                            .toArray(i -> new Type[i]);
+                }
+            }
 
-        result = TypeUtils.parameterize(clazz, typeArguments);
+            result = TypeUtils.parameterize(clazz, typeArguments);
+        }
 
         return result;
     }

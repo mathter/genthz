@@ -102,6 +102,24 @@ public class DashaObjectFactoryDefaultsTest {
                 .forEach(e -> Assertions.assertNotNull(e));
     }
 
+    @Test
+    public void testArray0() {
+        final String[][] instance = this.objectFactory.get(String[][].class);
+
+        Assertions.assertNotNull(instance);
+        Assertions.assertEquals(
+                this.objectFactory.generationProvider().defaults().defaultCollectionSize(),
+                instance.length
+        );
+    }
+
+    @Test
+    public void testArray1() {
+        final SimpleGenericModel instance = this.objectFactory.get(SimpleGenericModel.class, String[].class, String.class);
+
+        Assertions.assertNotNull(instance);
+    }
+
     private static Stream<Arguments> data() {
         return Stream.of(
                 Arguments.of(Boolean.class, null),

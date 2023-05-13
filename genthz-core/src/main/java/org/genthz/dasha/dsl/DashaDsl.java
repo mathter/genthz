@@ -6,6 +6,7 @@ import org.genthz.GenerationProvider;
 import org.genthz.context.Context;
 import org.genthz.dasha.DashaDefaults;
 import org.genthz.dsl.Customable;
+import org.genthz.dsl.Customs;
 import org.genthz.dsl.Dsl;
 import org.genthz.dsl.FillerFirst;
 import org.genthz.dsl.InstanceBuilderFirst;
@@ -191,6 +192,11 @@ public class DashaDsl implements Dsl {
                 .m(DEFAULT_SUB_COLLECTION_METRIC)
                 .ib(this.defaults.defSetInstanceBuilder())
                 .f(this.defaults.defSetFiller());
+
+        this.custom(Customs.isArray())
+                .m(DEFAULT_COLLECTION_METRIC)
+                .ib(this.defaults.defArrayInstanceBuilder())
+                .f(this.defaults.defArrayFiller());
 
         return this;
     }

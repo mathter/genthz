@@ -132,7 +132,7 @@ public class GenericUtilTest {
     @Test
     public void testStrictParameterize() {
         final GenericUtil util = new GenericUtil(true);
-        final ParameterizedType type = util.parameterize(List.class, String.class);
+        final ParameterizedType type = (ParameterizedType) util.parameterize(List.class, String.class);
 
         Assertions.assertNotNull(type);
         Assertions.assertEquals(List.class, type.getRawType());
@@ -153,23 +153,25 @@ public class GenericUtilTest {
     @Test
     public void testUnstrictParameterize() {
         final GenericUtil util = new GenericUtil(false);
-        final ParameterizedType type = util.parameterize(List.class, String.class);
+        final Type type = util.parameterize(List.class, String.class);
 
         Assertions.assertNotNull(type);
-        Assertions.assertEquals(List.class, type.getRawType());
-        Assertions.assertEquals(1, type.getActualTypeArguments().length);
-        Assertions.assertEquals(String.class, type.getActualTypeArguments()[0]);
+        Assertions.assertTrue(type instanceof ParameterizedType);
+        Assertions.assertEquals(List.class, ((ParameterizedType) type).getRawType());
+        Assertions.assertEquals(1, ((ParameterizedType) type).getActualTypeArguments().length);
+        Assertions.assertEquals(String.class, ((ParameterizedType) type).getActualTypeArguments()[0]);
     }
 
     @Test
     public void testUnstrictParameterizeWithoutTypeArguments() {
         final GenericUtil util = new GenericUtil(false);
-        final ParameterizedType type = util.parameterize(List.class);
+        final Type type = util.parameterize(List.class);
 
         Assertions.assertNotNull(type);
-        Assertions.assertEquals(List.class, type.getRawType());
-        Assertions.assertEquals(1, type.getActualTypeArguments().length);
-        Assertions.assertEquals(Object.class, type.getActualTypeArguments()[0]);
+        Assertions.assertTrue(type instanceof ParameterizedType);
+        Assertions.assertEquals(List.class, ((ParameterizedType) type).getRawType());
+        Assertions.assertEquals(1, ((ParameterizedType) type).getActualTypeArguments().length);
+        Assertions.assertEquals(Object.class, ((ParameterizedType) type).getActualTypeArguments()[0]);
     }
 }
 

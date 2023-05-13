@@ -71,4 +71,8 @@ public interface Defaults {
     public InstanceBuilderConsumer<Set> defSetInstanceBuilder();
 
     public Filler<Set> defSetFiller();
+
+    public InstanceBuilderConsumer<?> defArrayInstanceBuilder();
+
+    public Filler<?> defArrayFiller();
 }
