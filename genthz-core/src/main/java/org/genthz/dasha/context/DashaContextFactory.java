@@ -76,6 +76,7 @@ public class DashaContextFactory implements ContextFactory {
 
         if (Collection.class.isAssignableFrom(TypeUtils.getRawType(upType, Collection.class))) {
             final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(upType);
+            variableTypeMap.putAll(TypeUtils.getTypeArguments(upType, Collection.class));
             result = new ArrayList<>(count);
 
             for (int i = 0; i < count; i++) {

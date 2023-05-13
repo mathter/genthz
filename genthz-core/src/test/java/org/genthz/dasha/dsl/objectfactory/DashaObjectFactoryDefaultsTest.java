@@ -1,5 +1,6 @@
 package org.genthz.dasha.dsl.objectfactory;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.ObjectFactory;
 import org.genthz.dasha.DashaObjectFactory;
 import org.junit.jupiter.api.Assertions;
@@ -49,6 +50,44 @@ public class DashaObjectFactoryDefaultsTest {
     @Test
     public void testSimpleGenericModel() {
         final SimpleGenericModel instance = this.objectFactory.get(SimpleGenericModel.class, LocalDateTime.class, String.class);
+
+        Assertions.assertNotNull(instance);
+        Assertions.assertNotNull(instance.getName());
+        Assertions.assertNotNull(instance.getLastName());
+        Assertions.assertNotNull(instance.getBirthDay());
+        Assertions.assertNotNull(instance.getAge());
+
+        Assertions.assertNotNull(instance.getOtherNames());
+        Assertions.assertEquals(5, instance.getOtherNames().size());
+
+        instance.getOtherNames().stream()
+                .forEach(e -> Assertions.assertNotNull(e));
+    }
+
+    @Test
+    public void testSimpleGenericModelWithoutTypeArguments() {
+        final SimpleGenericModel instance = this.objectFactory.get(SimpleGenericModel.class);
+
+        Assertions.assertNotNull(instance);
+        Assertions.assertNotNull(instance.getName());
+        Assertions.assertNotNull(instance.getLastName());
+        Assertions.assertNotNull(instance.getBirthDay());
+        Assertions.assertNotNull(instance.getAge());
+
+        Assertions.assertNotNull(instance.getOtherNames());
+        Assertions.assertEquals(5, instance.getOtherNames().size());
+
+        instance.getOtherNames().stream()
+                .forEach(e -> Assertions.assertNotNull(e));
+    }
+
+    @Test
+    public void testSimpleGenericModelWithParameterizedTest() {
+        final SimpleGenericModel instance = this.objectFactory.get(
+                SimpleGenericModel.class,
+                TypeUtils.parameterize(Collection.class, LocalDateTime.class),
+                TypeUtils.parameterize(Set.class, String.class)
+        );
 
         Assertions.assertNotNull(instance);
         Assertions.assertNotNull(instance.getName());
