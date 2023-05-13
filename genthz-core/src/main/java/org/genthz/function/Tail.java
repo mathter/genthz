@@ -4,8 +4,8 @@ import org.genthz.context.InstanceContext;
 
 import java.util.Optional;
 
-public interface Simple<T> extends InstanceBuilder<T> {
-    public static <T> Simple<T> parent() {
+public interface Tail<T> extends InstanceBuilder<T> {
+    public static <T> Tail<T> parent() {
         return ctx -> Optional.ofNullable(ctx.up())
                 .map(e -> (InstanceContext<T>) e)
                 .map(e -> e.instance())

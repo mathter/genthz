@@ -5,6 +5,7 @@ import org.genthz.context.Bindings;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.context.NodeInstanceContext;
+import org.genthz.reflection.GenericUtil;
 import org.genthz.util.StreamUtil;
 
 import java.lang.reflect.Constructor;
@@ -22,40 +23,34 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DashaContextFactory implements ContextFactory {
-    private static final Type[] EMPTY_GENERIC_ARG_TYPE = new Type[0];
+    private final GenericUtil genericUtil;
+
+    public DashaContextFactory() {
+        this(false);
+    }
+
+    public DashaContextFactory(boolean strict) {
+        this.genericUtil = new GenericUtil(strict);
+    }
 
     @Override
     public <T> InstanceContext<T> single(Bindings bindings, Class<T> type, Type... genericArgTypes) {
-        final TypeVariable<?>[] typeParameters = type.getTypeParameters();
-
-        if ((genericArgTypes == null && typeParameters.length == 0)
-                || (genericArgTypes != null && typeParameters.length == genericArgTypes.length)) {
-            final ParameterizedType parameterizedType = TypeUtils.parameterize(type, genericArgTypes != null ? genericArgTypes : EMPTY_GENERIC_ARG_TYPE);
-            final ObjectInstanceAccessor<T> instanceAccessor = new ObjectInstanceAccessor<>();
-            return new DashaInstanceContext(
-                    this,
-                    bindings,
-                    instanceAccessor,
-                    null,
-                    parameterizedType
-            );
-        } else {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "Invalid count of parameters specified for class %s: expected %d, got %s ",
-                            type,
-                            typeParameters.length,
-                            genericArgTypes != null ? genericArgTypes.length : null
-                    )
-            );
-        }
+        final ParameterizedType parameterizedType = this.genericUtil.parameterize(type, genericArgTypes);
+        final ObjectInstanceAccessor<T> instanceAccessor = new ObjectInstanceAccessor<>();
+        return new DashaInstanceContext(
+                this,
+                bindings,
+                instanceAccessor,
+                null,
+                parameterizedType
+        );
     }
 
     @Override
     public <T> List<InstanceContext> byConstructor(InstanceContext<T> up, Constructor constructor) {
         final List<InstanceContext> result;
         final Type[] parameterTypes = constructor.getGenericParameterTypes();
-        final Map<TypeVariable<?>, Type> variableTypeMap = this.getTypeArguments(up.type());
+        final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(up.type());
 
         result = new ArrayList<>(constructor.getParameterCount());
 
@@ -80,7 +75,7 @@ public class DashaContextFactory implements ContextFactory {
         final Type upType = up.type();
 
         if (Collection.class.isAssignableFrom(TypeUtils.getRawType(upType, Collection.class))) {
-            final Map<TypeVariable<?>, Type> variableTypeMap = TypeUtils.getTypeArguments(upType, Collection.class);
+            final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(upType);
             result = new ArrayList<>(count);
 
             for (int i = 0; i < count; i++) {
@@ -104,9 +99,7 @@ public class DashaContextFactory implements ContextFactory {
     public <T, E> List<NodeInstanceContext<E, Integer>> byArray(InstanceContext<T> up, int count) {
         final List<NodeInstanceContext<E, Integer>> result;
         final Type upType = up.type();
-        final Map<TypeVariable<?>, Type> variableTypeMap = upType instanceof ParameterizedType
-                ? TypeUtils.getTypeArguments((ParameterizedType) upType)
-                : Collections.emptyMap();
+        final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(upType);
 
         if (TypeUtils.isArrayType(upType)) {
             final Type componentType = TypeUtils.getArrayComponentType(upType);
@@ -133,7 +126,7 @@ public class DashaContextFactory implements ContextFactory {
     public <T> Collection<NodeInstanceContext<?, String>> byProperties(InstanceContext<T> up) {
         final Collection<NodeInstanceContext<?, String>> result;
         final Type upType = up.type();
-        final Map<TypeVariable<?>, Type> variableTypeMap = this.getTypeArguments(upType);
+        final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(upType);
 
         result = Optional.of(upType)
                 .map(e -> (Class) TypeUtils.getRawType(e, Object.class))
@@ -159,21 +152,5 @@ public class DashaContextFactory implements ContextFactory {
 
     private Type unrollType(Map<TypeVariable<?>, Type> variableTypeMap, Type type) {
         return Optional.ofNullable(TypeUtils.unrollVariables(variableTypeMap, type)).orElse(Object.class);
-    }
-
-    private Map<TypeVariable<?>, Type> getTypeArguments(Type type) {
-        final Map<TypeVariable<?>, Type> result;
-
-        if (type instanceof Class) {
-            result = TypeUtils.getTypeArguments(type, null);
-        } else if (type instanceof ParameterizedType) {
-            result = TypeUtils.getTypeArguments((ParameterizedType) type);
-        } else {
-            throw new IllegalArgumentException(
-                    String.format("Argument type must be %s or %s! Currently %s", Class.class, ParameterizedType.class, type)
-            );
-        }
-
-        return result;
     }
 }

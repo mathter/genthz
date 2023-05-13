@@ -2,7 +2,7 @@ package org.genthz.dsl;
 
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.InstanceBuilderConsumer;
-import org.genthz.function.Simple;
+import org.genthz.function.Tail;
 
 public interface InstanceBuilderFirst {
     default public <T> FillerThen ib(InstanceBuilder<T> function) {
@@ -27,7 +27,7 @@ public interface InstanceBuilderFirst {
         this.simple(InstanceBuilderConsumer.from(function));
     }
 
-    default public <T> void simple(Simple simple) {
+    default public <T> void tail(Tail simple) {
         this.simple((InstanceBuilder<T>) simple);
     }
 }
