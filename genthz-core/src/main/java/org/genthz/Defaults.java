@@ -72,7 +72,7 @@ public interface Defaults {
 
     public Filler<Set> defSetFiller();
 
-    public InstanceBuilderConsumer<?> defArrayInstanceBuilder();
+    public <T> InstanceBuilderConsumer<T> defArrayInstanceBuilder();
 
     public Filler<?> defArrayFiller();
 }

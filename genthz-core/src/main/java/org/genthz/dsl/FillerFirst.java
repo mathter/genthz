@@ -2,10 +2,10 @@ package org.genthz.dsl;
 
 import org.genthz.function.Filler;
 
-public interface FillerFirst {
-    default public <T> InstanceBuilderThen f(Filler<T> function) {
+public interface FillerFirst<T> {
+    default public InstanceBuilderThen<T> f(Filler<T> function) {
         return this.filler(function);
     }
 
-    public <T> InstanceBuilderThen filler(Filler<T> function);
+    public InstanceBuilderThen<T> filler(Filler<T> function);
 }

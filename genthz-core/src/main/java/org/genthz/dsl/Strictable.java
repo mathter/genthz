@@ -6,7 +6,7 @@ public interface Strictable {
     /**
      * The method is short alias for {@linkplain #strict(Type, Type...)} )}.
      */
-    default public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S s(Type type, Type... genericTypeArgs) {
+    default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S s(Type type, Type... genericTypeArgs) {
         return this.strict(type, genericTypeArgs);
     }
 
@@ -18,5 +18,9 @@ public interface Strictable {
      * @param <S>  type of the selector.
      * @return selector.
      */
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs);
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs);
+
+    default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Class<T> clazz, Type... genericTypeArgs) {
+        return this.strict((Type) clazz, genericTypeArgs);
+    }
 }

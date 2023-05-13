@@ -9,9 +9,9 @@ import java.util.function.Predicate;
 class CustomSelector extends AbstractSelector {
     private final Predicate<Context> predicate;
 
-    public CustomSelector(Selector parent, Predicate<Context> predicate) {
+    public CustomSelector(Selector parent, Predicate<? extends Context> predicate) {
         super(parent);
-        this.predicate = Objects.requireNonNull(predicate);
+        this.predicate = (Predicate<Context>) Objects.requireNonNull(predicate);
     }
 
     @Override

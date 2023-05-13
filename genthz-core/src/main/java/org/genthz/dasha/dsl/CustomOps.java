@@ -1,7 +1,7 @@
 package org.genthz.dasha.dsl;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.genthz.context.Context;
+import org.genthz.context.InstanceContext;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.FillerFirst;
 import org.genthz.dsl.FillerThen;
@@ -25,10 +25,10 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class CustomOps extends SelectorOp<CustomOps> implements Pathable, Strictable, Unstricable, InstanceBuilderFirst, FillerFirst, Using<CustomOps> {
-    private final Predicate<Context> predicate;
+public class CustomOps<T> extends SelectorOp<CustomOps<T>> implements Pathable, Strictable, Unstricable, InstanceBuilderFirst<T>, FillerFirst<T>, Using<CustomOps> {
+    private final Predicate<InstanceContext<T>> predicate;
 
-    public CustomOps(SelectorOp up, Predicate<Context> predicate) {
+    public CustomOps(SelectorOp up, Predicate<InstanceContext<T>> predicate) {
         super(up);
         this.predicate = predicate;
     }
@@ -44,33 +44,33 @@ public class CustomOps extends SelectorOp<CustomOps> implements Pathable, Strict
     }
 
     @Override
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs) {
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs) {
         return (S) new StrictTypeOp(this, type, genericTypeArgs);
     }
 
     @Override
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs) {
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs) {
         return (S) new UnstrictTypeOp(this, type, genericTypeArgs);
     }
 
     @Override
-    public <T> InstanceBuilderThen filler(Filler<T> function) {
+    public InstanceBuilderThen<T> filler(Filler<T> function) {
         return new InstanceBuilderThenOp(this, function);
     }
 
     @Override
-    public <T> FillerThen instanceBuilder(InstanceBuilderConsumer<T> function) {
+    public FillerThen instanceBuilder(InstanceBuilderConsumer<T> function) {
         return new FillerThenOp(this, function);
     }
 
     @Override
-    public <T> void simple() {
+    public void simple() {
         final Selector selector = this.up().selector();
         this.dsl().reg(new SimpleOp(this, new DefaultInstanceBuilderConsumer<>(), UnitFiller.INSTANCE));
     }
 
     @Override
-    public <T> void simple(InstanceBuilderConsumer<T> function) {
+    public void simple(InstanceBuilderConsumer<T> function) {
         final Selector selector = this.up().selector();
         final DashaDsl dsl = this.dsl();
 

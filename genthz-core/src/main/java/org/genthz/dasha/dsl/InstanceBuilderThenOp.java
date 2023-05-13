@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class InstanceBuilderThenOp extends Op<SelectorOp<?>> implements InstanceBuilderThen {
+public class InstanceBuilderThenOp<T> extends Op<SelectorOp<?>> implements InstanceBuilderThen<T> {
     private final Filler<?> fillerFunction;
 
     private InstanceBuilderConsumer<?> function;
@@ -21,7 +21,7 @@ public class InstanceBuilderThenOp extends Op<SelectorOp<?>> implements Instance
     }
 
     @Override
-    public <T> void instanceBuilder(InstanceBuilderConsumer<T> function) {
+    public void instanceBuilder(InstanceBuilderConsumer<T> function) {
         this.function = function;
         this.dsl().reg(this);
     }

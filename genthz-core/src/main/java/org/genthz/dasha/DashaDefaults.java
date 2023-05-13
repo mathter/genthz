@@ -5,7 +5,6 @@ import org.genthz.Defaults;
 import org.genthz.function.DefaultArrayFiller;
 import org.genthz.function.DefaultArrayInstanceBuilderConsumer;
 import org.genthz.function.DefaultCollectionFiller;
-import org.genthz.function.DefaultInstanceBuilderConsumer;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilderConsumer;
 import org.genthz.reflection.GenericUtil;
@@ -32,7 +31,7 @@ public class DashaDefaults implements Defaults {
 
     private final Filler<?> defaultCollectionFiller = new DefaultCollectionFiller<>();
 
-    private final InstanceBuilderConsumer<?> defaultArrayInstanceBuilder = new DefaultArrayInstanceBuilderConsumer<>(new GenericUtil(false));
+    private final InstanceBuilderConsumer defaultArrayInstanceBuilder = new DefaultArrayInstanceBuilderConsumer<>(new GenericUtil(false));
     private final Filler<?> defaultArrayFiller = new DefaultArrayFiller<>();
 
     private int defaultCollectionSize = 5;
@@ -180,7 +179,7 @@ public class DashaDefaults implements Defaults {
     }
 
     @Override
-    public InstanceBuilderConsumer<?> defArrayInstanceBuilder() {
+    public <T> InstanceBuilderConsumer<T> defArrayInstanceBuilder() {
         return this.defaultArrayInstanceBuilder;
     }
 

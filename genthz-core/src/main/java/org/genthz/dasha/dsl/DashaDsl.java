@@ -3,7 +3,7 @@ package org.genthz.dasha.dsl;
 import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.Defaults;
 import org.genthz.GenerationProvider;
-import org.genthz.context.Context;
+import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.Customs;
@@ -202,7 +202,7 @@ public class DashaDsl implements Dsl {
     }
 
     @Override
-    public <S extends Pathable & Strictable & Unstricable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S custom(Predicate<Context> predicate) {
+    public <T, S extends Pathable & Strictable & Unstricable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S custom(Predicate<InstanceContext<T>> predicate) {
         return (S) new CustomOps(this.empty, predicate);
     }
 
@@ -212,12 +212,12 @@ public class DashaDsl implements Dsl {
     }
 
     @Override
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs) {
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs) {
         return (S) new StrictTypeOp(this.empty, type, genericTypeArgs);
     }
 
     @Override
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs) {
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs) {
         return (S) new UnstrictTypeOp(this.empty, type, genericTypeArgs);
     }
 

@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class FillerThenOp extends Op<SelectorOp<?>> implements FillerThen {
+class FillerThenOp<T> extends Op<SelectorOp<?>> implements FillerThen<T> {
     private final InstanceBuilderConsumer<?> instanceBuilderConsumerFunction;
 
     private Filler<?> function;
@@ -21,7 +21,7 @@ class FillerThenOp extends Op<SelectorOp<?>> implements FillerThen {
     }
 
     @Override
-    public <T> void filler(Filler<T> function) {
+    public void filler(Filler<T> function) {
         this.function = function;
         this.dsl().reg(this);
     }

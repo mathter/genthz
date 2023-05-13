@@ -1,7 +1,7 @@
 package org.genthz.dasha.dsl;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.genthz.context.Context;
+import org.genthz.context.InstanceContext;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.FillerFirst;
 import org.genthz.dsl.FillerThen;
@@ -9,13 +9,13 @@ import org.genthz.dsl.InstanceBuilderFirst;
 import org.genthz.dsl.InstanceBuilderThen;
 import org.genthz.dsl.Metric;
 import org.genthz.dsl.Pathable;
+import org.genthz.dsl.Strictable;
+import org.genthz.dsl.Unstricable;
 import org.genthz.dsl.Using;
 import org.genthz.function.DefaultInstanceBuilderConsumer;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilderConsumer;
 import org.genthz.function.Selector;
-import org.genthz.dsl.Strictable;
-import org.genthz.dsl.Unstricable;
 import org.genthz.function.UnitFiller;
 
 import java.lang.reflect.Type;
@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-class UnstrictTypeOp extends TypeOp<UnstrictTypeOp> implements Pathable, Customable, InstanceBuilderFirst, FillerFirst, Metric<UnstrictTypeOp>, Using<UnstrictTypeOp> {
+class UnstrictTypeOp<T> extends TypeOp<UnstrictTypeOp<T>> implements Pathable, Customable, InstanceBuilderFirst<T>, FillerFirst<T>, Metric<UnstrictTypeOp<T>>, Using<UnstrictTypeOp> {
     public UnstrictTypeOp(SelectorOp up, Type type, Type... genericTypeArgs) {
         super(up, type, genericTypeArgs);
     }
@@ -36,7 +36,7 @@ class UnstrictTypeOp extends TypeOp<UnstrictTypeOp> implements Pathable, Customa
     }
 
     @Override
-    public <S extends Pathable & Strictable & Unstricable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S custom(Predicate<Context> predicate) {
+    public <T, S extends Pathable & Strictable & Unstricable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S custom(Predicate<InstanceContext<T>> predicate) {
         return (S) new CustomOps(this, predicate);
     }
 
@@ -46,22 +46,22 @@ class UnstrictTypeOp extends TypeOp<UnstrictTypeOp> implements Pathable, Customa
     }
 
     @Override
-    public <T> InstanceBuilderThen filler(Filler<T> function) {
+    public InstanceBuilderThen<T> filler(Filler<T> function) {
         return new InstanceBuilderThenOp(this, function);
     }
 
     @Override
-    public <T> FillerThen instanceBuilder(InstanceBuilderConsumer<T> function) {
+    public FillerThen instanceBuilder(InstanceBuilderConsumer<T> function) {
         return new FillerThenOp(this, function);
     }
 
     @Override
-    public <T> void simple() {
+    public void simple() {
         this.dsl().reg(new SimpleOp(this, new DefaultInstanceBuilderConsumer<>(), UnitFiller.INSTANCE));
     }
 
     @Override
-    public <T> void simple(InstanceBuilderConsumer<T> function) {
+    public void simple(InstanceBuilderConsumer<T> function) {
         this.dsl().reg(new SimpleOp(this, function, UnitFiller.INSTANCE));
     }
 

@@ -6,7 +6,7 @@ public interface Unstricable {
     /**
      * The method is short alias for {@linkplain #unstrict(Type, Type...)}.
      */
-    default public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S us(Type type, Type... genericTypeArgs) {
+    default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S us(Type type, Type... genericTypeArgs) {
         return this.unstrict(type, genericTypeArgs);
     }
 
@@ -18,5 +18,9 @@ public interface Unstricable {
      * @param <S>  type of the selector.
      * @return selector.
      */
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs);
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs);
+
+    default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S unstrict(Class<T> clazz, Type... genericTypeArgs) {
+        return this.unstrict((Type) clazz, genericTypeArgs);
+    }
 }
