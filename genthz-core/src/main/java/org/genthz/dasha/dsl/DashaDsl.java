@@ -1,62 +1,268 @@
+/*
+ * Generated - testing becomes easier
+ *
+ * Copyright (C) 2023 mathter@mail.ru
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.genthz.dasha.dsl;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.genthz.Defaults;
 import org.genthz.GenerationProvider;
-import org.genthz.context.Context;
+import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
-import org.genthz.dasha.DashaGenerationProvider;
 import org.genthz.dsl.Customable;
+import org.genthz.dsl.Customs;
 import org.genthz.dsl.Dsl;
 import org.genthz.dsl.FillerFirst;
 import org.genthz.dsl.InstanceBuilderFirst;
+import org.genthz.dsl.Metric;
 import org.genthz.dsl.Pathable;
 import org.genthz.dsl.Strictable;
 import org.genthz.dsl.Unstricable;
+import org.genthz.dsl.Using;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilder;
+import org.genthz.function.InstanceBuilderConsumer;
 import org.genthz.function.Selector;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Deque;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class DashaDsl implements Dsl {
-    private Map<Selector, InstanceBuilder> builderMap = new HashMap<>();
+    public static final int DEFAULT_METRIC = 0;
 
-    private Map<Selector, Filler> fillerMap = new HashMap<>();
+    public static final int DEFAULT_COLLECTION_METRIC = DEFAULT_METRIC;
 
-    void reg(Selector selector, InstanceBuilder instanceBuilder) {
-        this.builderMap.put(selector, instanceBuilder);
-    }
+    public static final int DEFAULT_SUB_COLLECTION_METRIC = DEFAULT_COLLECTION_METRIC + 1;
 
-    void reg(Selector selector, Filler filler) {
-        this.fillerMap.put(selector, filler);
+    private final Collection<Op> ops = new ArrayList<>();
+
+    private Defaults defaults = new DashaDefaults();
+
+    private SelectorOp<?> empty = new SelectorOp(null) {
+        @Override
+        public Selector selector() {
+            return null;
+        }
+
+        @Override
+        public Collection<Pair<Selector, ?>> op() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public DashaDsl dsl() {
+            return DashaDsl.this;
+        }
+    };
+
+    protected void reg(Op op) {
+        this.ops.add(op);
     }
 
     @Override
-    public <S extends Pathable & Strictable & Unstricable & InstanceBuilderFirst & FillerFirst> S custom(Predicate<Context> predicate) {
-        return (S) new CustomOps(null, predicate);
+    public DashaDsl defaults(Defaults defaults) {
+        this.defaults = defaults != null ? defaults : new DashaDefaults();
+        return this;
+    }
+
+    public DashaDsl def() {
+        this.strict(Boolean.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defBooleanInstanceBuilder());
+
+        this.strict(Boolean.TYPE)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defBooleanInstanceBuilder());
+
+        this.strict(Byte.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defByteInstanceBuilder());
+
+        this.strict(Byte.TYPE)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defByteInstanceBuilder());
+
+        this.strict(Short.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defShortInstanceBuilder());
+
+        this.strict(Short.TYPE)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defShortInstanceBuilder());
+
+        this.strict(Integer.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defIntegerInstanceBuilder());
+
+        this.strict(Integer.TYPE)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defIntegerInstanceBuilder());
+
+        this.strict(Long.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defLongInstanceBuilder());
+
+        this.strict(Long.TYPE)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defLongInstanceBuilder());
+
+        this.strict(Float.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defFloatInstanceBuilder());
+
+        this.strict(Float.TYPE)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defFloatInstanceBuilder());
+
+        this.strict(Double.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defDoubleInstanceBuilder());
+
+        this.strict(Double.TYPE)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defDoubleInstanceBuilder());
+
+        this.strict(String.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defStringInstanceBuilder());
+
+        this.strict(Date.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defDateInstanceBuilder());
+
+        this.strict(LocalDate.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defLocalDateInstanceBuilder());
+
+        this.strict(LocalDateTime.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defLocalDateTimeInstanceBuilder());
+
+        this.strict(LocalTime.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defLocalTimeInstanceBuilder());
+
+        this.strict(OffsetTime.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defOffsetTimeInstanceBuilder());
+
+        this.strict(OffsetDateTime.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defOffsetDateTimeInstanceBuilder());
+
+        this.strict(ZonedDateTime.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defZonedDateTimeInstanceBuilder());
+
+        this.strict(ZoneId.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defZoneIdInstanceBuilder());
+
+        this.unstrict(Collection.class)
+                .m(DEFAULT_COLLECTION_METRIC)
+                .ib(this.defaults.defCollectionInstanceBuilder())
+                .f(this.defaults.defCollectionFiller());
+
+        this.unstrict(List.class)
+                .m(DEFAULT_SUB_COLLECTION_METRIC)
+                .ib(this.defaults.defListInstanceBuilder())
+                .f(this.defaults.defListFiller());
+
+        this.unstrict(Queue.class)
+                .m(DEFAULT_SUB_COLLECTION_METRIC)
+                .ib(this.defaults.defQueueInstanceBuilder())
+                .f(this.defaults.defQueueFiller());
+
+        this.unstrict(Deque.class)
+                .m(DEFAULT_SUB_COLLECTION_METRIC)
+                .ib(this.defaults.defDequeInstanceBuilder())
+                .filler(this.defaults.defDequeFiller());
+
+        this.unstrict(Set.class)
+                .m(DEFAULT_SUB_COLLECTION_METRIC)
+                .ib(this.defaults.defSetInstanceBuilder())
+                .f(this.defaults.defSetFiller());
+
+        this.custom(Customs.isArray())
+                .m(DEFAULT_COLLECTION_METRIC)
+                .ib(this.defaults.defArrayInstanceBuilder())
+                .f(this.defaults.defArrayFiller());
+
+        return this;
     }
 
     @Override
-    public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst> S path(String path) {
-        return (S) new PathOp(null, path);
+    public <T, S extends Pathable & Strictable & Unstricable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S custom(Predicate<InstanceContext<T>> predicate) {
+        return (S) new CustomOps(this.empty, predicate);
     }
 
     @Override
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst> S strict(Type type, Type... genericTypeArgs) {
-        return (S) new StrictTypeOp(null, type, genericTypeArgs);
+    public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(String path) {
+        return (S) new PathOp(this.empty, path);
     }
 
     @Override
-    public <T, S extends Pathable & Customable & InstanceBuilderFirst & FillerFirst> S unstrict(Type type, Type... genericTypeArgs) {
-        return (S) new UnstrictTypeOp(null, type, genericTypeArgs);
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs) {
+        return (S) new StrictTypeOp(this.empty, type, genericTypeArgs);
+    }
+
+    @Override
+    public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs) {
+        return (S) new UnstrictTypeOp(this.empty, type, genericTypeArgs);
     }
 
     @Override
     public GenerationProvider build(GenerationProvider parent) {
-        final DashaGenerationProvider provider = new DashaGenerationProvider(parent, new DashaDefaults());
+        final Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders = new ArrayList<>();
+        final Collection<Pair<Selector, Filler>> fillers = new ArrayList<>();
 
-        return provider;
+        for (Op op : this.ops) {
+            final Collection<Pair<Selector, ?>> list = op.op();
+            list.forEach(e -> {
+                if (e.getRight() instanceof InstanceBuilderConsumer) {
+                    instanceBuilders.add((Pair<Selector, InstanceBuilderConsumer>) e);
+                } else if (e.getRight() instanceof Filler) {
+                    fillers.add((Pair<Selector, Filler>) e);
+                } else {
+                    throw new IllegalStateException(
+                            String.format("%s is not valid! Must be %s or %s", e, InstanceBuilderConsumer.class, Filler.class)
+                    );
+                }
+            });
+        }
+
+        return new DashaGenerationProvider(
+                parent,
+                this.defaults,
+                instanceBuilders,
+                fillers
+        );
     }
 }

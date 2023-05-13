@@ -1,9 +1,28 @@
+/*
+ * Generated - testing becomes easier
+ *
+ * Copyright (C) 2023 mathter@mail.ru
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.genthz.dasha.context;
 
 import org.genthz.context.Accessor;
 import org.genthz.context.Stage;
 
-public abstract class AbstractAccessor<T> implements Accessor<T> {
+import java.util.Objects;
+
+abstract class AbstractAccessor<T> implements Accessor<T> {
     private Stage stage = Stage.NEW;
 
     @Override
@@ -12,21 +31,7 @@ public abstract class AbstractAccessor<T> implements Accessor<T> {
     }
 
     @Override
-    public void init() {
-        this.stage = Stage.CREATING;
-    }
-
-    @Override
-    public void set(T value) throws IllegalStateException {
-        switch (this.stage) {
-            case CREATING:
-                this.stage = Stage.CREATED;
-                break;
-            case CREATED:
-                this.stage = Stage.COMPLETE;
-                break;
-            default:
-                throw new IllegalStateException(String.format("Invalid transition! Current stage=%s", this.stage));
-        }
+    public void stage(Stage stage) {
+        this.stage = Objects.requireNonNull(stage);
     }
 }

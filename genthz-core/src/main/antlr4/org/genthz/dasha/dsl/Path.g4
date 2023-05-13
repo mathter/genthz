@@ -26,7 +26,7 @@ root
     ;
 
 pathElement
-    :   (staticElement | matchedElement | skipSequnce)
+    :   (staticElement indexedElement* | matchedElement indexedElement* | skipSequnce)
     ;
 
 staticElement
@@ -38,11 +38,11 @@ matchedElement
     ;
 
 indexedElement
-    :   '[' index ']'
+    :   '[' COUNT ']'
     ;
 
 index
-    :   DIGIT+
+    :   SKIP_NAME_COUNT
     ;
 
 skipSequnce
@@ -50,14 +50,14 @@ skipSequnce
     ;
 
 skipElement
-    :   SKIP_NAME SKIP_NAME_COUNT?
+    :   SKIP_NAME COUNT?
     ;
 
 SKIP_NAME
     :   '..'
     ;
 
-SKIP_NAME_COUNT
+COUNT
     :   DIGIT+
     ;
 

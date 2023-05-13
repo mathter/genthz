@@ -1,3 +1,20 @@
+/*
+ * Generated - testing becomes easier
+ *
+ * Copyright (C) 2023 mathter@mail.ru
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.genthz.dasha.dsl;
 
 import org.genthz.function.Selector;
@@ -56,6 +73,39 @@ public class Antrl4PathProcessorTest {
         Assertions.assertTrue(selector instanceof FixedPathSelector);
         Assertions.assertTrue(selector.up().isPresent());
         Assertions.assertEquals("f0", ((FixedPathSelector) selector).getElement());
+
+        selector = selector.up().get();
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof FixedPathSelector);
+        Assertions.assertFalse(selector.up().isPresent());
+        Assertions.assertEquals("/", ((FixedPathSelector) selector).getElement());
+    }
+
+    @Test
+    public void testSkip() {
+        Selector selector = Antrl4PathProcessor.path(null, "/f/..2/..4/s");
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof FixedPathSelector);
+        Assertions.assertTrue(selector.up().isPresent());
+        Assertions.assertEquals("s", ((FixedPathSelector) selector).getElement());
+
+        selector = selector.up().get();
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof SkipPathSelector);
+        Assertions.assertTrue(selector.up().isPresent());
+        Assertions.assertEquals(4, ((SkipPathSelector) selector).getSkip());
+
+        selector = selector.up().get();
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof SkipPathSelector);
+        Assertions.assertTrue(selector.up().isPresent());
+        Assertions.assertEquals(2, ((SkipPathSelector) selector).getSkip());
+
+        selector = selector.up().get();
+        Assertions.assertNotNull(selector);
+        Assertions.assertTrue(selector instanceof FixedPathSelector);
+        Assertions.assertTrue(selector.up().isPresent());
+        Assertions.assertEquals("f", ((FixedPathSelector) selector).getElement());
 
         selector = selector.up().get();
         Assertions.assertNotNull(selector);
