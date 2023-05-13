@@ -74,6 +74,21 @@ public class DashaObjectFactoryTest {
                         },
                         SimpleTestModel.class,
                         null
+                ),
+                Arguments.of(
+                        Optional.of(new DashaDsl().def())
+                                .map(e -> {
+                                    e.path("otherNames[1]")
+                                            .simple(ctx -> "Name");
+                                    return e;
+                                })
+                                .get(),
+                        (Consumer<SimpleGenericModel>) e -> {
+                            Assertions.assertNotNull(e);
+                            Assertions.assertEquals("Name", e.getOtherNames().get(1));
+                        },
+                        SimpleGenericModel.class,
+                        null
                 )
         );
     }

@@ -44,12 +44,12 @@ class Antrl4PathProcessor {
 
         @Override
         public void enterIndexedElement(PathParser.IndexedElementContext ctx) {
-            this.up = new IndexPathSelector(this.up, Integer.parseInt(ctx.index().getText()));
+            this.up = new IndexPathSelector(this.up, Integer.parseInt(ctx.COUNT().getText()));
         }
 
         @Override
         public void enterSkipElement(PathParser.SkipElementContext ctx) {
-            this.up = new SkipPathSelector(this.up, Integer.parseInt(ctx.SKIP_NAME_COUNT().getText()));
+            this.up = new SkipPathSelector(this.up, Integer.parseInt(ctx.COUNT().getText()));
         }
     }
 }
