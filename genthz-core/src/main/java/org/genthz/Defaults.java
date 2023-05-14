@@ -18,6 +18,7 @@
 package org.genthz;
 
 import org.genthz.function.Filler;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.InstanceBuilderConsumer;
 
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -244,4 +246,8 @@ public interface Defaults {
      * @return filler.
      */
     public Filler<?> defArrayFiller();
+
+    public InstanceBuilder<Map> defMapInstanceBuilder();
+
+    public Filler<Map> defMapFiller();
 }

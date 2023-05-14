@@ -18,6 +18,7 @@
 package org.genthz.dasha.context;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Bindings;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
@@ -87,7 +88,7 @@ public class DashaContextFactory implements ContextFactory {
     }
 
     @Override
-    public <T, E> List<NodeInstanceContext<E, Integer>> byCollection(InstanceContext<T> up, int count) {
+    public <T extends Collection, E> List<NodeInstanceContext<E, Integer>> byCollection(InstanceContext<T> up, int count) {
         final List<NodeInstanceContext<E, Integer>> result;
         final Type upType = up.type();
 
@@ -129,7 +130,7 @@ public class DashaContextFactory implements ContextFactory {
                         this,
                         instanceAccessor,
                         up,
-                        this.unrollType(null, componentType),
+                        this.unrollType(variableTypeMap, componentType),
                         instanceAccessor
                 ));
             }
@@ -170,5 +171,42 @@ public class DashaContextFactory implements ContextFactory {
 
     private Type unrollType(Map<TypeVariable<?>, Type> variableTypeMap, Type type) {
         return Optional.ofNullable(TypeUtils.unrollVariables(variableTypeMap, type)).orElse(Object.class);
+    }
+
+    @Override
+    public <K, V, T extends Map<K, V>> Collection<Pair<NodeInstanceContext<K, Integer>, NodeInstanceContext<V, K>>> byMapKey(InstanceContext<T> up, int count) {
+        final Collection<Pair<NodeInstanceContext<K, Integer>, NodeInstanceContext<V, K>>> result;
+        final Type upType = up.type();
+
+        if (Map.class.isAssignableFrom(TypeUtils.getRawType(upType, Collection.class))) {
+            final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(upType);
+            variableTypeMap.putAll(TypeUtils.getTypeArguments(upType, Map.class));
+            result = new ArrayList<>(count);
+
+            for (int i = 0; i < count; i++) {
+                final MapKeyAccessor keyInstanceAccessor = new MapKeyAccessor(i);
+                final NodeInstanceContext<K, Integer> keyContext = new DashaNodeInstanceContext(
+                        this,
+                        keyInstanceAccessor,
+                        up,
+                        this.unrollType(variableTypeMap, Map.class.getTypeParameters()[0]),
+                        keyInstanceAccessor
+                );
+                final MapValueAccessor valueInstanceAccessor = new MapValueAccessor(up.instance(), keyInstanceAccessor, i);
+                final NodeInstanceContext<V, K> valueContext = new DashaNodeInstanceContext(
+                        this,
+                        valueInstanceAccessor,
+                        up,
+                        this.unrollType(variableTypeMap, Map.class.getTypeParameters()[1]),
+                        valueInstanceAccessor
+                );
+
+                result.add(Pair.of(keyContext, valueContext));
+            }
+        } else {
+            throw new IllegalStateException("Up context class must be instance of " + Map.class + " !");
+        }
+
+        return result;
     }
 }

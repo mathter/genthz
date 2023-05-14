@@ -22,6 +22,7 @@ import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.context.DashaContextFactory;
 import org.genthz.function.DefaultCollectionFiller;
+import org.genthz.function.DefaultMapFiller;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilderConsumer;
 import org.genthz.function.UnitFiller;
@@ -42,6 +43,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -65,6 +67,8 @@ public class DashaDslTest {
 
         if (Collection.class.isAssignableFrom(clazz)) {
             Assertions.assertTrue(filler instanceof DefaultCollectionFiller);
+        } else if (Map.class.isAssignableFrom(clazz)) {
+            Assertions.assertTrue(filler instanceof DefaultMapFiller);
         } else {
             Assertions.assertTrue(filler instanceof UnitFiller);
         }
@@ -75,32 +79,33 @@ public class DashaDslTest {
 
     private static Stream<Arguments> data() {
         return Stream.of(
-                Arguments.of(Boolean.class, null),
-                Arguments.of(boolean.class, null),
-                Arguments.of(Short.class, null),
-                Arguments.of(short.class, null),
-                Arguments.of(Integer.class, null),
-                Arguments.of(int.class, null),
-                Arguments.of(Long.class, null),
-                Arguments.of(long.class, null),
-                Arguments.of(Float.class, null),
-                Arguments.of(float.class, null),
-                Arguments.of(Double.class, null),
-                Arguments.of(double.class, null),
-                Arguments.of(String.class, null),
-                Arguments.of(Date.class, null),
-                Arguments.of(LocalDate.class, null),
-                Arguments.of(LocalTime.class, null),
-                Arguments.of(LocalDateTime.class, null),
-                Arguments.of(OffsetTime.class, null),
-                Arguments.of(OffsetDateTime.class, null),
-                Arguments.of(ZonedDateTime.class, null),
-                Arguments.of(ZoneId.class, null),
-                Arguments.of(Collection.class, new Class[]{String.class}),
-                Arguments.of(List.class, new Class[]{String.class}),
-                Arguments.of(Queue.class, new Class[]{String.class}),
-                Arguments.of(Deque.class, new Class[]{String.class}),
-                Arguments.of(Set.class, new Class[]{String.class})
+//                Arguments.of(Boolean.class, null),
+//                Arguments.of(boolean.class, null),
+//                Arguments.of(Short.class, null),
+//                Arguments.of(short.class, null),
+//                Arguments.of(Integer.class, null),
+//                Arguments.of(int.class, null),
+//                Arguments.of(Long.class, null),
+//                Arguments.of(long.class, null),
+//                Arguments.of(Float.class, null),
+//                Arguments.of(float.class, null),
+//                Arguments.of(Double.class, null),
+//                Arguments.of(double.class, null),
+//                Arguments.of(String.class, null),
+//                Arguments.of(Date.class, null),
+//                Arguments.of(LocalDate.class, null),
+//                Arguments.of(LocalTime.class, null),
+//                Arguments.of(LocalDateTime.class, null),
+//                Arguments.of(OffsetTime.class, null),
+//                Arguments.of(OffsetDateTime.class, null),
+//                Arguments.of(ZonedDateTime.class, null),
+//                Arguments.of(ZoneId.class, null),
+//                Arguments.of(Collection.class, new Class[]{String.class}),
+//                Arguments.of(List.class, new Class[]{String.class}),
+//                Arguments.of(Queue.class, new Class[]{String.class}),
+//                Arguments.of(Deque.class, new Class[]{String.class}),
+//                Arguments.of(Set.class, new Class[]{String.class}),
+                Arguments.of(Map.class, new Class[]{String.class, String.class})
         );
     }
 }

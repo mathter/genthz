@@ -22,7 +22,9 @@ import org.genthz.Defaults;
 import org.genthz.function.DefaultArrayFiller;
 import org.genthz.function.DefaultArrayInstanceBuilderConsumer;
 import org.genthz.function.DefaultCollectionFiller;
+import org.genthz.function.DefaultMapFiller;
 import org.genthz.function.Filler;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.InstanceBuilderConsumer;
 import org.genthz.reflection.GenericUtil;
 
@@ -38,8 +40,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -49,7 +53,10 @@ public class DashaDefaults implements Defaults {
     private final Filler<?> defaultCollectionFiller = new DefaultCollectionFiller<>();
 
     private final InstanceBuilderConsumer defaultArrayInstanceBuilder = new DefaultArrayInstanceBuilderConsumer<>(new GenericUtil(false));
+
     private final Filler<?> defaultArrayFiller = new DefaultArrayFiller<>();
+
+    private final Filler<Map> defaultMapFiller = new DefaultMapFiller();
 
     private int defaultCollectionSize = 5;
 
@@ -203,5 +210,15 @@ public class DashaDefaults implements Defaults {
     @Override
     public Filler<?> defArrayFiller() {
         return this.defaultArrayFiller;
+    }
+
+    @Override
+    public InstanceBuilder<Map> defMapInstanceBuilder() {
+        return ctx -> new HashMap();
+    }
+
+    @Override
+    public Filler<Map> defMapFiller() {
+        return this.defaultMapFiller;
     }
 }

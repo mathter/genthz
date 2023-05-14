@@ -50,6 +50,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -209,6 +210,11 @@ public class DashaDsl implements Dsl {
                 .m(DEFAULT_SUB_COLLECTION_METRIC)
                 .ib(this.defaults.defSetInstanceBuilder())
                 .f(this.defaults.defSetFiller());
+
+        this.unstrict(Map.class)
+                .m(DEFAULT_COLLECTION_METRIC)
+                .ib(this.defaults.defMapInstanceBuilder())
+                .f(this.defaults.defMapFiller());
 
         this.custom(Customs.isArray())
                 .m(DEFAULT_COLLECTION_METRIC)

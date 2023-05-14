@@ -17,10 +17,13 @@
  */
 package org.genthz.context;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class contains several methods for context creation.
@@ -76,7 +79,7 @@ public interface ContextFactory {
      * @param <E>   type of the collection elements.
      * @return list of the contexts.
      */
-    public <T, E> List<NodeInstanceContext<E, Integer>> byCollection(InstanceContext<T> up, int count);
+    public <T extends Collection, E> List<NodeInstanceContext<E, Integer>> byCollection(InstanceContext<T> up, int count);
 
     /**
      * Method returns {@linkplain List} of the contexts for elements of java array.
@@ -97,4 +100,6 @@ public interface ContextFactory {
      * @return collection of the contexts.
      */
     public <T> Collection<NodeInstanceContext<?, String>> byProperties(InstanceContext<T> up);
+
+    public <K, V, T extends Map<K, V>> Collection<Pair<NodeInstanceContext<K, Integer>, NodeInstanceContext<V, K>>> byMapKey(InstanceContext<T> up, int count);
 }
