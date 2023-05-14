@@ -24,7 +24,7 @@ import java.lang.reflect.Type;
  * This class is strategy for search {@linkplain Constructor} for instance creation.
  *
  * @author mathter
- * @see 3.0.0
+ * @since  3.0.0
  */
 public interface ConstructorChoiceStrategy {
     /**

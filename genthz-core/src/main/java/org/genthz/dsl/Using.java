@@ -19,6 +19,18 @@ package org.genthz.dsl;
 
 import java.util.function.Consumer;
 
+/**
+ * Util class.
+ *
+ * @param <T> type of selector builder.
+ * @author mathter
+ * @since 3.0.0
+ */
 public interface Using<T> {
+    /**
+     * This method allows reuse selecor builder in {@linkplain Consumer}.
+     *
+     * @param consumer consumer recycling selector builder.
+     */
     public void use(Consumer<T> consumer);
 }

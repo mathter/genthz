@@ -17,8 +17,24 @@
  */
 package org.genthz.dsl;
 
+/**
+ * This interface represents object with Name;
+ *
+ * @param <T>
+ */
 public interface Named<T extends Named<T>> {
+    /**
+     * Method returns the name.
+     *
+     * @return name.
+     */
     public String name();
 
+    /**
+     * Method sets the name.
+     *
+     * @param name name.
+     * @return this object.
+     */
     public T name(CharSequence name);
 }

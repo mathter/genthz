@@ -17,6 +17,14 @@
  */
 package org.genthz.dsl;
 
+import org.genthz.context.InstanceContext;
+
+/**
+ * This class contains methods that make it possible to create context selectors based on the paths.
+ *
+ * @author mathter
+ * @since 3.0.0
+ */
 public interface Pathable {
     /**
      * The method is short alias for {@linkplain #path(String)}.
@@ -25,5 +33,24 @@ public interface Pathable {
         return this.path(path);
     }
 
+    /**
+     * Creates selector builder pased on paths. Fields, indexes of collection elements or arrays can be used.
+     * <pre>
+     *     public class TestClass {
+     *         private String myField;
+     *         ...
+     *     }
+     *
+     *     Dsl dsl = new DashaDsl()
+     *          .defs()                         // create default rules for object creation.
+     *          .strict(TestClass.class)        // matche only TestClass.class
+     *          .path("myField")                // matche fiedls with name "myField"
+     *          .simple(ctx -> "My value");     // create instance builder with fixed generated value: "My values"
+     * </pre>
+     *
+     * @param path path.
+     * @param <S>  type of selector builder.
+     * @return selector builder.
+     */
     public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(String path);
 }
