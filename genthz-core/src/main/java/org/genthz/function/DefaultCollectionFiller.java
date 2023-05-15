@@ -24,12 +24,21 @@ import org.genthz.context.InstanceContext;
 import java.util.Collection;
 
 public class DefaultCollectionFiller<T extends Collection> extends AbstractContainerFiller<T> implements Filler<T> {
+
+    public DefaultCollectionFiller() {
+        super();
+    }
+
+    public DefaultCollectionFiller(ContainerSize<?> containerSize) {
+        super(containerSize);
+    }
+
     @Override
     public void fill(InstanceContext<T> context) {
         final ContextFactory contextFactory = context.contextFactory();
         final ObjectFactory objectFactory = context.objectFactory();
 
-        contextFactory.byCollection(context, this.collectionSize.apply(context))
+        contextFactory.byCollection(context, this.containerSize.get(context))
                 .forEach(e -> objectFactory.process(e));
     }
 }

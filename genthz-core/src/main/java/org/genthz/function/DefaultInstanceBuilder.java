@@ -62,4 +62,18 @@ public class DefaultInstanceBuilder<T> implements InstanceBuilder<T> {
 
         return instance;
     }
+
+
+    public ConstructorChoiceStrategy getConstructorChoiceStrategy() {
+        return constructorChoiceStrategy;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getSimpleName())
+                .append('{')
+                .append("constructorChoiceStrategy=" + this.getConstructorChoiceStrategy())
+                .append('}')
+                .toString();
+    }
 }

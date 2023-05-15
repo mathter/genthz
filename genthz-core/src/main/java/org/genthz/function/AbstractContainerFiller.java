@@ -1,17 +1,23 @@
 package org.genthz.function;
 
-import org.genthz.context.Context;
-
-import java.util.function.Function;
-
 public abstract class AbstractContainerFiller<T> implements Filler<T> {
-    protected final Function<Context, Integer> collectionSize;
+    protected final ContainerSize containerSize;
 
     public AbstractContainerFiller() {
-        this(ctx -> ctx.objectFactory().generationProvider().defaults().defaultCollectionSize());
+        this(new DefaultsContainerSize());
     }
 
-    public AbstractContainerFiller(Function<Context, Integer> collectionSize) {
-        this.collectionSize = collectionSize;
+    public AbstractContainerFiller(ContainerSize<?> containerSize) {
+        this.containerSize = containerSize;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder(this.getClass().getSimpleName())
+                .append('{')
+                .append("collectionSize=")
+                .append(this.containerSize)
+                .append('}')
+                .toString();
     }
 }

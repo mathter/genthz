@@ -22,6 +22,7 @@ import org.genthz.Defaults;
 import org.genthz.GenerationProvider;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
+import org.genthz.dasha.Logger;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.Customs;
 import org.genthz.dsl.Dsl;
@@ -32,6 +33,8 @@ import org.genthz.dsl.Pathable;
 import org.genthz.dsl.Strictable;
 import org.genthz.dsl.Unstricable;
 import org.genthz.dsl.Using;
+import org.genthz.function.DefaultFiller;
+import org.genthz.function.DefaultInstanceBuilder;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
@@ -109,6 +112,11 @@ public class DashaDsl implements Dsl {
     }
 
     public DashaDsl def() {
+        this.unstrict(Object.class)
+                .m(Integer.MIN_VALUE)
+                .ib(new DefaultInstanceBuilder<>())
+                .f(new DefaultFiller());
+
         this.strict(Boolean.class)
                 .m(DEFAULT_METRIC)
                 .simple(this.defaults.defBooleanInstanceBuilder());
@@ -217,7 +225,7 @@ public class DashaDsl implements Dsl {
                 .f(this.defaults.defQueueFiller());
 
         this.unstrict(Deque.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_2)
                 .ib(this.defaults.defDequeInstanceBuilder())
                 .filler(this.defaults.defDequeFiller());
 
@@ -286,17 +294,19 @@ public class DashaDsl implements Dsl {
 
         for (Op op : this.ops) {
             final Collection<Pair<Selector, ?>> list = op.op();
-            list.forEach(e -> {
-                if (e.getRight() instanceof InstanceBuilder) {
-                    instanceBuilders.add((Pair<Selector, InstanceBuilder>) e);
-                } else if (e.getRight() instanceof Filler) {
-                    fillers.add((Pair<Selector, Filler>) e);
-                } else {
-                    throw new IllegalStateException(
-                            String.format("%s is not valid! Must be %s or %s", e, InstanceBuilder.class, Filler.class)
-                    );
-                }
-            });
+            list.stream()
+                    .peek(e -> Logger.logCreateSelectable(e))
+                    .forEach(e -> {
+                        if (e.getRight() instanceof InstanceBuilder) {
+                            instanceBuilders.add((Pair<Selector, InstanceBuilder>) e);
+                        } else if (e.getRight() instanceof Filler) {
+                            fillers.add((Pair<Selector, Filler>) e);
+                        } else {
+                            throw new IllegalStateException(
+                                    String.format("%s is not valid! Must be %s or %s", e, InstanceBuilder.class, Filler.class)
+                            );
+                        }
+                    });
         }
 
         return new DashaGenerationProvider(

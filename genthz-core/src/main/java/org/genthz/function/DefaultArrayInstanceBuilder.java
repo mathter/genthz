@@ -41,7 +41,6 @@ public class DefaultArrayInstanceBuilder<T> implements InstanceBuilder<T> {
     @Override
     public T instance(InstanceContext<T> context) {
         final T instance;
-        final ContextFactory contextFactory = context.contextFactory();
         final ObjectFactory objectFactory = context.objectFactory();
         final Type type = context.type();
 

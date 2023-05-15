@@ -18,19 +18,16 @@
 package org.genthz.function;
 
 import org.genthz.ObjectFactory;
-import org.genthz.context.Context;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
-
-import java.util.function.Function;
 
 public class DefaultArrayFiller<T> extends AbstractContainerFiller<T> implements Filler<T> {
     public DefaultArrayFiller() {
         super();
     }
 
-    public DefaultArrayFiller(Function<Context, Integer> collectionSize) {
-        super(collectionSize);
+    public DefaultArrayFiller(ContainerSize containerSize) {
+        super(containerSize);
     }
 
     @Override
@@ -38,7 +35,7 @@ public class DefaultArrayFiller<T> extends AbstractContainerFiller<T> implements
         final ContextFactory contextFactory = context.contextFactory();
         final ObjectFactory objectFactory = context.objectFactory();
 
-        contextFactory.byArray(context, this.collectionSize.apply(context))
+        contextFactory.byArray(context, this.containerSize.get(context))
                 .forEach(e -> objectFactory.process(e));
     }
 }

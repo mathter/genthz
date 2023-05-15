@@ -17,10 +17,14 @@
  */
 package org.genthz.dasha.dsl;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.dsl.Metric;
 import org.genthz.function.Selector;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 abstract class AbstractSelector implements Selector {
     private final Optional<Selector> up;
@@ -31,6 +35,14 @@ abstract class AbstractSelector implements Selector {
 
     protected AbstractSelector(Selector up) {
         this.up = Optional.ofNullable(up);
+    }
+
+    protected Stream<Pair<String, Object>> params() {
+        return Stream.of(
+                Pair.of("name", this.name),
+                Pair.of("metric", this.metric),
+                Pair.of("effective", this.effective())
+        );
     }
 
     @Override
@@ -73,5 +85,19 @@ abstract class AbstractSelector implements Selector {
                 : NameGenerator.next();
 
         return this;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder(this.getClass().getSimpleName())
+                .append('{')
+                .append(
+                        this.params()
+                                .map(e -> e.getLeft() + "=" + e.getRight())
+                                .collect(Collectors.joining(","))
+                )
+                .append('}');
+
+        return sb.toString();
     }
 }

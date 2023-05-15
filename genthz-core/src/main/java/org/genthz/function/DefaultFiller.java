@@ -32,4 +32,9 @@ public class DefaultFiller<T> implements Filler<T> {
                 .forEach(e -> objectFactory.process(e));
 
     }
+
+    @Override
+    public String toString() {
+        return "DefaultFiller{}";
+    }
 }
