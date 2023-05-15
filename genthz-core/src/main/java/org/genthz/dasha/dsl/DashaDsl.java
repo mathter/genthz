@@ -33,9 +33,10 @@ import org.genthz.dsl.Strictable;
 import org.genthz.dsl.Unstricable;
 import org.genthz.dsl.Using;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
 
+import javax.script.Bindings;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -51,16 +52,30 @@ import java.util.Date;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Queue;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.function.Predicate;
 
 public class DashaDsl implements Dsl {
     public static final int DEFAULT_METRIC = 0;
 
-    public static final int DEFAULT_COLLECTION_METRIC = DEFAULT_METRIC;
+    public static final int DEFAULT_COLLECTION_METRIC_LEV_0 = DEFAULT_METRIC;
 
-    public static final int DEFAULT_SUB_COLLECTION_METRIC = DEFAULT_COLLECTION_METRIC + 1;
+    public static final int DEFAULT_COLLECTION_METRIC_LEV_1 = DEFAULT_COLLECTION_METRIC_LEV_0 + 1;
+
+    public static final int DEFAULT_COLLECTION_METRIC_LEV_2 = DEFAULT_COLLECTION_METRIC_LEV_1 + 1;
+
+    public static final int DEFAULT_COLLECTION_METRIC_LEV_3 = DEFAULT_COLLECTION_METRIC_LEV_2 + 1;
+
+    public static final int DEFAULT_COLLECTION_METRIC_LEV_4 = DEFAULT_COLLECTION_METRIC_LEV_3 + 1;
+
+    public static final int DEFAULT_COLLECTION_METRIC_LEV_5 = DEFAULT_COLLECTION_METRIC_LEV_4 + 1;
+
+    public static final int DEFAULT_COLLECTION_METRIC_LEV_6 = DEFAULT_COLLECTION_METRIC_LEV_5 + 1;
 
     private final Collection<Op> ops = new ArrayList<>();
 
@@ -187,39 +202,59 @@ public class DashaDsl implements Dsl {
                 .simple(this.defaults.defZoneIdInstanceBuilder());
 
         this.unstrict(Collection.class)
-                .m(DEFAULT_COLLECTION_METRIC)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_0)
                 .ib(this.defaults.defCollectionInstanceBuilder())
                 .f(this.defaults.defCollectionFiller());
 
         this.unstrict(List.class)
-                .m(DEFAULT_SUB_COLLECTION_METRIC)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
                 .ib(this.defaults.defListInstanceBuilder())
                 .f(this.defaults.defListFiller());
 
         this.unstrict(Queue.class)
-                .m(DEFAULT_SUB_COLLECTION_METRIC)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
                 .ib(this.defaults.defQueueInstanceBuilder())
                 .f(this.defaults.defQueueFiller());
 
         this.unstrict(Deque.class)
-                .m(DEFAULT_SUB_COLLECTION_METRIC)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
                 .ib(this.defaults.defDequeInstanceBuilder())
                 .filler(this.defaults.defDequeFiller());
 
         this.unstrict(Set.class)
-                .m(DEFAULT_SUB_COLLECTION_METRIC)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
                 .ib(this.defaults.defSetInstanceBuilder())
                 .f(this.defaults.defSetFiller());
 
+        this.custom(Customs.isArray())
+                .m(DEFAULT_COLLECTION_METRIC_LEV_0)
+                .ib(this.defaults.defArrayInstanceBuilder())
+                .f(this.defaults.defArrayFiller());
+
         this.unstrict(Map.class)
-                .m(DEFAULT_COLLECTION_METRIC)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_0)
                 .ib(this.defaults.defMapInstanceBuilder())
                 .f(this.defaults.defMapFiller());
 
-        this.custom(Customs.isArray())
-                .m(DEFAULT_COLLECTION_METRIC)
-                .ib(this.defaults.defArrayInstanceBuilder())
-                .f(this.defaults.defArrayFiller());
+        this.unstrict(SortedMap.class)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
+                .ib(this.defaults.defSortedMapInstanceBuilder())
+                .f(this.defaults.defSortedMapFiller());
+
+        this.unstrict(NavigableMap.class)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_2)
+                .ib(this.defaults.defNavigableMapInstanceBuilder())
+                .f(this.defaults.defNavigableMapFiller());
+
+        this.unstrict(ConcurrentMap.class)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_3)
+                .ib(this.defaults.defConcurrentMapInstanceBuilder())
+                .f(this.defaults.defConcurrentMapFiller());
+
+        this.unstrict(ConcurrentNavigableMap.class)
+                .m(DEFAULT_COLLECTION_METRIC_LEV_4)
+                .ib(this.defaults.defConcurrentNavigableMapInstanceBuilder())
+                .f(this.defaults.defConcurrentNavigableMapFiller());
 
         return this;
     }
@@ -246,19 +281,19 @@ public class DashaDsl implements Dsl {
 
     @Override
     public GenerationProvider build(GenerationProvider parent) {
-        final Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders = new ArrayList<>();
+        final Collection<Pair<Selector, InstanceBuilder>> instanceBuilders = new ArrayList<>();
         final Collection<Pair<Selector, Filler>> fillers = new ArrayList<>();
 
         for (Op op : this.ops) {
             final Collection<Pair<Selector, ?>> list = op.op();
             list.forEach(e -> {
-                if (e.getRight() instanceof InstanceBuilderConsumer) {
-                    instanceBuilders.add((Pair<Selector, InstanceBuilderConsumer>) e);
+                if (e.getRight() instanceof InstanceBuilder) {
+                    instanceBuilders.add((Pair<Selector, InstanceBuilder>) e);
                 } else if (e.getRight() instanceof Filler) {
                     fillers.add((Pair<Selector, Filler>) e);
                 } else {
                     throw new IllegalStateException(
-                            String.format("%s is not valid! Must be %s or %s", e, InstanceBuilderConsumer.class, Filler.class)
+                            String.format("%s is not valid! Must be %s or %s", e, InstanceBuilder.class, Filler.class)
                     );
                 }
             });

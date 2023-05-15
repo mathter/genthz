@@ -29,9 +29,9 @@ import org.genthz.dsl.Pathable;
 import org.genthz.dsl.Strictable;
 import org.genthz.dsl.Unstricable;
 import org.genthz.dsl.Using;
-import org.genthz.function.DefaultInstanceBuilderConsumer;
+import org.genthz.function.DefaultInstanceBuilder;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
 import org.genthz.function.UnitFiller;
 
@@ -61,17 +61,17 @@ class PathOp<T> extends SelectorOp<PathOp<T>> implements Pathable, Strictable, U
     }
 
     @Override
-    public FillerThen instanceBuilder(InstanceBuilderConsumer<T> function) {
+    public FillerThen instanceBuilder(InstanceBuilder<T> function) {
         return new FillerThenOp(this.up(), function);
     }
 
     @Override
     public void simple() {
-        this.dsl().reg(new SimpleOp(this, new DefaultInstanceBuilderConsumer<>(), UnitFiller.INSTANCE));
+        this.dsl().reg(new SimpleOp(this, new DefaultInstanceBuilder<>(), UnitFiller.INSTANCE));
     }
 
     @Override
-    public void simple(InstanceBuilderConsumer<T> function) {
+    public void simple(InstanceBuilder<T> function) {
         this.dsl().reg(new SimpleOp(this, function, UnitFiller.INSTANCE));
     }
 

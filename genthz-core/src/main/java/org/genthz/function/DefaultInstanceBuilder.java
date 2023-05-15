@@ -17,34 +17,30 @@
  */
 package org.genthz.function;
 
-import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.ConstructorChoiceStrategy;
-import org.genthz.Defaults;
 import org.genthz.ObjectFactory;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.context.MinimalArgCountConstructorChoiceStrategy;
-import org.genthz.reflection.GenericUtil;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-public class DefaultInstanceBuilderConsumer<T> implements InstanceBuilderConsumer<T> {
+public class DefaultInstanceBuilder<T> implements InstanceBuilder<T> {
     private final ConstructorChoiceStrategy constructorChoiceStrategy;
 
-    public DefaultInstanceBuilderConsumer() {
+    public DefaultInstanceBuilder() {
         this(new MinimalArgCountConstructorChoiceStrategy());
     }
 
 
-    public DefaultInstanceBuilderConsumer(ConstructorChoiceStrategy constructorChoiceStrategy) {
+    public DefaultInstanceBuilder(ConstructorChoiceStrategy constructorChoiceStrategy) {
         this.constructorChoiceStrategy = Objects.requireNonNull(constructorChoiceStrategy);
     }
 
     @Override
-    public void instance(InstanceContext<T> context) {
+    public T instance(InstanceContext<T> context) {
         final T instance;
         final ContextFactory contextFactory = context.contextFactory();
         final ObjectFactory objectFactory = context.objectFactory();
@@ -64,6 +60,6 @@ public class DefaultInstanceBuilderConsumer<T> implements InstanceBuilderConsume
             );
         }
 
-        context.set(instance);
+        return instance;
     }
 }

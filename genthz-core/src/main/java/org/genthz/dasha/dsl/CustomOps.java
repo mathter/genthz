@@ -29,9 +29,9 @@ import org.genthz.dsl.Pathable;
 import org.genthz.dsl.Strictable;
 import org.genthz.dsl.Unstricable;
 import org.genthz.dsl.Using;
-import org.genthz.function.DefaultInstanceBuilderConsumer;
+import org.genthz.function.DefaultInstanceBuilder;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
 import org.genthz.function.UnitFiller;
 
@@ -76,18 +76,18 @@ public class CustomOps<T> extends SelectorOp<CustomOps<T>> implements Pathable, 
     }
 
     @Override
-    public FillerThen instanceBuilder(InstanceBuilderConsumer<T> function) {
+    public FillerThen instanceBuilder(InstanceBuilder<T> function) {
         return new FillerThenOp(this, function);
     }
 
     @Override
     public void simple() {
         final Selector selector = this.up().selector();
-        this.dsl().reg(new SimpleOp(this, new DefaultInstanceBuilderConsumer<>(), UnitFiller.INSTANCE));
+        this.dsl().reg(new SimpleOp(this, new DefaultInstanceBuilder<>(), UnitFiller.INSTANCE));
     }
 
     @Override
-    public void simple(InstanceBuilderConsumer<T> function) {
+    public void simple(InstanceBuilder<T> function) {
         final Selector selector = this.up().selector();
         final DashaDsl dsl = this.dsl();
 

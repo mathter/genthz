@@ -27,19 +27,19 @@ import org.genthz.reflection.GenericUtil;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 
-public class DefaultArrayInstanceBuilderConsumer<T> implements InstanceBuilderConsumer<T> {
+public class DefaultArrayInstanceBuilder<T> implements InstanceBuilder<T> {
     private final GenericUtil genericUtil;
 
-    public DefaultArrayInstanceBuilderConsumer() {
+    public DefaultArrayInstanceBuilder() {
         this(new GenericUtil(false));
     }
 
-    public DefaultArrayInstanceBuilderConsumer(GenericUtil genericUtil) {
+    public DefaultArrayInstanceBuilder(GenericUtil genericUtil) {
         this.genericUtil = genericUtil;
     }
 
     @Override
-    public void instance(InstanceContext<T> context) {
+    public T instance(InstanceContext<T> context) {
         final T instance;
         final ContextFactory contextFactory = context.contextFactory();
         final ObjectFactory objectFactory = context.objectFactory();
@@ -51,8 +51,6 @@ public class DefaultArrayInstanceBuilderConsumer<T> implements InstanceBuilderCo
                     this.genericUtil.getRawClass(null, TypeUtils.getArrayComponentType(type)),
                     defaults.defaultCollectionSize()
             );
-
-            context.set(instance);
         } else {
             throw new IllegalArgumentException(
                     String.format(
@@ -61,5 +59,7 @@ public class DefaultArrayInstanceBuilderConsumer<T> implements InstanceBuilderCo
                     )
             );
         }
+
+        return instance;
     }
 }

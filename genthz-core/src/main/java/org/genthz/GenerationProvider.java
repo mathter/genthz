@@ -19,13 +19,13 @@ package org.genthz;
 
 import org.genthz.context.InstanceContext;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 
 import java.util.Optional;
 
 /**
  * This class contains information for class instance generation such as
- * {@linkplain org.genthz.function.InstanceBuilder}, {@linkplain InstanceBuilderConsumer}
+ * {@linkplain org.genthz.function.InstanceBuilder}, {@linkplain InstanceBuilder}
  * {@linkplain Filler} and {@linkplain org.genthz.function.Selector}.
  *
  * @author mathter
@@ -33,7 +33,7 @@ import java.util.Optional;
  */
 public interface GenerationProvider {
     /**
-     * Method returns appropriate {@linkplain InstanceBuilderConsumer} for given context.
+     * Method returns appropriate {@linkplain InstanceBuilder} for given context.
      * Implementation of this method must search instance builder in this provider.
      * If instance builder is not found the search must be continued in parent provider.
      *
@@ -42,7 +42,7 @@ public interface GenerationProvider {
      * @return instance builder for instance creation.
      * @see #up()
      */
-    public <T> InstanceBuilderConsumer<T> instanceBuilder(InstanceContext context);
+    public <T> InstanceBuilder<T> instanceBuilder(InstanceContext context);
 
     /**
      * Method returns appropriate {@linkplain Filler} for given context.
