@@ -68,66 +68,85 @@ class DashaGenerationProvider implements GenerationProvider {
 
     @Override
     public <T> InstanceBuilder<T> instanceBuilder(InstanceContext context) {
-        final Pair<Selector, InstanceBuilder> result;
+        final InstanceBuilder<T> result;
         final List<Pair<Selector, InstanceBuilder>> willBeUsed = this.instanceBuilders.stream()
                 .filter(e -> e.getLeft().test(context))
                 .sorted(COMPARATOR)
                 .collect(Collectors.toList());
         final int size = willBeUsed.size();
 
-        if (size == 1) {
-            result = willBeUsed.get(0);
+        if (size == 0) {
+            result = (InstanceBuilder<T>) this.up.map(e -> e.instanceBuilder(context))
+                    .orElseThrow(() -> new IllegalStateException(
+                            String.format("There are no instance builder for context %s", context)
+                    ));
         } else {
-            final Pair<Selector, InstanceBuilder> last = willBeUsed.get(size - 1);
-
-            if (last.getLeft().effective() > willBeUsed.get(size - 2).getLeft().effective()) {
-                result = last;
+            final Pair<Selector, InstanceBuilder> pair;
+            if (size == 1) {
+                pair = willBeUsed.get(0);
             } else {
-                throw new IllegalStateException(
-                        String.format("There are more then one instance builder for context: %s with metric=%s selectors: %s",
-                                context,
-                                last.getLeft().effective(),
-                                willBeUsed
-                        )
-                );
+                final Pair<Selector, InstanceBuilder> last = willBeUsed.get(size - 1);
+
+                if (last.getLeft().effective() > willBeUsed.get(size - 2).getLeft().effective()) {
+                    pair = last;
+                } else {
+                    throw new IllegalStateException(
+                            String.format("There are more then one instance builder for context: %s with metric=%s selectors: %s",
+                                    context,
+                                    last.getLeft().effective(),
+                                    willBeUsed
+                            )
+                    );
+                }
             }
+
+            Logger.logInstanceBuilderWillBeUsed(context, pair);
+            result = pair.getRight();
         }
 
-        Logger.logInstanceBuilderWillBeUsed(context, result);
-
-        return result.getRight();
+        return result;
     }
 
     @Override
     public <T> Filler<T> filler(InstanceContext context) {
-        final Pair<Selector, Filler> result;
+        final Filler<T> result;
         final List<Pair<Selector, Filler>> willBeUsed = this.filles.stream()
                 .filter(e -> e.getLeft().test(context))
                 .sorted(COMPARATOR)
                 .collect(Collectors.toList());
         final int size = willBeUsed.size();
 
-        if (size == 1) {
-            result = willBeUsed.get(0);
+        if (size == 0) {
+            result = (Filler<T>) this.up.map(e -> e.filler(context))
+                    .orElseThrow(() -> new IllegalStateException(
+                            String.format("There are no instance builder for context %s", context)
+                    ));
         } else {
-            final Pair<Selector, Filler> last = willBeUsed.get(size - 1);
+            final Pair<Selector, Filler> pair;
 
-            if (last.getLeft().effective() > willBeUsed.get(size - 2).getLeft().effective()) {
-                result = last;
+            if (size == 1) {
+                pair = willBeUsed.get(0);
             } else {
-                throw new IllegalStateException(
-                        String.format("There are more then one instance builder for context: %s with metric=%s selectors: %s",
-                                context,
-                                last.getLeft().effective(),
-                                willBeUsed
-                        )
-                );
+                final Pair<Selector, Filler> last = willBeUsed.get(size - 1);
+
+                if (last.getLeft().effective() > willBeUsed.get(size - 2).getLeft().effective()) {
+                    pair = last;
+                } else {
+                    throw new IllegalStateException(
+                            String.format("There are more then one instance builder for context: %s with metric=%s selectors: %s",
+                                    context,
+                                    last.getLeft().effective(),
+                                    willBeUsed
+                            )
+                    );
+                }
             }
+
+            Logger.logFillerBuilderWillBeUsed(context, pair);
+            result = pair.getRight();
         }
 
-        Logger.logFillerBuilderWillBeUsed(context, result);
-
-        return result.getRight();
+        return result;
     }
 
     @Override
