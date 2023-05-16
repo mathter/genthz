@@ -21,7 +21,7 @@ package org.genthz.dasha.dsl;
 import org.genthz.context.Context;
 import org.genthz.function.Selector;
 
-class PathSelector extends AbstractSelector {
+abstract class PathSelector extends AbstractSelector {
 
     public PathSelector(Selector parent) {
         super(parent);

@@ -17,19 +17,25 @@
  */
 package org.genthz.function;
 
-import org.genthz.Defaults;
 import org.genthz.ObjectFactory;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 
-public class DefaultArrayFiller<T> implements Filler<T> {
+public class DefaultArrayFiller<T> extends AbstractContainerFiller<T> implements Filler<T> {
+    public DefaultArrayFiller() {
+        super();
+    }
+
+    public DefaultArrayFiller(ContainerSize containerSize) {
+        super(containerSize);
+    }
+
     @Override
     public void fill(InstanceContext<T> context) {
         final ContextFactory contextFactory = context.contextFactory();
         final ObjectFactory objectFactory = context.objectFactory();
-        final Defaults defaults = objectFactory.generationProvider().defaults();
 
-        contextFactory.byArray(context, defaults.defaultCollectionSize())
+        contextFactory.byArray(context, this.containerSize.get(context))
                 .forEach(e -> objectFactory.process(e));
     }
 }

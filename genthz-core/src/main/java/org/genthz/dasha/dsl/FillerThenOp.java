@@ -20,7 +20,7 @@ package org.genthz.dasha.dsl;
 import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.dsl.FillerThen;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
 
 import java.util.Collection;
@@ -28,13 +28,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class FillerThenOp<T> extends Op<SelectorOp<?>> implements FillerThen<T> {
-    private final InstanceBuilderConsumer<?> instanceBuilderConsumerFunction;
+    private final InstanceBuilder<?> instanceBuilderFunction;
 
     private Filler<?> function;
 
-    public FillerThenOp(SelectorOp up, InstanceBuilderConsumer<?> instanceBuilderConsumerFunction) {
+    public FillerThenOp(SelectorOp up, InstanceBuilder<?> instanceBuilderFunction) {
         super(up);
-        this.instanceBuilderConsumerFunction = instanceBuilderConsumerFunction;
+        this.instanceBuilderFunction = instanceBuilderFunction;
     }
 
     @Override
@@ -48,7 +48,7 @@ class FillerThenOp<T> extends Op<SelectorOp<?>> implements FillerThen<T> {
         final Selector selector = this.up().selector();
 
         return Stream.of(
-                Pair.of(selector, this.instanceBuilderConsumerFunction),
+                Pair.of(selector, this.instanceBuilderFunction),
                 Pair.of(selector, this.function)
         ).collect(Collectors.toList());
     }

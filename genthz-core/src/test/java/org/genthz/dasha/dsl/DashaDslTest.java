@@ -22,14 +22,16 @@ import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.context.DashaContextFactory;
 import org.genthz.function.DefaultCollectionFiller;
+import org.genthz.function.DefaultMapFiller;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.UnitFiller;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import javax.script.Bindings;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,8 +44,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Queue;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.stream.Stream;
 
 public class DashaDslTest {
@@ -57,7 +64,7 @@ public class DashaDslTest {
     @MethodSource("data")
     public void testDefauts(Class<?> clazz, Type... typeArguments) {
         final InstanceContext context = this.contextFactory.single(clazz, typeArguments);
-        final InstanceBuilderConsumer ib = generationProvider.instanceBuilder(context);
+        final InstanceBuilder ib = generationProvider.instanceBuilder(context);
         final Filler filler = generationProvider.filler(context);
 
         Assertions.assertNotNull(ib);
@@ -65,11 +72,13 @@ public class DashaDslTest {
 
         if (Collection.class.isAssignableFrom(clazz)) {
             Assertions.assertTrue(filler instanceof DefaultCollectionFiller);
+        } else if (Map.class.isAssignableFrom(clazz)) {
+            Assertions.assertTrue(filler instanceof DefaultMapFiller);
         } else {
             Assertions.assertTrue(filler instanceof UnitFiller);
         }
 
-        ib.instance(context);
+        context.set(ib.instance(context));
         Assertions.assertNotNull(context.instance());
     }
 
@@ -100,7 +109,12 @@ public class DashaDslTest {
                 Arguments.of(List.class, new Class[]{String.class}),
                 Arguments.of(Queue.class, new Class[]{String.class}),
                 Arguments.of(Deque.class, new Class[]{String.class}),
-                Arguments.of(Set.class, new Class[]{String.class})
+                Arguments.of(Set.class, new Class[]{String.class}),
+                Arguments.of(Map.class, new Class[]{String.class, String.class}),
+                Arguments.of(SortedMap.class, new Class[]{String.class, String.class}),
+                Arguments.of(NavigableMap.class, new Class[]{String.class, String.class}),
+                Arguments.of(ConcurrentMap.class, new Class[]{String.class, String.class}),
+                Arguments.of(ConcurrentNavigableMap.class, new Class[]{String.class, String.class})
         );
     }
 }

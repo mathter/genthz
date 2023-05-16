@@ -26,7 +26,7 @@ import org.genthz.context.Stage;
 import org.genthz.dasha.context.DashaContextFactory;
 import org.genthz.dasha.dsl.DashaDsl;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 
 import java.lang.reflect.Type;
 
@@ -77,12 +77,12 @@ public class DashaObjectFactory implements ObjectFactory {
     private <T> void processNew(InstanceContext<T> context) {
         context.objectFactory(this);
 
-        final InstanceBuilderConsumer<T> ib = this.generationProvider.instanceBuilder(context);
+        final InstanceBuilder<T> ib = this.generationProvider.instanceBuilder(context);
         final Filler<T> filler = this.generationProvider.filler(context);
 
         try {
             context.stage(Stage.CREATING);
-            ib.instance(context);
+            context.set(ib.instance(context));
             context.stage(Stage.CREATED);
         } catch (Throwable t) {
             context.stage(Stage.NEW);

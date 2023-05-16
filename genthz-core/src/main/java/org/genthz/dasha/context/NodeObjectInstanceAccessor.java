@@ -19,17 +19,21 @@ package org.genthz.dasha.context;
 
 import org.genthz.context.Node;
 
-class NodeObjectInstanceAccessor<T, N> extends ObjectInstanceAccessor<T> implements Node<N> {
-    private final N node;
+import java.util.Objects;
 
-    private T object;
+class NodeObjectInstanceAccessor<T, N> extends ObjectInstanceAccessor<T> implements Node<N> {
+    private final Node<N> node;
 
     public NodeObjectInstanceAccessor(N node) {
-        this.node = node;
+        this.node = () -> node;
+    }
+
+    public NodeObjectInstanceAccessor(Node<N> node) {
+        this.node = Objects.requireNonNull(node);
     }
 
     @Override
     public N node() {
-        return this.node;
+        return this.node.node();
     }
 }

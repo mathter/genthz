@@ -18,7 +18,7 @@
 package org.genthz;
 
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,8 +31,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Queue;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentNavigableMap;
 
 /**
  * This class represents same information for generation class instances, for
@@ -54,189 +59,189 @@ public interface Defaults {
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Boolean> defBooleanInstanceBuilder();
+    public InstanceBuilder<Boolean> defBooleanInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Byte} or {@linkplain Byte#TYPE} classes.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Byte> defByteInstanceBuilder();
+    public InstanceBuilder<Byte> defByteInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Short} or {@linkplain Short#TYPE} classes.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Short> defShortInstanceBuilder();
+    public InstanceBuilder<Short> defShortInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Integer} or {@linkplain Integer#TYPE} classes.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Integer> defIntegerInstanceBuilder();
+    public InstanceBuilder<Integer> defIntegerInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Long} or {@linkplain Long#TYPE} classes.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Long> defLongInstanceBuilder();
+    public InstanceBuilder<Long> defLongInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Float} or {@linkplain Float#TYPE} classes.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Float> defFloatInstanceBuilder();
+    public InstanceBuilder<Float> defFloatInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Double} or {@linkplain Double#TYPE} classes.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Double> defDoubleInstanceBuilder();
+    public InstanceBuilder<Double> defDoubleInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain String}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<String> defStringInstanceBuilder();
+    public InstanceBuilder<String> defStringInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Date}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Date> defDateInstanceBuilder();
+    public InstanceBuilder<Date> defDateInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain LocalDate}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<LocalDate> defLocalDateInstanceBuilder();
+    public InstanceBuilder<LocalDate> defLocalDateInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain LocalTime}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<LocalTime> defLocalTimeInstanceBuilder();
+    public InstanceBuilder<LocalTime> defLocalTimeInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain LocalDateTime}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<LocalDateTime> defLocalDateTimeInstanceBuilder();
+    public InstanceBuilder<LocalDateTime> defLocalDateTimeInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain OffsetTime}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<OffsetTime> defOffsetTimeInstanceBuilder();
+    public InstanceBuilder<OffsetTime> defOffsetTimeInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain OffsetDateTime}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<OffsetDateTime> defOffsetDateTimeInstanceBuilder();
+    public InstanceBuilder<OffsetDateTime> defOffsetDateTimeInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain ZonedDateTime}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<ZonedDateTime> defZonedDateTimeInstanceBuilder();
+    public InstanceBuilder<ZonedDateTime> defZonedDateTimeInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain ZoneId}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<ZoneId> defZoneIdInstanceBuilder();
+    public InstanceBuilder<ZoneId> defZoneIdInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Collection}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Collection> defCollectionInstanceBuilder();
+    public <T extends Collection> InstanceBuilder<T> defCollectionInstanceBuilder();
 
     /**
      * Method returns default filler for {@linkplain Collection}.
      *
      * @return filler.
      */
-    public Filler<Collection> defCollectionFiller();
+    public <T extends Collection> Filler<T> defCollectionFiller();
 
     /**
      * Method returns default instance builder for {@linkplain List}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<List> defListInstanceBuilder();
+    public <T extends List> InstanceBuilder<T> defListInstanceBuilder();
 
     /**
      * Method returns default filler for {@linkplain List}.
      *
      * @return filler.
      */
-    public Filler<List> defListFiller();
+    public <T extends List> Filler<T> defListFiller();
 
     /**
      * Method returns default instance builder for {@linkplain Queue}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Queue> defQueueInstanceBuilder();
+    public <T extends Queue> InstanceBuilder<T> defQueueInstanceBuilder();
 
     /**
      * Method returns default filler for {@linkplain Queue}.
      *
      * @return filler.
      */
-    public Filler<Queue> defQueueFiller();
+    public <T extends Queue> Filler<T> defQueueFiller();
 
     /**
      * Method returns default instance builder for {@linkplain Deque}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Deque> defDequeInstanceBuilder();
+    public <T extends Deque> InstanceBuilder<T> defDequeInstanceBuilder();
 
     /**
      * Method returns default filler for {@linkplain Deque}.
      *
      * @return filler.
      */
-    public Filler<Deque> defDequeFiller();
+    public <T extends Deque> Filler<T> defDequeFiller();
 
     /**
      * Method returns default instance builder for {@linkplain Set}.
      *
      * @return instance builder.
      */
-    public InstanceBuilderConsumer<Set> defSetInstanceBuilder();
+    public <T extends Set> InstanceBuilder<T> defSetInstanceBuilder();
 
     /**
      * Method returns default filler for {@linkplain Set}.
      *
      * @return filler.
      */
-    public Filler<Set> defSetFiller();
+    public <T extends Set> Filler<T> defSetFiller();
 
     /**
      * Method returns default instance builder for java arrays.
      *
      * @return instance builder.
      */
-    public <T> InstanceBuilderConsumer<T> defArrayInstanceBuilder();
+    public <T> InstanceBuilder<T> defArrayInstanceBuilder();
 
     /**
      * Method returns default filler for java arrays.
@@ -244,4 +249,74 @@ public interface Defaults {
      * @return filler.
      */
     public Filler<?> defArrayFiller();
+
+    /**
+     * Method returns default instance builder for {@linkplain Map}.
+     *
+     * @return instance builder.
+     */
+    public <T extends Map> InstanceBuilder<T> defMapInstanceBuilder();
+
+    /**
+     * Method returns default filler for {@linkplain Map}.
+     *
+     * @return filler.
+     */
+    public <T extends Map> Filler<T> defMapFiller();
+
+    /**
+     * Method returns default instance builder for {@linkplain ConcurrentMap}.
+     *
+     * @return instance builder.
+     */
+    public <T extends ConcurrentMap> InstanceBuilder<T> defConcurrentMapInstanceBuilder();
+
+    /**
+     * Method returns default filler for {@linkplain ConcurrentMap}.
+     *
+     * @return filler.
+     */
+    public <T extends ConcurrentMap> Filler<T> defConcurrentMapFiller();
+
+    /**
+     * Method returns default instance builder for {@linkplain ConcurrentNavigableMap}.
+     *
+     * @return instance builder.
+     */
+    public <T extends ConcurrentNavigableMap> InstanceBuilder<T> defConcurrentNavigableMapInstanceBuilder();
+
+    /**
+     * Method returns default filler for {@linkplain ConcurrentNavigableMap}.
+     *
+     * @return filler.
+     */
+    public <T extends ConcurrentNavigableMap> Filler<T> defConcurrentNavigableMapFiller();
+
+    /**
+     * Method returns default instance builder for {@linkplain NavigableMap}.
+     *
+     * @return instance builder.
+     */
+    public <T extends NavigableMap> InstanceBuilder<T> defNavigableMapInstanceBuilder();
+
+    /**
+     * Method returns default filler for {@linkplain NavigableMap}.
+     *
+     * @return filler.
+     */
+    public <T extends NavigableMap> Filler<T> defNavigableMapFiller();
+
+    /**
+     * Method returns default instance builder for {@linkplain SortedMap}.
+     *
+     * @return instance builder.
+     */
+    public <T extends SortedMap> InstanceBuilder<T> defSortedMapInstanceBuilder();
+
+    /**
+     * Method returns default filler for {@linkplain SortedMap}.
+     *
+     * @return filler.
+     */
+    public <T extends SortedMap> Filler<T> defSortedMapFiller();
 }

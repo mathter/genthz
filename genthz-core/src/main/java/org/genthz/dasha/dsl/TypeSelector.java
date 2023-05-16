@@ -17,11 +17,13 @@
  */
 package org.genthz.dasha.dsl;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Context;
 import org.genthz.function.Selector;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.stream.Stream;
 
 abstract class TypeSelector extends AbstractSelector {
     protected final Type type;
@@ -32,8 +34,17 @@ abstract class TypeSelector extends AbstractSelector {
     }
 
     @Override
+    protected Stream<Pair<String, Object>> params() {
+        return Stream.concat(super.params(), Stream.of(Pair.of("type", this.getType())));
+    }
+
+    @Override
     public boolean test(Context context) {
         return this.up().map(e -> e.test(context)).orElse(true);
+    }
+
+    public Type getType() {
+        return type;
     }
 
     protected Type down(Type type) {

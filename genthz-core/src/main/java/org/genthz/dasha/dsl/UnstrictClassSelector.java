@@ -18,15 +18,22 @@
 package org.genthz.dasha.dsl;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Context;
 import org.genthz.context.InstanceContext;
 import org.genthz.function.Selector;
 
 import java.lang.reflect.Type;
+import java.util.stream.Stream;
 
 class UnstrictClassSelector extends TypeSelector {
     public UnstrictClassSelector(Selector parent, Type type) {
         super(parent, type);
+    }
+
+    @Override
+    protected Stream<Pair<String, Object>> params() {
+        return Stream.concat(super.params(), Stream.of(Pair.of("type_matching", "unstrict")));
     }
 
     @Override

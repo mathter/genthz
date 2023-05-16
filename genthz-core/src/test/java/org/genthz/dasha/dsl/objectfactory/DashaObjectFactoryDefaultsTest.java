@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -147,7 +148,8 @@ public class DashaObjectFactoryDefaultsTest {
                 Arguments.of(List.class, new Class[]{String.class}),
                 Arguments.of(Queue.class, new Class[]{String.class}),
                 Arguments.of(Deque.class, new Class[]{String.class}),
-                Arguments.of(Set.class, new Class[]{String.class})
+                Arguments.of(Set.class, new Class[]{String.class}),
+                Arguments.of(Map.class, new Class[]{String.class, String.class})
         );
     }
 }

@@ -22,16 +22,21 @@ import org.genthz.Defaults;
 import org.genthz.GenerationProvider;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
+import org.genthz.dasha.Logger;
 import org.genthz.function.DefaultFiller;
-import org.genthz.function.DefaultInstanceBuilderConsumer;
+import org.genthz.function.DefaultInstanceBuilder;
 import org.genthz.function.Filler;
-import org.genthz.function.InstanceBuilderConsumer;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.stream.Collectors;
 
 class DashaGenerationProvider implements GenerationProvider {
     private static final Comparator<Pair<Selector, ?>> COMPARATOR = Comparator.comparingInt(e -> e.getLeft().effective());
@@ -40,12 +45,12 @@ class DashaGenerationProvider implements GenerationProvider {
 
     private final Defaults defaults;
 
-    private final Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders;
+    private final Collection<Pair<Selector, InstanceBuilder>> instanceBuilders;
 
     private final Collection<Pair<Selector, Filler>> filles;
 
     public DashaGenerationProvider(
-            Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders,
+            Collection<Pair<Selector, InstanceBuilder>> instanceBuilders,
             Collection<Pair<Selector, Filler>> filles) {
         this(null, null, instanceBuilders, filles);
     }
@@ -53,7 +58,7 @@ class DashaGenerationProvider implements GenerationProvider {
     public DashaGenerationProvider(
             GenerationProvider up,
             Defaults defaults,
-            Collection<Pair<Selector, InstanceBuilderConsumer>> instanceBuilders,
+            Collection<Pair<Selector, InstanceBuilder>> instanceBuilders,
             Collection<Pair<Selector, Filler>> filles) {
         this.up = Optional.ofNullable(up);
         this.defaults = defaults != null ? defaults : new DashaDefaults();
@@ -62,21 +67,67 @@ class DashaGenerationProvider implements GenerationProvider {
     }
 
     @Override
-    public <T> InstanceBuilderConsumer<T> instanceBuilder(InstanceContext context) {
-        return this.instanceBuilders.stream()
+    public <T> InstanceBuilder<T> instanceBuilder(InstanceContext context) {
+        final Pair<Selector, InstanceBuilder> result;
+        final List<Pair<Selector, InstanceBuilder>> willBeUsed = this.instanceBuilders.stream()
                 .filter(e -> e.getLeft().test(context))
-                .max(COMPARATOR)
-                .map(Pair::getRight)
-                .orElseGet(() -> this.up.map(e -> e.instanceBuilder(context)).orElseGet(() -> new DefaultInstanceBuilderConsumer<>()));
+                .sorted(COMPARATOR)
+                .collect(Collectors.toList());
+        final int size = willBeUsed.size();
+
+        if (size == 1) {
+            result = willBeUsed.get(0);
+        } else {
+            final Pair<Selector, InstanceBuilder> last = willBeUsed.get(size - 1);
+
+            if (last.getLeft().effective() > willBeUsed.get(size - 2).getLeft().effective()) {
+                result = last;
+            } else {
+                throw new IllegalStateException(
+                        String.format("There are more then one instance builder for context: %s with metric=%s selectors: %s",
+                                context,
+                                last.getLeft().effective(),
+                                willBeUsed
+                        )
+                );
+            }
+        }
+
+        Logger.logInstanceBuilderWillBeUsed(context, result);
+
+        return result.getRight();
     }
 
     @Override
     public <T> Filler<T> filler(InstanceContext context) {
-        return this.filles.stream()
+        final Pair<Selector, Filler> result;
+        final List<Pair<Selector, Filler>> willBeUsed = this.filles.stream()
                 .filter(e -> e.getLeft().test(context))
-                .max(COMPARATOR)
-                .map(Pair::getRight)
-                .orElseGet(() -> this.up.map(e -> e.filler(context)).orElseGet(() -> new DefaultFiller()));
+                .sorted(COMPARATOR)
+                .collect(Collectors.toList());
+        final int size = willBeUsed.size();
+
+        if (size == 1) {
+            result = willBeUsed.get(0);
+        } else {
+            final Pair<Selector, Filler> last = willBeUsed.get(size - 1);
+
+            if (last.getLeft().effective() > willBeUsed.get(size - 2).getLeft().effective()) {
+                result = last;
+            } else {
+                throw new IllegalStateException(
+                        String.format("There are more then one instance builder for context: %s with metric=%s selectors: %s",
+                                context,
+                                last.getLeft().effective(),
+                                willBeUsed
+                        )
+                );
+            }
+        }
+
+        Logger.logFillerBuilderWillBeUsed(context, result);
+
+        return result.getRight();
     }
 
     @Override

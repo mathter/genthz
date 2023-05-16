@@ -17,8 +17,17 @@
  */
 package org.genthz.dsl;
 
+import org.genthz.context.InstanceContext;
+
 import java.lang.reflect.Type;
 
+/**
+ * This class contains methods that make it possible to create context selectors based on the type of object
+ * being created (i.e. {@linkplain InstanceContext#type()}).
+ *
+ * @author mathter
+ * @since 3.0.0
+ */
 public interface Strictable {
     /**
      * The method is short alias for {@linkplain #strict(Type, Type...)} )}.
@@ -29,14 +38,32 @@ public interface Strictable {
 
     /**
      * Method returns object for building selector chain with class check element.
+     * The selector that will be created uses the {@linkplain Class#equals(Object)} method to test the context.
      *
-     * @param type class of the path element.
-     * @param <T>  type of the path element.
-     * @param <S>  type of the selector.
-     * @return selector.
+     * <pre>
+     *      Dsl dsl = new DashaDsl()
+     *          .defs()                                     // create default rules for object creation.
+     *          .strict(String.class)                       // matche only String.class
+     *          .simple(ctx -> "This is a test string");    // create instance builder with fixed generated value: "This is a test string"
+     * </pre>
+     *
+     * @param type            type of the path element.
+     * @param genericTypeArgs types of type parameters array.
+     * @param <T>             type of the path element.
+     * @param <S>             type of the selector builder.
+     * @return selector buider.
      */
     public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs);
 
+    /**
+     * Like {@linkplain #strict(Type, Type...)} but first parameter has {@linkplain Class} type.
+     *
+     * @param clazz           class of the path element.
+     * @param genericTypeArgs types of type parameters array.
+     * @param <T>             type of the path element.
+     * @param <S>             type of the selector builder.
+     * @return selector builder.
+     */
     default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Class<T> clazz, Type... genericTypeArgs) {
         return this.strict((Type) clazz, genericTypeArgs);
     }

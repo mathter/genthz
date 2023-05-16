@@ -26,4 +26,9 @@ public class UnitFiller<T> implements Filler<T> {
     public void fill(InstanceContext<T> context) {
         // Do nothing.
     }
+
+    @Override
+    public String toString() {
+        return "UnitFiller{}";
+    }
 }

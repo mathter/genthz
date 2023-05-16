@@ -22,10 +22,22 @@ import org.genthz.context.InstanceContext;
 
 import java.util.function.Predicate;
 
+/**
+ * This class contains methods that make it possible to create context selectors based on different conditions.
+ *
+ * @author mathter
+ * @since 3.0.0
+ */
 public final class Customs {
     private Customs() {
     }
 
+    /**
+     * The method returns a {@linkplain Predicate} that verifies that the class represents an array.
+     *
+     * @param <T> type represented by InstantContext.
+     * @return
+     */
     public static <T> Predicate<InstanceContext<T>> isArray() {
         return ctx -> ctx instanceof InstanceContext
                 && TypeUtils.isArrayType(ctx.type());
