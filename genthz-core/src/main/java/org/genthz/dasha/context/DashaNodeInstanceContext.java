@@ -25,6 +25,7 @@ import org.genthz.context.NodeInstanceContext;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 class DashaNodeInstanceContext<T, N> extends DashaInstanceContext<T> implements NodeInstanceContext<T, N> {
     private final Node<N> node;
@@ -41,5 +42,13 @@ class DashaNodeInstanceContext<T, N> extends DashaInstanceContext<T> implements 
     @Override
     public N node() {
         return this.node.node();
+    }
+
+    @Override
+    public Stream<Parameter> params() {
+        return Stream.concat(
+                super.params(),
+                Stream.of(Parameter.of("node", this.node()))
+        );
     }
 }

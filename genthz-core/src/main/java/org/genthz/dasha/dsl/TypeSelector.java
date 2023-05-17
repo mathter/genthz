@@ -17,7 +17,6 @@
  */
 package org.genthz.dasha.dsl;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Context;
 import org.genthz.function.Selector;
 
@@ -34,8 +33,11 @@ abstract class TypeSelector extends AbstractSelector {
     }
 
     @Override
-    protected Stream<Pair<String, Object>> params() {
-        return Stream.concat(super.params(), Stream.of(Pair.of("type", this.getType())));
+    public Stream<Parameter> params() {
+        return Stream.concat(
+                super.params(),
+                Stream.of(Parameter.of("type", this.getType()))
+        );
     }
 
     @Override

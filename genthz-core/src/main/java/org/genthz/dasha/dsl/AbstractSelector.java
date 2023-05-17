@@ -17,16 +17,16 @@
  */
 package org.genthz.dasha.dsl;
 
-import org.apache.commons.lang3.tuple.Pair;
+import org.genthz.dasha.diagnostic.DiagnosticParameters;
+import org.genthz.dasha.diagnostic.DiganosticInfo;
 import org.genthz.dsl.Metric;
 import org.genthz.function.Selector;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-abstract class AbstractSelector implements Selector {
+abstract class AbstractSelector implements Selector, DiagnosticParameters, DiganosticInfo {
     private final Optional<Selector> up;
 
     private String name = NameGenerator.next();
@@ -37,11 +37,11 @@ abstract class AbstractSelector implements Selector {
         this.up = Optional.ofNullable(up);
     }
 
-    protected Stream<Pair<String, Object>> params() {
+    public Stream<Parameter> params() {
         return Stream.of(
-                Pair.of("name", this.name),
-                Pair.of("metric", this.metric),
-                Pair.of("effective", this.effective())
+                Parameter.of("name", this.name),
+                Parameter.of("metric", this.metric),
+                Parameter.of("effective", this.effective())
         );
     }
 
@@ -88,16 +88,20 @@ abstract class AbstractSelector implements Selector {
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder(this.getClass().getSimpleName())
+    public String getDiagnosticInfo() {
+        return new StringBuilder(this.getClass().getSimpleName())
                 .append('{')
                 .append(
                         this.params()
-                                .map(e -> e.getLeft() + "=" + e.getRight())
+                                .map(e -> e.getName() + "=" + e.getValue())
                                 .collect(Collectors.joining(","))
                 )
-                .append('}');
+                .append('}')
+                .toString();
+    }
 
-        return sb.toString();
+    @Override
+    public String toString() {
+        return this.getDiagnosticInfo();
     }
 }

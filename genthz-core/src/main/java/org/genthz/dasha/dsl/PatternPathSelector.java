@@ -40,8 +40,11 @@ class PatternPathSelector extends PathSelector {
     }
 
     @Override
-    protected Stream<Pair<String, Object>> params() {
-        return Stream.concat(super.params(), Stream.of(Pair.of("pattern", this.getPattern())));
+    public Stream<Parameter> params() {
+        return Stream.concat(
+                super.params(),
+                Stream.of(Parameter.of("pattern", this.getPattern()))
+        );
     }
 
     public Pattern getPattern() {

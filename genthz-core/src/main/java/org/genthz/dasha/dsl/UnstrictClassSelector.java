@@ -32,8 +32,11 @@ class UnstrictClassSelector extends TypeSelector {
     }
 
     @Override
-    protected Stream<Pair<String, Object>> params() {
-        return Stream.concat(super.params(), Stream.of(Pair.of("type_matching", "unstrict")));
+    public Stream<Parameter> params() {
+        return Stream.concat(
+                super.params(),
+                Stream.of(Parameter.of("type_matching", "unstrict"))
+        );
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.genthz.dasha;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Context;
+import org.genthz.dasha.diagnostic.DiganosticInfo;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
@@ -14,7 +15,7 @@ public class Logger {
         LOG.debug(
                 "Selectable created for: selector: {} with target: {}",
                 pair.getLeft(),
-                pair.getRight()
+                pair.getRight() instanceof DiganosticInfo ? ((DiganosticInfo) pair.getRight()).getDiagnosticInfo() : pair.getRight().toString()
         );
     }
 
@@ -22,7 +23,7 @@ public class Logger {
         LOG.debug(
                 "The following selector: {} and instance builder {} will be used for context: {}",
                 pair.getLeft(),
-                pair.getRight(),
+                pair.getRight() instanceof DiganosticInfo ? ((DiganosticInfo) pair.getRight()).getDiagnosticInfo() : pair.getRight().toString(),
                 context
         );
     }
@@ -31,7 +32,7 @@ public class Logger {
         LOG.debug(
                 "The following selector: {} and instance builder {} will be used for context: {}",
                 pair.getLeft(),
-                pair.getRight(),
+                pair.getRight() instanceof DiganosticInfo ? ((DiganosticInfo) pair.getRight()).getDiagnosticInfo() : pair.getRight().toString(),
                 context
         );
     }

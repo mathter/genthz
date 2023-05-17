@@ -34,8 +34,11 @@ class SkipPathSelector extends PathSelector {
     }
 
     @Override
-    protected Stream<Pair<String, Object>> params() {
-        return Stream.concat(super.params(), Stream.of(Pair.of("skip", this.getSkip())));
+    public Stream<Parameter> params() {
+        return Stream.concat(
+                super.params(),
+                Stream.of(Parameter.of("skip", this.getSkip()))
+        );
     }
 
     public int getSkip() {

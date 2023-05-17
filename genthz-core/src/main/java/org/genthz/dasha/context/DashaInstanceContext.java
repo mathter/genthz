@@ -19,13 +19,16 @@ package org.genthz.dasha.context;
 
 import org.genthz.ObjectFactory;
 import org.genthz.context.*;
+import org.genthz.dasha.diagnostic.DiagnosticParameters;
+import org.genthz.dasha.diagnostic.DiganosticInfo;
 import org.genthz.util.StreamUtil;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class DashaInstanceContext<T> implements InstanceContext<T> {
+class DashaInstanceContext<T> implements InstanceContext<T>, DiagnosticParameters, DiganosticInfo {
     private final ContextFactory contextFactory;
 
     private final InstanceAccessor<T> instanceAccessor;
@@ -35,8 +38,6 @@ class DashaInstanceContext<T> implements InstanceContext<T> {
     private final Type type;
 
     private final Bindings bindings;
-
-    private Stage stage = Stage.NEW;
 
     private ObjectFactory objectFactory;
 
@@ -114,5 +115,33 @@ class DashaInstanceContext<T> implements InstanceContext<T> {
     @Override
     public Bindings bindings() {
         return this.bindings;
+    }
+
+    @Override
+    public Stream<Parameter> params() {
+        return Stream.of(
+                Parameter.of("type", this.type()),
+                Parameter.of("stage", this.stage()),
+                Parameter.of("bindings", this.bindings()),
+                Parameter.of("up", this.up())
+        );
+    }
+
+    @Override
+    public String getDiagnosticInfo() {
+        return new StringBuilder(this.getClass().getSimpleName())
+                .append('{')
+                .append(
+                        this.params()
+                                .map(e -> e.getName() + "=" + e.getValue())
+                                .collect(Collectors.joining(","))
+                )
+                .append('}')
+                .toString();
+    }
+
+    @Override
+    public String toString() {
+        return this.getDiagnosticInfo();
     }
 }

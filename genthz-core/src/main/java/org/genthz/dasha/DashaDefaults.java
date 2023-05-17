@@ -30,6 +30,8 @@ import org.genthz.reflection.GenericUtil;
 
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -112,6 +114,21 @@ public class DashaDefaults implements Defaults {
     @Override
     public InstanceBuilder<Double> defDoubleInstanceBuilder() {
         return ctx -> this.random.nextDouble();
+    }
+
+    @Override
+    public InstanceBuilder<Number> defNumberInstanceBuilder() {
+        return ctx -> BigInteger.valueOf(this.random.nextLong());
+    }
+
+    @Override
+    public InstanceBuilder<BigInteger> defBigIntegerInstanceBuilder() {
+        return ctx -> BigInteger.valueOf(this.random.nextLong());
+    }
+
+    @Override
+    public InstanceBuilder<BigDecimal> defBigDecimalInstanceBuilder() {
+        return ctx -> BigDecimal.valueOf(this.random.nextDouble());
     }
 
     @Override
