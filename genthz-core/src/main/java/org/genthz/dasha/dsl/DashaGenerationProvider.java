@@ -22,23 +22,21 @@ import org.genthz.Defaults;
 import org.genthz.GenerationProvider;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
-import org.genthz.dasha.Logger;
-import org.genthz.function.DefaultFiller;
-import org.genthz.function.DefaultInstanceBuilder;
+import org.genthz.logging.Logger;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
+import org.genthz.logging.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 class DashaGenerationProvider implements GenerationProvider {
+    private static final Logger LOG = LoggerFactory.get();
     private static final Comparator<Pair<Selector, ?>> COMPARATOR = Comparator.comparingInt(e -> e.getLeft().effective());
 
     private final Optional<GenerationProvider> up;
@@ -100,7 +98,7 @@ class DashaGenerationProvider implements GenerationProvider {
                 }
             }
 
-            Logger.logInstanceBuilderWillBeUsed(context, pair);
+            LOG.logInstanceBuilderWillBeUsed(context, pair);
             result = pair.getRight();
         }
 
@@ -142,7 +140,7 @@ class DashaGenerationProvider implements GenerationProvider {
                 }
             }
 
-            Logger.logFillerBuilderWillBeUsed(context, pair);
+            LOG.logFillerBuilderWillBeUsed(context, pair);
             result = pair.getRight();
         }
 

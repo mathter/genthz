@@ -17,8 +17,8 @@
  */
 package org.genthz.dasha.dsl;
 
-import org.genthz.dasha.diagnostic.DiagnosticParameters;
-import org.genthz.dasha.diagnostic.DiganosticInfo;
+import org.genthz.diagnostic.DiagnosticParameters;
+import org.genthz.diagnostic.DiganosticInfo;
 import org.genthz.dsl.Metric;
 import org.genthz.function.Selector;
 

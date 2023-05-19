@@ -19,8 +19,8 @@ package org.genthz.dasha.context;
 
 import org.genthz.ObjectFactory;
 import org.genthz.context.*;
-import org.genthz.dasha.diagnostic.DiagnosticParameters;
-import org.genthz.dasha.diagnostic.DiganosticInfo;
+import org.genthz.diagnostic.DiagnosticParameters;
+import org.genthz.diagnostic.DiganosticInfo;
 import org.genthz.util.StreamUtil;
 
 import java.lang.reflect.Type;

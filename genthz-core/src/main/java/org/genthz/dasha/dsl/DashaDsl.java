@@ -24,7 +24,7 @@ import org.genthz.ObjectFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
 import org.genthz.dasha.DashaObjectFactory;
-import org.genthz.dasha.Logger;
+import org.genthz.logging.Logger;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.Customs;
 import org.genthz.dsl.Dsl;
@@ -40,6 +40,7 @@ import org.genthz.function.DefaultInstanceBuilder;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
+import org.genthz.logging.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -67,6 +68,7 @@ import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.function.Predicate;
 
 public class DashaDsl implements Dsl {
+    private static final Logger LOG = LoggerFactory.get();
     public static final int DEFAULT_BASE = Integer.MIN_VALUE;
 
     public static final int DEFAULT_METRIC = 0;
@@ -312,7 +314,7 @@ public class DashaDsl implements Dsl {
         for (Op op : this.ops) {
             final Collection<Pair<Selector, ?>> list = op.op();
             list.stream()
-                    .peek(e -> Logger.logCreateSelectable(e))
+                    .peek(e -> LOG.logCreateSelectable(e))
                     .forEach(e -> {
                         if (e.getRight() instanceof InstanceBuilder) {
                             instanceBuilders.add((Pair<Selector, InstanceBuilder>) e);
