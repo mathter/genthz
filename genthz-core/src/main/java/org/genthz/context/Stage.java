@@ -33,7 +33,7 @@ public enum Stage {
     /**
      * This stage corresponds to creating instance by instance builder
      * (see {@linkplain org.genthz.function.InstanceBuilder}
-     * or {@linkplain org.genthz.function.InstanceBuilderConsumer}).
+     * or {@linkplain org.genthz.function.InstanceBuilder}).
      */
     CREATING,
 
