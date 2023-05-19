@@ -20,9 +20,11 @@ package org.genthz.dasha.dsl;
 import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.Defaults;
 import org.genthz.GenerationProvider;
+import org.genthz.ObjectFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
-import org.genthz.dasha.Logger;
+import org.genthz.dasha.DashaObjectFactory;
+import org.genthz.logging.Logger;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.Customs;
 import org.genthz.dsl.Dsl;
@@ -38,9 +40,11 @@ import org.genthz.function.DefaultInstanceBuilder;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
+import org.genthz.logging.LoggerFactory;
 
-import javax.script.Bindings;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -64,6 +68,9 @@ import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.function.Predicate;
 
 public class DashaDsl implements Dsl {
+    private static final Logger LOG = LoggerFactory.get();
+    public static final int DEFAULT_BASE = Integer.MIN_VALUE;
+
     public static final int DEFAULT_METRIC = 0;
 
     public static final int DEFAULT_COLLECTION_METRIC_LEV_0 = DEFAULT_METRIC;
@@ -113,7 +120,7 @@ public class DashaDsl implements Dsl {
 
     public DashaDsl def() {
         this.unstrict(Object.class)
-                .m(Integer.MIN_VALUE)
+                .m(DEFAULT_BASE)
                 .ib(new DefaultInstanceBuilder<>())
                 .f(new DefaultFiller());
 
@@ -172,6 +179,18 @@ public class DashaDsl implements Dsl {
         this.strict(Double.TYPE)
                 .m(DEFAULT_METRIC)
                 .simple(this.defaults.defDoubleInstanceBuilder());
+
+        this.strict(Number.class)
+                .m(DEFAULT_BASE + 1)
+                .simple(this.defaults.defNumberInstanceBuilder());
+
+        this.strict(BigInteger.class)
+                .metric(DEFAULT_METRIC)
+                .simple(this.defaults.defBigIntegerInstanceBuilder());
+
+        this.strict(BigDecimal.class)
+                .m(DEFAULT_METRIC)
+                .simple(this.defaults.defBigDecimalInstanceBuilder());
 
         this.strict(String.class)
                 .m(DEFAULT_METRIC)
@@ -295,7 +314,7 @@ public class DashaDsl implements Dsl {
         for (Op op : this.ops) {
             final Collection<Pair<Selector, ?>> list = op.op();
             list.stream()
-                    .peek(e -> Logger.logCreateSelectable(e))
+                    .peek(e -> LOG.logCreateSelectable(e))
                     .forEach(e -> {
                         if (e.getRight() instanceof InstanceBuilder) {
                             instanceBuilders.add((Pair<Selector, InstanceBuilder>) e);
@@ -315,5 +334,13 @@ public class DashaDsl implements Dsl {
                 instanceBuilders,
                 fillers
         );
+    }
+
+    public ObjectFactory objectFactory() {
+        return new DashaObjectFactory(this.build());
+    }
+
+    public ObjectFactory objectFactory(GenerationProvider parent) {
+        return new DashaObjectFactory(this.build(parent));
     }
 }

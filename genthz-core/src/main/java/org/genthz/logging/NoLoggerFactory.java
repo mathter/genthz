@@ -15,35 +15,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.dasha.dsl;
+package org.genthz.logging;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Context;
-import org.genthz.context.InstanceContext;
+import org.genthz.function.Filler;
+import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Objects;
-import java.util.stream.Stream;
-
-class StrictClassSelector extends TypeSelector {
-    public StrictClassSelector(Selector parent, Type type) {
-        super(parent, type);
+final class NoLoggerFactory extends LoggerFactory {
+    @Override
+    protected Logger instance() {
+        return new Inner();
     }
 
-    @Override
-    public Stream<Parameter> params() {
-        return Stream.concat(
-                super.params(),
-                Stream.of(Parameter.of("type_matching", "strict"))
-        );
-    }
+    private static class Inner implements Logger {
+        @Override
+        public void logCreateSelectable(Pair<Selector, ?> pair) {
+            // Do nothing.
+        }
 
-    @Override
-    public boolean test(Context context) {
-        return context instanceof InstanceContext
-                && Objects.equals(this.down(this.type), this.down(((InstanceContext<?>) context).type()))
-                && super.test(context);
+        @Override
+        public void logInstanceBuilderWillBeUsed(Context context, Pair<Selector, InstanceBuilder> pair) {
+            // Do nothing.
+        }
+
+        @Override
+        public void logFillerBuilderWillBeUsed(Context context, Pair<Selector, Filler> pair) {
+            // Do nothing.
+        }
     }
 }

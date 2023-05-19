@@ -20,6 +20,8 @@ package org.genthz;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -102,6 +104,12 @@ public interface Defaults {
      * @return instance builder.
      */
     public InstanceBuilder<Double> defDoubleInstanceBuilder();
+
+    public InstanceBuilder<Number> defNumberInstanceBuilder();
+
+    public InstanceBuilder<BigInteger> defBigIntegerInstanceBuilder();
+
+    public InstanceBuilder<BigDecimal> defBigDecimalInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain String}.
