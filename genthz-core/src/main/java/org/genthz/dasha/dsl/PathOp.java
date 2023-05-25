@@ -99,9 +99,4 @@ class PathOp<T> extends SelectorOp<PathOp<T>> implements Pathable, Strictable, U
     public void use(Consumer<PathOp> consumer) {
         Objects.requireNonNull(consumer).accept(this);
     }
-
-    @Override
-    public Collection<Pair<Selector, ?>> op() {
-        return Collections.emptyList();
-    }
 }

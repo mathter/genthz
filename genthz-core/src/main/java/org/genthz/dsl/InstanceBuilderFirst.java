@@ -21,18 +21,18 @@ import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Tail;
 
 public interface InstanceBuilderFirst<T> {
-    default public FillerThen ib(InstanceBuilder<T> function) {
+    default public FillerThen<T> ib(InstanceBuilder<T> function) {
         return this.instanceBuilder(function);
     }
 
 
-    public FillerThen instanceBuilder(InstanceBuilder<T> function);
+    public FillerThen<T> instanceBuilder(InstanceBuilder<T> function);
 
     public void simple();
 
     public void simple(InstanceBuilder<T> function);
 
-    default public void tail(Tail simple) {
-        this.simple((InstanceBuilder<T>) simple);
+    default public void tail(Tail<T> tail) {
+        this.simple(tail);
     }
 }

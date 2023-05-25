@@ -86,9 +86,4 @@ class StrictTypeOp<T> extends TypeOp<StrictTypeOp<T>> implements Pathable, Custo
     public void use(Consumer<StrictTypeOp> consumer) {
         Objects.requireNonNull(consumer).accept(this);
     }
-
-    @Override
-    public Collection<Pair<Selector, ?>> op() {
-        return Collections.emptyList();
-    }
 }

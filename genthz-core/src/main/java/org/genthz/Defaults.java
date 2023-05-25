@@ -256,7 +256,7 @@ public interface Defaults {
      *
      * @return filler.
      */
-    public Filler<?> defArrayFiller();
+    public <T> Filler defArrayFiller();
 
     /**
      * Method returns default instance builder for {@linkplain Map}.

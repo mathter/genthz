@@ -17,39 +17,18 @@
  */
 package org.genthz.dasha.dsl;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.dsl.FillerThen;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
-import org.genthz.function.Selector;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+class FillerThenOp<T> extends InternalFunctionsOp<T> implements FillerThen<T> {
 
-class FillerThenOp<T> extends Op<SelectorOp<?>> implements FillerThen<T> {
-    private final InstanceBuilder<?> instanceBuilderFunction;
-
-    private Filler<?> function;
-
-    public FillerThenOp(SelectorOp up, InstanceBuilder<?> instanceBuilderFunction) {
-        super(up);
-        this.instanceBuilderFunction = instanceBuilderFunction;
+    public FillerThenOp(SelectorOp up, InstanceBuilder<T> instanceBuilderFunction) {
+        super(up, instanceBuilderFunction);
     }
 
     @Override
     public void filler(Filler<T> function) {
-        this.function = function;
-        this.dsl().reg(this);
-    }
-
-    @Override
-    public Collection<Pair<Selector, ?>> op() {
-        final Selector selector = this.up().selector();
-
-        return Stream.of(
-                Pair.of(selector, this.instanceBuilderFunction),
-                Pair.of(selector, this.function)
-        ).collect(Collectors.toList());
+        this.setFiller(function);
     }
 }
