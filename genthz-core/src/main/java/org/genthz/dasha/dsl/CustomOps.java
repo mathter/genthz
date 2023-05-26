@@ -98,9 +98,4 @@ public class CustomOps<T> extends SelectorOp<CustomOps<T>> implements Pathable, 
     public void use(Consumer<CustomOps> consumer) {
         Objects.requireNonNull(consumer).accept(this);
     }
-
-    @Override
-    public Collection<Pair<Selector, ?>> op() {
-        return Collections.emptyList();
-    }
 }

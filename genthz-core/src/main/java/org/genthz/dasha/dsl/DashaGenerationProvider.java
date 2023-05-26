@@ -117,7 +117,7 @@ class DashaGenerationProvider implements GenerationProvider {
         if (size == 0) {
             result = (Filler<T>) this.up.map(e -> e.filler(context))
                     .orElseThrow(() -> new IllegalStateException(
-                            String.format("There are no instance builder for context %s", context)
+                            String.format("There are no filler for context %s", context)
                     ));
         } else {
             final Pair<Selector, Filler> pair;

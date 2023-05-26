@@ -17,9 +17,12 @@
  */
 package org.genthz.dasha.dsl;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.dsl.Metric;
 import org.genthz.function.Selector;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 abstract class SelectorOp<THIS extends SelectorOp<THIS>> extends Op<SelectorOp<?>> implements Metric<THIS> {
@@ -53,4 +56,9 @@ abstract class SelectorOp<THIS extends SelectorOp<THIS>> extends Op<SelectorOp<?
     }
 
     public abstract Selector selector();
+
+    @Override
+    public Collection<Pair<Selector, ?>> op() {
+        return Collections.emptyList();
+    }
 }

@@ -26,6 +26,6 @@ public interface Tail<T> extends InstanceBuilder<T> {
         return ctx -> Optional.ofNullable(ctx.up())
                 .map(e -> (InstanceContext<T>) e)
                 .map(e -> e.instance())
-                .orElseThrow(() -> new IllegalStateException("There is no parent valid context!"));
+                .orElseThrow(() -> new IllegalStateException("There is no parent valid value!"));
     }
 }

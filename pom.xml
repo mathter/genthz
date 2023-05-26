@@ -5,6 +5,7 @@
     <groupId>org.genthz</groupId>
     <artifactId>parent</artifactId>
     <version>3.1.0-SNAPSHOT</version>
+
     <modules>
         <module>genthz-core</module>
         <module>genthz-logging-slf4j</module>

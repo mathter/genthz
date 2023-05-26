@@ -86,9 +86,4 @@ class UnstrictTypeOp<T> extends TypeOp<UnstrictTypeOp<T>> implements Pathable, C
     public void use(Consumer<UnstrictTypeOp> consumer) {
         Objects.requireNonNull(consumer).accept(this);
     }
-
-    @Override
-    public Collection<Pair<Selector, ?>> op() {
-        return Collections.emptyList();
-    }
 }
