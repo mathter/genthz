@@ -4,7 +4,7 @@
 
     <groupId>org.genthz</groupId>
     <artifactId>parent</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2-SNAPSHOT</version>
     <modules>
         <module>genthz-core</module>
         <module>genthz-logging-slf4j</module>
@@ -22,7 +22,7 @@
         <url>https://github.com/mathter/genthz</url>
         <connection>scm:git:https://github.com/mathter/genthz.git</connection>
         <developerConnection>scm:git:https://github.com/mathter/genthz.git</developerConnection>
-        <tag>release/3.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
@@ -73,17 +73,17 @@
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-core</artifactId>
-                <version>3.0.1</version>
+                <version>3.0.2-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-core-tests</artifactId>
-                <version>3.0.1</version>
+                <version>3.0.2-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-logging-slf4j</artifactId>
-                <version>3.0.1</version>
+                <version>3.0.2-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

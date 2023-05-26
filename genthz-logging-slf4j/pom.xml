@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.genthz</groupId>
         <artifactId>parent</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>genthz-logging-slf4j</artifactId>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.genthz</groupId>
             <artifactId>genthz-core</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
