@@ -19,6 +19,7 @@ package org.genthz.dasha;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.genthz.Defaults;
+import org.genthz.context.Context;
 import org.genthz.function.DefaultArrayFiller;
 import org.genthz.function.DefaultArrayInstanceBuilder;
 import org.genthz.function.DefaultCollectionFiller;
@@ -58,8 +59,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.function.Function;
 
 public class DashaDefaults implements Defaults {
+    @Override
+    public Function<Context, Long> defaultMaxGenerationDepth() {
+        return ctx -> 100L;
+    }
 
     private final Filler<?> defaultCollectionFiller = new DefaultCollectionFiller<>();
 
