@@ -3,6 +3,7 @@ package org.genthz.dasha.dsl.objectfactory;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.ObjectFactory;
 import org.genthz.dasha.DashaObjectFactory;
+import org.genthz.util.StreamUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -150,6 +151,17 @@ public class DashaObjectFactoryDefaultsTest {
                 Arguments.of(Deque.class, new Class[]{String.class}),
                 Arguments.of(Set.class, new Class[]{String.class}),
                 Arguments.of(Map.class, new Class[]{String.class, String.class})
+        );
+    }
+
+    @Test
+    public void testRecursion() {
+        final Recursion instance = this.objectFactory.get(Recursion.class);
+
+        Assertions.assertNotNull(instance);
+        Assertions.assertEquals(
+                this.objectFactory.generationProvider().defaults().defaultMaxGenerationDepth().apply(null),
+                StreamUtil.of(instance, Recursion::getNext).count()
         );
     }
 }

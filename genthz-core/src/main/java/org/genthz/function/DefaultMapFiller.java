@@ -17,13 +17,15 @@ public class DefaultMapFiller<K, V> extends AbstractContainerFiller<Map<K, V>> {
 
     @Override
     public void fill(InstanceContext<Map<K, V>> context) {
-        final ContextFactory contextFactory = context.contextFactory();
-        final ObjectFactory objectFactory = context.objectFactory();
+        if (context.instance() != null) {
+            final ContextFactory contextFactory = context.contextFactory();
+            final ObjectFactory objectFactory = context.objectFactory();
 
-        contextFactory.byMapKey(context, this.containerSize.get(context))
-                .forEach(e -> {
-                    objectFactory.process(e.getKey());
-                    objectFactory.process(e.getValue());
-                });
+            contextFactory.byMapKey(context, this.containerSize.get(context))
+                    .forEach(e -> {
+                        objectFactory.process(e.getKey());
+                        objectFactory.process(e.getValue());
+                    });
+        }
     }
 }

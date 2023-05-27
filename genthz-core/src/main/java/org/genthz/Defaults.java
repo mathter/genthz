@@ -17,6 +17,7 @@
  */
 package org.genthz;
 
+import org.genthz.context.Context;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 
@@ -40,6 +41,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.function.Function;
 
 /**
  * This class represents same information for generation class instances, for
@@ -49,6 +51,14 @@ import java.util.concurrent.ConcurrentNavigableMap;
  * @since 3.0.0
  */
 public interface Defaults {
+
+    /**
+     * Method returns function defining max generation depth.
+     *
+     * @return function defining max generation depth.
+     */
+    public Function<Context, Long> defaultMaxGenerationDepth();
+
     /**
      * Method returns default size of collections or arrays which will be generated.
      *

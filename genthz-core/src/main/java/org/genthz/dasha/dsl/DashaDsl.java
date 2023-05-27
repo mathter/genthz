@@ -24,6 +24,7 @@ import org.genthz.ObjectFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
 import org.genthz.dasha.DashaObjectFactory;
+import org.genthz.function.UnitFiller;
 import org.genthz.logging.Logger;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.Customs;
@@ -86,6 +87,8 @@ public class DashaDsl implements Dsl {
     public static final int DEFAULT_COLLECTION_METRIC_LEV_5 = DEFAULT_COLLECTION_METRIC_LEV_4 + 1;
 
     public static final int DEFAULT_COLLECTION_METRIC_LEV_6 = DEFAULT_COLLECTION_METRIC_LEV_5 + 1;
+
+    public static final int DEFAULT_MAX_GENERATION_DEPTH = Integer.MAX_VALUE / 2;
 
     private final Collection<Op> ops = new ArrayList<>();
 
@@ -282,6 +285,10 @@ public class DashaDsl implements Dsl {
                 .m(DEFAULT_COLLECTION_METRIC_LEV_4)
                 .ib(this.defaults.defConcurrentNavigableMapInstanceBuilder())
                 .f(this.defaults.defConcurrentNavigableMapFiller());
+
+        this.custom(ctx -> ctx.ups().count() >= this.defaults.defaultMaxGenerationDepth().apply(ctx) - 1)
+                .m(DEFAULT_MAX_GENERATION_DEPTH)
+                .f(UnitFiller.INSTANCE);
 
         return this;
     }

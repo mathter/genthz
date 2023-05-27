@@ -25,12 +25,13 @@ import org.genthz.context.Stage;
 public class DefaultFiller<T> implements Filler<T> {
     @Override
     public void fill(InstanceContext<T> context) {
-        final ContextFactory contextFactory = context.contextFactory();
-        final ObjectFactory objectFactory = context.objectFactory();
+        if (context.instance() != null) {
+            final ContextFactory contextFactory = context.contextFactory();
+            final ObjectFactory objectFactory = context.objectFactory();
 
-        contextFactory.byProperties(context).stream()
-                .forEach(e -> objectFactory.process(e));
-
+            contextFactory.byProperties(context).stream()
+                    .forEach(e -> objectFactory.process(e));
+        }
     }
 
     @Override
