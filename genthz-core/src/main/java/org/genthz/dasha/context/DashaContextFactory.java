@@ -27,6 +27,7 @@ import org.genthz.reflection.GenericUtil;
 import org.genthz.util.StreamUtil;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -170,7 +171,14 @@ public class DashaContextFactory implements ContextFactory {
     }
 
     private Type unrollType(Map<TypeVariable<?>, Type> variableTypeMap, Type type) {
-        return Optional.ofNullable(TypeUtils.unrollVariables(variableTypeMap, type)).orElse(Object.class);
+        final Type result;
+        if (type instanceof GenericArrayType) {
+            result = TypeUtils.genericArrayType(this.unrollType(variableTypeMap, ((GenericArrayType) type).getGenericComponentType()));
+        } else {
+            result = Optional.ofNullable(TypeUtils.unrollVariables(variableTypeMap, type)).orElse(Object.class);
+        }
+
+        return result;
     }
 
     @Override

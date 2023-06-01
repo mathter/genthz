@@ -49,6 +49,7 @@ public class DefaultInstanceBuilder<T> implements InstanceBuilder<T> {
         final Constructor constructor = this.constructorChoiceStrategy.constructor(type);
 
         try {
+            constructor.setAccessible(true);
             instance = (T) constructor.newInstance(contextFactory.byConstructor(context, constructor)
                     .stream()
                     .map(e -> objectFactory.process(e).instance())
