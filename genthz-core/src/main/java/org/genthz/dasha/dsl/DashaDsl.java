@@ -66,7 +66,9 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class DashaDsl implements Dsl {
     private static final Logger LOG = LoggerFactory.get();
@@ -93,6 +95,9 @@ public class DashaDsl implements Dsl {
     private final Collection<Op> ops = new ArrayList<>();
 
     private Defaults defaults = new DashaDefaults();
+
+    private Consumer<Void> def = v -> {
+    };
 
     private SelectorOp<?> empty = new SelectorOp(null) {
         @Override
@@ -122,173 +127,175 @@ public class DashaDsl implements Dsl {
     }
 
     public DashaDsl def() {
-        this.unstrict(Object.class)
-                .m(DEFAULT_BASE)
-                .ib(new DefaultInstanceBuilder<>())
-                .f(new DefaultFiller());
+        this.def = v -> {
+            this.unstrict(Object.class)
+                    .m(DEFAULT_BASE)
+                    .ib(new DefaultInstanceBuilder<>())
+                    .f(new DefaultFiller());
 
-        this.strict(Boolean.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defBooleanInstanceBuilder());
+            this.strict(Boolean.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defBooleanInstanceBuilder());
 
-        this.strict(Boolean.TYPE)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defBooleanInstanceBuilder());
+            this.strict(Boolean.TYPE)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defBooleanInstanceBuilder());
 
-        this.strict(Byte.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defByteInstanceBuilder());
+            this.strict(Byte.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defByteInstanceBuilder());
 
-        this.strict(Byte.TYPE)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defByteInstanceBuilder());
+            this.strict(Byte.TYPE)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defByteInstanceBuilder());
 
-        this.strict(Short.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defShortInstanceBuilder());
+            this.strict(Short.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defShortInstanceBuilder());
 
-        this.strict(Short.TYPE)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defShortInstanceBuilder());
+            this.strict(Short.TYPE)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defShortInstanceBuilder());
 
-        this.strict(Integer.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defIntegerInstanceBuilder());
+            this.strict(Integer.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defIntegerInstanceBuilder());
 
-        this.strict(Integer.TYPE)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defIntegerInstanceBuilder());
+            this.strict(Integer.TYPE)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defIntegerInstanceBuilder());
 
-        this.strict(Long.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defLongInstanceBuilder());
+            this.strict(Long.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defLongInstanceBuilder());
 
-        this.strict(Long.TYPE)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defLongInstanceBuilder());
+            this.strict(Long.TYPE)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defLongInstanceBuilder());
 
-        this.strict(Float.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defFloatInstanceBuilder());
+            this.strict(Float.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defFloatInstanceBuilder());
 
-        this.strict(Float.TYPE)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defFloatInstanceBuilder());
+            this.strict(Float.TYPE)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defFloatInstanceBuilder());
 
-        this.strict(Double.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defDoubleInstanceBuilder());
+            this.strict(Double.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defDoubleInstanceBuilder());
 
-        this.strict(Double.TYPE)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defDoubleInstanceBuilder());
+            this.strict(Double.TYPE)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defDoubleInstanceBuilder());
 
-        this.strict(Number.class)
-                .m(DEFAULT_BASE + 1)
-                .simple(this.defaults.defNumberInstanceBuilder());
+            this.strict(Number.class)
+                    .m(DEFAULT_BASE + 1)
+                    .simple(this.defaults.defNumberInstanceBuilder());
 
-        this.strict(BigInteger.class)
-                .metric(DEFAULT_METRIC)
-                .simple(this.defaults.defBigIntegerInstanceBuilder());
+            this.strict(BigInteger.class)
+                    .metric(DEFAULT_METRIC)
+                    .simple(this.defaults.defBigIntegerInstanceBuilder());
 
-        this.strict(BigDecimal.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defBigDecimalInstanceBuilder());
+            this.strict(BigDecimal.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defBigDecimalInstanceBuilder());
 
-        this.strict(String.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defStringInstanceBuilder());
+            this.strict(String.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defStringInstanceBuilder());
 
-        this.strict(Date.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defDateInstanceBuilder());
+            this.strict(Date.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defDateInstanceBuilder());
 
-        this.strict(LocalDate.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defLocalDateInstanceBuilder());
+            this.strict(LocalDate.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defLocalDateInstanceBuilder());
 
-        this.strict(LocalDateTime.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defLocalDateTimeInstanceBuilder());
+            this.strict(LocalDateTime.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defLocalDateTimeInstanceBuilder());
 
-        this.strict(LocalTime.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defLocalTimeInstanceBuilder());
+            this.strict(LocalTime.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defLocalTimeInstanceBuilder());
 
-        this.strict(OffsetTime.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defOffsetTimeInstanceBuilder());
+            this.strict(OffsetTime.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defOffsetTimeInstanceBuilder());
 
-        this.strict(OffsetDateTime.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defOffsetDateTimeInstanceBuilder());
+            this.strict(OffsetDateTime.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defOffsetDateTimeInstanceBuilder());
 
-        this.strict(ZonedDateTime.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defZonedDateTimeInstanceBuilder());
+            this.strict(ZonedDateTime.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defZonedDateTimeInstanceBuilder());
 
-        this.strict(ZoneId.class)
-                .m(DEFAULT_METRIC)
-                .simple(this.defaults.defZoneIdInstanceBuilder());
+            this.strict(ZoneId.class)
+                    .m(DEFAULT_METRIC)
+                    .simple(this.defaults.defZoneIdInstanceBuilder());
 
-        this.unstrict(Collection.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_0)
-                .ib(this.defaults.defCollectionInstanceBuilder())
-                .f(this.defaults.defCollectionFiller());
+            this.unstrict(Collection.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_0)
+                    .ib(this.defaults.defCollectionInstanceBuilder())
+                    .f(this.defaults.defCollectionFiller());
 
-        this.unstrict(List.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
-                .ib(this.defaults.defListInstanceBuilder())
-                .f(this.defaults.defListFiller());
+            this.unstrict(List.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_1)
+                    .ib(this.defaults.defListInstanceBuilder())
+                    .f(this.defaults.defListFiller());
 
-        this.unstrict(Queue.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
-                .ib(this.defaults.defQueueInstanceBuilder())
-                .f(this.defaults.defQueueFiller());
+            this.unstrict(Queue.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_1)
+                    .ib(this.defaults.defQueueInstanceBuilder())
+                    .f(this.defaults.defQueueFiller());
 
-        this.unstrict(Deque.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_2)
-                .ib(this.defaults.defDequeInstanceBuilder())
-                .filler(this.defaults.defDequeFiller());
+            this.unstrict(Deque.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_2)
+                    .ib(this.defaults.defDequeInstanceBuilder())
+                    .filler(this.defaults.defDequeFiller());
 
-        this.unstrict(Set.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
-                .ib(this.defaults.defSetInstanceBuilder())
-                .f(this.defaults.defSetFiller());
+            this.unstrict(Set.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_1)
+                    .ib(this.defaults.defSetInstanceBuilder())
+                    .f(this.defaults.defSetFiller());
 
-        this.custom(Customs.isArray())
-                .m(DEFAULT_COLLECTION_METRIC_LEV_0)
-                .ib(this.defaults.defArrayInstanceBuilder())
-                .f(this.defaults.defArrayFiller());
+            this.custom(Customs.isArray())
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_0)
+                    .ib(this.defaults.defArrayInstanceBuilder())
+                    .f(this.defaults.defArrayFiller());
 
-        this.unstrict(Map.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_0)
-                .ib(this.defaults.defMapInstanceBuilder())
-                .f(this.defaults.defMapFiller());
+            this.unstrict(Map.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_0)
+                    .ib(this.defaults.defMapInstanceBuilder())
+                    .f(this.defaults.defMapFiller());
 
-        this.unstrict(SortedMap.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_1)
-                .ib(this.defaults.defSortedMapInstanceBuilder())
-                .f(this.defaults.defSortedMapFiller());
+            this.unstrict(SortedMap.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_1)
+                    .ib(this.defaults.defSortedMapInstanceBuilder())
+                    .f(this.defaults.defSortedMapFiller());
 
-        this.unstrict(NavigableMap.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_2)
-                .ib(this.defaults.defNavigableMapInstanceBuilder())
-                .f(this.defaults.defNavigableMapFiller());
+            this.unstrict(NavigableMap.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_2)
+                    .ib(this.defaults.defNavigableMapInstanceBuilder())
+                    .f(this.defaults.defNavigableMapFiller());
 
-        this.unstrict(ConcurrentMap.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_3)
-                .ib(this.defaults.defConcurrentMapInstanceBuilder())
-                .f(this.defaults.defConcurrentMapFiller());
+            this.unstrict(ConcurrentMap.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_3)
+                    .ib(this.defaults.defConcurrentMapInstanceBuilder())
+                    .f(this.defaults.defConcurrentMapFiller());
 
-        this.unstrict(ConcurrentNavigableMap.class)
-                .m(DEFAULT_COLLECTION_METRIC_LEV_4)
-                .ib(this.defaults.defConcurrentNavigableMapInstanceBuilder())
-                .f(this.defaults.defConcurrentNavigableMapFiller());
+            this.unstrict(ConcurrentNavigableMap.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_4)
+                    .ib(this.defaults.defConcurrentNavigableMapInstanceBuilder())
+                    .f(this.defaults.defConcurrentNavigableMapFiller());
 
-        this.custom(ctx -> ctx.ups().count() >= this.defaults.defaultMaxGenerationDepth().apply(ctx) - 1)
-                .m(DEFAULT_MAX_GENERATION_DEPTH)
-                .f(UnitFiller.INSTANCE);
+            this.custom(ctx -> ctx.ups().count() >= this.defaults.defaultMaxGenerationDepth().apply(ctx) - 1)
+                    .m(DEFAULT_MAX_GENERATION_DEPTH)
+                    .f(UnitFiller.INSTANCE);
+        };
 
         return this;
     }
@@ -317,6 +324,8 @@ public class DashaDsl implements Dsl {
     public GenerationProvider build(GenerationProvider parent) {
         final Collection<Pair<Selector, InstanceBuilder>> instanceBuilders = new ArrayList<>();
         final Collection<Pair<Selector, Filler>> fillers = new ArrayList<>();
+
+        this.def.accept(null);
 
         for (Op op : this.ops) {
             final Collection<Pair<Selector, ?>> list = op.op();
