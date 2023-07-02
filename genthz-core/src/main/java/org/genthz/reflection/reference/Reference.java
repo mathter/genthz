@@ -15,26 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.dasha.context;
+package org.genthz.reflection.reference;
 
-import org.genthz.context.Accessor;
-import org.genthz.context.Instance;
-
-class ObjectInstanceAccessor<T> extends AbstractAccessor<T> implements Instance<T>, Accessor<T> {
-    private T object;
-
-    @Override
-    public T get() {
-        return this.object;
-    }
-
-    @Override
-    public void set(T value) throws IllegalStateException {
-        this.object = value;
-    }
-
-    @Override
-    public T instance() {
-        return this.get();
-    }
+public interface Reference {
 }

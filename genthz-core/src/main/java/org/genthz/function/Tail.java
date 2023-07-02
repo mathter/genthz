@@ -21,7 +21,12 @@ import org.genthz.context.InstanceContext;
 
 import java.util.Optional;
 
-public interface Tail<T> extends InstanceBuilder<T> {
+public interface Tail<T> extends InstanceBuilder<T>, Filler<T> {
+    @Override
+    default void fill(InstanceContext<T> context) {
+        // Do nothing.
+    }
+
     public static <T> Tail<T> parent() {
         return ctx -> Optional.ofNullable(ctx.up())
                 .map(e -> (InstanceContext<T>) e)

@@ -18,18 +18,50 @@
 package org.genthz.function;
 
 import org.genthz.ObjectFactory;
+import org.genthz.context.AccessorResolver;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.context.Stage;
 
+import java.util.Collection;
+
 public class DefaultFiller<T> implements Filler<T> {
+    private final AccessorResolver accessorResolver;
+
+    private final Collection<String> includes;
+
+    private final Collection<String> excludes;
+
+    public DefaultFiller() {
+        this(null, null, null);
+    }
+
+    public DefaultFiller(AccessorResolver accessorResolver, Collection<String> includes, Collection<String> excludes) {
+        if (includes == null || includes.isEmpty() || excludes == null || excludes.isEmpty()) {
+            this.includes = includes;
+            this.excludes = excludes;
+        } else {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "Only one parameter 'includes can be not empty! Now: includes: %s, excludes: %s",
+                            includes,
+                            excludes
+                    )
+            );
+        }
+        this.accessorResolver = accessorResolver;
+    }
+
     @Override
     public void fill(InstanceContext<T> context) {
-        if (context.instance() != null) {
+        if (context.get() != null) {
             final ContextFactory contextFactory = context.contextFactory();
             final ObjectFactory objectFactory = context.objectFactory();
 
-            contextFactory.byProperties(context).stream()
+            (this.accessorResolver == null
+                    ? contextFactory.byProperties(context)
+                    : contextFactory.byProperties(context, this.accessorResolver))
+                    .stream()
                     .forEach(e -> objectFactory.process(e));
         }
     }

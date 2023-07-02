@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 class DashaInstanceContext<T> implements InstanceContext<T>, DiagnosticParameters, DiganosticInfo {
     private final ContextFactory contextFactory;
 
-    private final InstanceAccessor<T> instanceAccessor;
+    private final Accessor<T> accessor;
 
     private final Context up;
 
@@ -43,12 +43,12 @@ class DashaInstanceContext<T> implements InstanceContext<T>, DiagnosticParameter
 
     public DashaInstanceContext(ContextFactory contextFactory,
                                 Bindings bindings,
-                                InstanceAccessor<T> instanceAccessor,
+                                Accessor<T> accessor,
                                 Context up,
                                 Type type) {
         this.contextFactory = Objects.requireNonNull(contextFactory);
         this.bindings = bindings;
-        this.instanceAccessor = Objects.requireNonNull(instanceAccessor);
+        this.accessor = Objects.requireNonNull(accessor);
         this.up = up;
         this.type = type;
     }
@@ -70,36 +70,49 @@ class DashaInstanceContext<T> implements InstanceContext<T>, DiagnosticParameter
 
     @Override
     public Stage stage() {
-        return this.instanceAccessor.stage();
+        return this.accessor.stage();
     }
 
     @Override
     public void stage(Stage stage) {
-        this.instanceAccessor.stage(stage);
+        this.accessor.stage(stage);
     }
 
     @Override
     public T get() {
-        return this.instanceAccessor.get();
+        return this.accessor.get();
     }
 
     @Override
     public void set(T value) {
-        this.instanceAccessor.set(value);
+        this.accessor.set(value);
     }
 
     @Override
     public T instance() {
-        return this.get();
+        final T result;
+
+        switch (this.accessor.stage()) {
+            case FILLING:
+            case COMPLETE:
+                result = this.get();
+                break;
+
+            case NEW:
+                this.objectFactory.process(this);
+                result = this.get();
+                break;
+
+            default:
+                throw new IllegalStateException("Cycle call!");
+        }
+
+        return result;
     }
 
     @Override
     public Type type() {
         return this.type;
-    }
-
-    public InstanceAccessor<T> getInstanceAccessor() {
-        return instanceAccessor;
     }
 
     @Override

@@ -26,11 +26,5 @@ import java.lang.reflect.Type;
  * @author mathter
  * @since 3.0.0
  */
-public interface InstanceContext<T> extends Accessor<T>, Instance<T>, Context {
-    /**
-     * Method returns {@linkplain Type} of the instance will be created.
-     *
-     * @return type of the instance.
-     */
-    public Type type();
+public interface InstanceContext<T> extends Accessor<T>, Instance<T>, Context, Typeable {
 }

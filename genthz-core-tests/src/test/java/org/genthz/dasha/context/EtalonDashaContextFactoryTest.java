@@ -17,24 +17,12 @@
  */
 package org.genthz.dasha.context;
 
-import org.genthz.context.Accessor;
-import org.genthz.context.Instance;
+import org.genthz.context.ContextFactory;
+import org.genthz.etalon.EtalonContextFactoryTest;
 
-class ObjectInstanceAccessor<T> extends AbstractAccessor<T> implements Instance<T>, Accessor<T> {
-    private T object;
-
+public class EtalonDashaContextFactoryTest extends EtalonContextFactoryTest {
     @Override
-    public T get() {
-        return this.object;
-    }
-
-    @Override
-    public void set(T value) throws IllegalStateException {
-        this.object = value;
-    }
-
-    @Override
-    public T instance() {
-        return this.get();
+    protected ContextFactory contextFactory() {
+        return new DashaContextFactory();
     }
 }

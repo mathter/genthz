@@ -15,26 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.dasha.context;
+package org.genthz.dasha.dsl;
 
-import org.genthz.context.Accessor;
-import org.genthz.context.Instance;
+import org.genthz.GenerationProvider;
+import org.genthz.ObjectFactory;
+import org.genthz.dasha.DashaObjectFactory;
+import org.genthz.etalon.AbstractEtalonObjectFactoryTest;
+import org.junit.jupiter.api.Test;
 
-class ObjectInstanceAccessor<T> extends AbstractAccessor<T> implements Instance<T>, Accessor<T> {
-    private T object;
+public class FillersTest extends AbstractEtalonObjectFactoryTest {
+    @Test
+    public void test() {
 
-    @Override
-    public T get() {
-        return this.object;
     }
 
     @Override
-    public void set(T value) throws IllegalStateException {
-        this.object = value;
-    }
-
-    @Override
-    public T instance() {
-        return this.get();
+    public ObjectFactory objectFactory(GenerationProvider generationProvider) {
+        return new DashaObjectFactory(generationProvider);
     }
 }

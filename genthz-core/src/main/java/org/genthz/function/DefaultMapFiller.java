@@ -17,7 +17,7 @@ public class DefaultMapFiller<K, V> extends AbstractContainerFiller<Map<K, V>> {
 
     @Override
     public void fill(InstanceContext<Map<K, V>> context) {
-        if (context.instance() != null) {
+        if (context.get() != null) {
             final ContextFactory contextFactory = context.contextFactory();
             final ObjectFactory objectFactory = context.objectFactory();
 

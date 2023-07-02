@@ -17,12 +17,30 @@
  */
 package org.genthz.reflection;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
+
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public final class Util {
     private Util() {
+    }
+
+    public static Type unrollType(Map<TypeVariable<?>, Type> variableTypeMap, Type type) {
+        final Type result;
+        if (type instanceof GenericArrayType) {
+            result = TypeUtils.genericArrayType(Util.unrollType(variableTypeMap, ((GenericArrayType) type).getGenericComponentType()));
+        } else {
+            result = Optional.ofNullable(TypeUtils.unrollVariables(variableTypeMap, type)).orElse(Object.class);
+        }
+
+        return result;
     }
 
     public static <T> void setFieldValue(Field field, Object object, T value) {

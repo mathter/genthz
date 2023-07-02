@@ -17,9 +17,11 @@
  */
 package org.genthz.dasha.context;
 
+import org.genthz.context.Accessor;
 import org.genthz.context.Bindings;
 import org.genthz.context.Context;
 import org.genthz.context.ContextFactory;
+import org.genthz.context.Instance;
 import org.genthz.context.Node;
 import org.genthz.context.NodeInstanceContext;
 
@@ -33,20 +35,20 @@ class DashaNodeInstanceContext<T, N> extends DashaInstanceContext<T> implements 
     private final boolean isConstructorParameter;
 
     public DashaNodeInstanceContext(ContextFactory contextFactory,
-                                    InstanceAccessor<T> instanceAccessor,
+                                    Accessor<T> accessor,
                                     Context up,
                                     Type type,
                                     Node<N> node) {
-        this(contextFactory, instanceAccessor, up, type, node, false);
+        this(contextFactory, accessor, up, type, node, false);
     }
 
     public DashaNodeInstanceContext(ContextFactory contextFactory,
-                                    InstanceAccessor<T> instanceAccessor,
+                                    Accessor<T> accessor,
                                     Context up,
                                     Type type,
                                     Node<N> node,
                                     boolean isConstructorParameter) {
-        super(contextFactory, Bindings.bindings(up.bindings()), instanceAccessor, up, type);
+        super(contextFactory, Bindings.bindings(up.bindings()), accessor, up, type);
         this.node = Objects.requireNonNull(node);
         this.isConstructorParameter = isConstructorParameter;
     }

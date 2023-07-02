@@ -19,24 +19,26 @@ package org.genthz.dasha.context;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.genthz.context.AccessorResolver;
 import org.genthz.context.Bindings;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.context.NodeInstanceContext;
+import org.genthz.dasha.DashaObjectFactory;
 import org.genthz.reflection.GenericUtil;
+import org.genthz.reflection.Util;
 import org.genthz.util.StreamUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,11 +46,22 @@ import java.util.stream.Stream;
 public class DashaContextFactory implements ContextFactory {
     private final GenericUtil genericUtil;
 
+    private final AccessorResolver accessorResolver;
+
     public DashaContextFactory() {
         this(false);
     }
 
     public DashaContextFactory(boolean strict) {
+        this(new DashaAccessorResolver(), strict);
+    }
+
+    public DashaContextFactory(AccessorResolver accessorResolver) {
+        this(accessorResolver, false);
+    }
+
+    public DashaContextFactory(AccessorResolver accessorResolver, boolean strict) {
+        this.accessorResolver = Objects.requireNonNull(accessorResolver, "accessorResolver parameter can't be null!");
         this.genericUtil = new GenericUtil(strict);
     }
 
@@ -66,8 +79,8 @@ public class DashaContextFactory implements ContextFactory {
     }
 
     @Override
-    public <T> List<InstanceContext> byConstructor(InstanceContext<T> up, Constructor constructor) {
-        final List<InstanceContext> result;
+    public <T> List<NodeInstanceContext<?, Integer>> byConstructor(InstanceContext<T> up, Constructor constructor) {
+        final List<NodeInstanceContext<?, Integer>> result;
         final Type[] parameterTypes = constructor.getGenericParameterTypes();
         final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(up.type());
 
@@ -80,7 +93,7 @@ public class DashaContextFactory implements ContextFactory {
                     this,
                     instanceAccessor,
                     up,
-                    this.unrollType(variableTypeMap, parameterTypes[i]),
+                    Util.unrollType(variableTypeMap, parameterTypes[i]),
                     instanceAccessor,
                     true
             ));
@@ -105,7 +118,7 @@ public class DashaContextFactory implements ContextFactory {
                         this,
                         instanceAccessor,
                         up,
-                        this.unrollType(variableTypeMap, Collection.class.getTypeParameters()[0]),
+                        Util.unrollType(variableTypeMap, Collection.class.getTypeParameters()[0]),
                         instanceAccessor
                 ));
             }
@@ -132,7 +145,7 @@ public class DashaContextFactory implements ContextFactory {
                         this,
                         instanceAccessor,
                         up,
-                        this.unrollType(variableTypeMap, componentType),
+                        Util.unrollType(variableTypeMap, componentType),
                         instanceAccessor
                 ));
             }
@@ -145,39 +158,22 @@ public class DashaContextFactory implements ContextFactory {
 
     @Override
     public <T> Collection<NodeInstanceContext<?, String>> byProperties(InstanceContext<T> up) {
-        final Collection<NodeInstanceContext<?, String>> result;
-        final Type upType = up.type();
-        final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(upType);
-
-        result = Optional.of(upType)
-                .map(e -> (Class) TypeUtils.getRawType(e, Object.class))
-                .map(e -> StreamUtil.of(e, Class::getSuperclass))
-                .orElse(Stream.empty())
-                .flatMap(e -> Stream.of(e.getDeclaredFields()))
-                .filter(e -> Optional.of(e.getModifiers()).map(m -> !Modifier.isFinal(m) && !Modifier.isStatic(m)).get())
-                .map(e -> {
-                            final FieldInstanceAccessor accessor = new FieldInstanceAccessor(up, e);
-                            return (NodeInstanceContext<?, String>) new DashaNodeInstanceContext(
-                                    this,
-                                    accessor,
-                                    up,
-                                    this.unrollType(variableTypeMap, e.getGenericType()),
-                                    accessor
-                            );
-                        }
-                )
-                .collect(Collectors.toList());
-
-        return result;
+        return this.byProperties(up, this.accessorResolver);
     }
 
-    private Type unrollType(Map<TypeVariable<?>, Type> variableTypeMap, Type type) {
-        final Type result;
-        if (type instanceof GenericArrayType) {
-            result = TypeUtils.genericArrayType(this.unrollType(variableTypeMap, ((GenericArrayType) type).getGenericComponentType()));
-        } else {
-            result = Optional.ofNullable(TypeUtils.unrollVariables(variableTypeMap, type)).orElse(Object.class);
-        }
+    @Override
+    public <T> Collection<NodeInstanceContext<?, String>> byProperties(InstanceContext<T> up, AccessorResolver accessorResolver) {
+        final Collection<NodeInstanceContext<?, String>> result = Objects.requireNonNull(accessorResolver, "accessorResolver parameter can't be null!")
+                .resolve(up)
+                .stream()
+                .map(e -> (NodeInstanceContext<?, String>) new DashaNodeInstanceContext(
+                        this,
+                        e,
+                        up,
+                        e.type(),
+                        e
+                ))
+                .collect(Collectors.toList());
 
         return result;
     }
@@ -198,7 +194,7 @@ public class DashaContextFactory implements ContextFactory {
                         this,
                         keyInstanceAccessor,
                         up,
-                        this.unrollType(variableTypeMap, Map.class.getTypeParameters()[0]),
+                        Util.unrollType(variableTypeMap, Map.class.getTypeParameters()[0]),
                         keyInstanceAccessor
                 );
                 final MapValueAccessor valueInstanceAccessor = new MapValueAccessor(up.instance(), keyInstanceAccessor, i);
@@ -206,7 +202,7 @@ public class DashaContextFactory implements ContextFactory {
                         this,
                         valueInstanceAccessor,
                         up,
-                        this.unrollType(variableTypeMap, Map.class.getTypeParameters()[1]),
+                        Util.unrollType(variableTypeMap, Map.class.getTypeParameters()[1]),
                         valueInstanceAccessor
                 );
 

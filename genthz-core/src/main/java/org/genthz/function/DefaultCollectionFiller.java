@@ -35,7 +35,7 @@ public class DefaultCollectionFiller<T extends Collection> extends AbstractConta
 
     @Override
     public void fill(InstanceContext<T> context) {
-        if (context.instance() != null) {
+        if (context.get() != null) {
             final ContextFactory contextFactory = context.contextFactory();
             final ObjectFactory objectFactory = context.objectFactory();
 

@@ -32,7 +32,7 @@ public class DefaultArrayFiller<T> extends AbstractContainerFiller<T> implements
 
     @Override
     public void fill(InstanceContext<T> context) {
-        if (context.instance() != null) {
+        if (context.get() != null) {
             final ContextFactory contextFactory = context.contextFactory();
             final ObjectFactory objectFactory = context.objectFactory();
 

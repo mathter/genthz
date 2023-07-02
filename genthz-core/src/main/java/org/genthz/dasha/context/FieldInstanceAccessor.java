@@ -19,20 +19,24 @@ package org.genthz.dasha.context;
 
 import org.genthz.context.Instance;
 import org.genthz.context.Node;
+import org.genthz.context.Typeable;
 import org.genthz.reflection.Util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.Objects;
 
-class FieldInstanceAccessor<T> extends AbstractAccessor<T>
-        implements InstanceAccessor<T>, Node<String> {
+class FieldInstanceAccessor<T> extends AbstractAccessor<T> implements Node<String>, Typeable {
     private final Instance<T> upInstance;
 
     private final Field field;
 
-    public FieldInstanceAccessor(Instance<T> upInstance, Field field) {
+    private final Type type;
+
+    public FieldInstanceAccessor(Instance<T> upInstance, Field field, Type type) {
         this.upInstance = Objects.requireNonNull(upInstance);
         this.field = Objects.requireNonNull(field);
+        this.type = type;
     }
 
     @Override
@@ -48,5 +52,10 @@ class FieldInstanceAccessor<T> extends AbstractAccessor<T>
     @Override
     public String node() {
         return this.field.getName();
+    }
+
+    @Override
+    public Type type() {
+        return this.type;
     }
 }

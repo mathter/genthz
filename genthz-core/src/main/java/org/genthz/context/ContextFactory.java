@@ -68,7 +68,7 @@ public interface ContextFactory {
      * @param <T>         type of the class.
      * @return list of the contexts.
      */
-    public <T> List<InstanceContext> byConstructor(InstanceContext<T> up, Constructor constructor);
+    public <T> List<NodeInstanceContext<?, Integer>> byConstructor(InstanceContext<T> up, Constructor constructor);
 
     /**
      * Method returns {@linkplain List} the contexts for elements of collection.
@@ -100,6 +100,8 @@ public interface ContextFactory {
      * @return collection of the contexts.
      */
     public <T> Collection<NodeInstanceContext<?, String>> byProperties(InstanceContext<T> up);
+
+    public <T> Collection<NodeInstanceContext<?, String>> byProperties(InstanceContext<T> up, AccessorResolver accessorResolver);
 
     public <K, V, T extends Map<K, V>> Collection<Pair<NodeInstanceContext<K, Integer>, NodeInstanceContext<V, K>>> byMapKey(InstanceContext<T> up, int count);
 }
