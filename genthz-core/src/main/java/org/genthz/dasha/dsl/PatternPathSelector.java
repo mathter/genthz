@@ -60,7 +60,6 @@ class PatternPathSelector extends PathSelector {
             if ("/".equals(this.pattern.pattern())) {
                 result = context.up() == null;
             } else {
-
                 result = Optional.ofNullable(((NodeInstanceContext) context).node())
                         .filter(e -> e instanceof CharSequence)
                         .map(Object::toString)

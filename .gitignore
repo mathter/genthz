@@ -19,6 +19,7 @@ syntax: glob
 *.iml
 
 # building
+gen
 target
 build
 null

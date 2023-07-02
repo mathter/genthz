@@ -81,7 +81,8 @@ public class DashaContextFactory implements ContextFactory {
                     instanceAccessor,
                     up,
                     this.unrollType(variableTypeMap, parameterTypes[i]),
-                    instanceAccessor
+                    instanceAccessor,
+                    true
             ));
         }
 

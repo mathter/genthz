@@ -30,13 +30,25 @@ import java.util.stream.Stream;
 class DashaNodeInstanceContext<T, N> extends DashaInstanceContext<T> implements NodeInstanceContext<T, N> {
     private final Node<N> node;
 
+    private final boolean isConstructorParameter;
+
     public DashaNodeInstanceContext(ContextFactory contextFactory,
                                     InstanceAccessor<T> instanceAccessor,
                                     Context up,
                                     Type type,
                                     Node<N> node) {
+        this(contextFactory, instanceAccessor, up, type, node, false);
+    }
+
+    public DashaNodeInstanceContext(ContextFactory contextFactory,
+                                    InstanceAccessor<T> instanceAccessor,
+                                    Context up,
+                                    Type type,
+                                    Node<N> node,
+                                    boolean isConstructorParameter) {
         super(contextFactory, Bindings.bindings(up.bindings()), instanceAccessor, up, type);
         this.node = Objects.requireNonNull(node);
+        this.isConstructorParameter = isConstructorParameter;
     }
 
     @Override
@@ -50,5 +62,10 @@ class DashaNodeInstanceContext<T, N> extends DashaInstanceContext<T> implements 
                 super.params(),
                 Stream.of(Parameter.of("node", this.node()))
         );
+    }
+
+    @Override
+    public boolean isConstructorParameter() {
+        return this.isConstructorParameter;
     }
 }

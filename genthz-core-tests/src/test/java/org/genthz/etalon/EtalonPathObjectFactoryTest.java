@@ -3,6 +3,7 @@ package org.genthz.etalon;
 import org.genthz.ObjectFactory;
 import org.genthz.dasha.dsl.DashaDsl;
 import org.genthz.dsl.Dsl;
+import org.genthz.etalon.model.SimpleGeneric2;
 import org.genthz.etalon.model.SimpleTestModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -89,6 +90,19 @@ public abstract class EtalonPathObjectFactoryTest extends AbstractEtalonObjectFa
                         },
                         SimpleTestModel.class,
                         null
+                ),
+                Arguments.of(
+                        new DashaDsl() {
+                            {
+                                path("c{0}").simple(ctx -> "Name");
+                            }
+                        }.def(),
+                        (Consumer<SimpleGeneric2>) e -> {
+                            Assertions.assertNotNull(e);
+                            Assertions.assertEquals("Name", e.getField1());
+                        },
+                        SimpleGeneric2.class,
+                        new Type[]{String.class, Integer.class}
                 )
         );
     }

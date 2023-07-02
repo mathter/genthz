@@ -68,5 +68,10 @@ class Antrl4PathProcessor {
         public void enterSkipElement(PathParser.SkipElementContext ctx) {
             this.up = new SkipPathSelector(this.up, Integer.parseInt(ctx.COUNT().getText()));
         }
+
+        @Override
+        public void enterConstructor(PathParser.ConstructorContext ctx) {
+            this.up = new IndexPathSelector(this.up, Integer.parseInt(ctx.COUNT().getText()), true);
+        }
     }
 }

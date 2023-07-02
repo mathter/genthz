@@ -27,9 +27,16 @@ import java.util.stream.Stream;
 class IndexPathSelector extends PathSelector {
     private final int index;
 
+    private final boolean isConstructorParameter;
+
     public IndexPathSelector(Selector parent, int index) {
-        super(Objects.requireNonNull(parent));
+        this(parent, index, false);
+    }
+
+    public IndexPathSelector(Selector parent, int index, boolean isConstructorParameter) {
+        super(parent);
         this.index = index;
+        this.isConstructorParameter = isConstructorParameter;
     }
 
     public int getIndex() {
@@ -49,9 +56,10 @@ class IndexPathSelector extends PathSelector {
         final boolean result;
 
         if (context instanceof NodeInstanceContext) {
-            final Object node = ((NodeInstanceContext) context).node();
+            final NodeInstanceContext ctx = (NodeInstanceContext) context;
+            final Object node = ctx.node();
             if (node instanceof Integer) {
-                return this.index == (Integer) node && super.test(context);
+                return this.index == (Integer) node && ctx.isConstructorParameter() == this.isConstructorParameter && super.test(context);
             } else {
                 result = false;
             }

@@ -26,11 +26,15 @@ root
     ;
 
 pathElement
-    :   (staticElement indexedElement* | matchedElement indexedElement* | skipSequnce)
+    :   (staticElement indexedElement* | matchedElement indexedElement* | skipSequnce | constructor)
+    ;
+
+constructor
+    :   'c{' COUNT '}'
     ;
 
 staticElement
-    :   SYMBOLS
+    :   IDENTIFIER
     ;
 
 matchedElement
@@ -61,16 +65,12 @@ COUNT
     :   DIGIT+
     ;
 
-SYMBOLS
-    :   JavaLetterOrDigit+
-    ;
-
 MATCHED_SYMBOLS
-    :   ANY | (ANY? (SYMBOLS | ANY)* SYMBOLS?)
+    :   JavaLetter* (ANY | ANY JavaLetterOrDigit+)+
     ;
 
-ALPHABET
-    :   [a-zA-Z]
+IDENTIFIER
+    : JavaLetter+ JavaLetterOrDigit*
     ;
 
 DIGIT

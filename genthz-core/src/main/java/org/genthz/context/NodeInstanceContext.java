@@ -26,4 +26,5 @@ package org.genthz.context;
  * @since 3.0.0
  */
 public interface NodeInstanceContext<T, N> extends InstanceContext<T>, Node<N> {
+    public boolean isConstructorParameter();
 }
