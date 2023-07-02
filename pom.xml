@@ -4,7 +4,7 @@
 
     <groupId>org.genthz</groupId>
     <artifactId>parent</artifactId>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.0.3-SNAPSHOT</version>
 
     <modules>
         <module>genthz-core</module>
@@ -74,17 +74,17 @@
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-core</artifactId>
-                <version>3.1.0-SNAPSHOT</version>
+                <version>3.0.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-core-tests</artifactId>
-                <version>3.1.0-SNAPSHOT</version>
+                <version>3.0.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-logging-slf4j</artifactId>
-                <version>3.1.0-SNAPSHOT</version>
+                <version>3.0.3-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
