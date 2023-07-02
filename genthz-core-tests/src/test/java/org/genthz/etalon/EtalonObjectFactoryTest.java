@@ -1,6 +1,9 @@
 package org.genthz.etalon;
 
 import org.genthz.ObjectFactory;
+import org.genthz.etalon.model.Simple;
+import org.genthz.etalon.model.SimpleGeneric;
+import org.genthz.util.StreamUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +33,7 @@ import java.util.stream.Stream;
 /**
  * Etalon tests for {@linkplain ObjectFactory}.
  */
-public abstract class EtalonObjectFactoryTest {
+public abstract class EtalonObjectFactoryTest extends AbstractEtalonObjectFactoryTest {
     @ParameterizedTest
     @DisplayName("Default instance builders and fillers test.")
     @MethodSource("data")
@@ -45,8 +48,8 @@ public abstract class EtalonObjectFactoryTest {
     public void testSimple() {
         final Simple value = this.objectFactory().get(Simple.class);
         Assertions.assertNotNull(value);
-        Assertions.assertNotNull(value.stringField);
-        Assertions.assertNotNull(value.dateField);
+        Assertions.assertNotNull(value.getStringField());
+        Assertions.assertNotNull(value.getDateField());
     }
 
     @Test
@@ -68,35 +71,78 @@ public abstract class EtalonObjectFactoryTest {
         final SimpleGeneric value = this.objectFactory().get(SimpleGeneric.class, keyClass, valueClass);
 
         Assertions.assertNotNull(value);
-        Assertions.assertNotNull(value.tField);
-        Assertions.assertNotNull(value.collectionField);
-        value.collectionField.stream().forEach(e -> {
+        Assertions.assertNotNull(value.gettField());
+        Assertions.assertNotNull(value.getCollectionField());
+        value.getCollectionField().stream().forEach(e -> {
             Assertions.assertNotNull(e);
             Assertions.assertTrue(valueClass.equals(e.getClass()));
         });
-        Assertions.assertNotNull(value.listField);
-        value.listField.stream().forEach(e -> {
+        Assertions.assertNotNull(value.getListField());
+        value.getListField().stream().forEach(e -> {
             Assertions.assertNotNull(e);
             Assertions.assertTrue(valueClass.equals(e.getClass()));
         });
-        Assertions.assertNotNull(value.setField);
-        value.setField.stream().forEach(e -> {
+        Assertions.assertNotNull(value.getSetField());
+        value.getSetField().stream().forEach(e -> {
             Assertions.assertNotNull(e);
             Assertions.assertTrue(valueClass.equals(e.getClass()));
         });
-        Assertions.assertNotNull(value.mapField);
-        value.mapField.keySet().stream().forEach(e -> {
+        Assertions.assertNotNull(value.getMapField());
+        value.getMapField().keySet().stream().forEach(e -> {
             Assertions.assertNotNull(e);
             Assertions.assertTrue(keyClass.equals(e.getClass()));
         });
-        value.mapField.values().stream().forEach(e -> {
+        value.getMapField().values().stream().forEach(e -> {
             Assertions.assertNotNull(e);
             Assertions.assertTrue(valueClass.equals(e.getClass()));
         });
-        Assertions.assertNotNull(value.arrayField);
+        Assertions.assertNotNull(value.getArrayField());
     }
 
-    public abstract ObjectFactory objectFactory();
+    @Test
+    @DisplayName("Generic generation test without type arguments.")
+    public void testSimpleGenericWithoutTypeArguments() {
+        final SimpleGeneric value = this.objectFactory().get(SimpleGeneric.class);
+
+        Assertions.assertNotNull(value);
+        Assertions.assertNotNull(value.gettField());
+        Assertions.assertNotNull(value.getCollectionField());
+        value.getCollectionField().stream().forEach(e -> {
+            Assertions.assertNotNull(e);
+            Assertions.assertTrue(Object.class.equals(e.getClass()));
+        });
+        Assertions.assertNotNull(value.getListField());
+        value.getListField().stream().forEach(e -> {
+            Assertions.assertNotNull(e);
+            Assertions.assertTrue(Object.class.equals(e.getClass()));
+        });
+        Assertions.assertNotNull(value.getSetField());
+        value.getSetField().stream().forEach(e -> {
+            Assertions.assertNotNull(e);
+            Assertions.assertTrue(Object.class.equals(e.getClass()));
+        });
+        Assertions.assertNotNull(value.getMapField());
+        value.getMapField().keySet().stream().forEach(e -> {
+            Assertions.assertNotNull(e);
+            Assertions.assertTrue(Object.class.equals(e.getClass()));
+        });
+        value.getMapField().values().stream().forEach(e -> {
+            Assertions.assertNotNull(e);
+            Assertions.assertTrue(Object.class.equals(e.getClass()));
+        });
+        Assertions.assertNotNull(value.getArrayField());
+    }
+
+    @Test
+    public void testRecursion() {
+        final Recursion instance = this.objectFactory().get(Recursion.class);
+
+        Assertions.assertNotNull(instance);
+        Assertions.assertEquals(
+                this.objectFactory().generationProvider().defaults().defaultMaxGenerationDepth().apply(null),
+                StreamUtil.of(instance, Recursion::getNext).count()
+        );
+    }
 
     private static Stream<Arguments> types() {
         return Stream.of(
@@ -143,23 +189,15 @@ public abstract class EtalonObjectFactoryTest {
         );
     }
 
-    public static class Simple {
-        private String stringField;
+    public static class Recursion {
+        private  Recursion next;
 
-        private Date dateField;
-    }
+        public Recursion getNext() {
+            return next;
+        }
 
-    public static class SimpleGeneric<K, T> {
-        private T tField;
-
-        private Collection<T> collectionField;
-
-        private List<T> listField;
-
-        private Set<T> setField;
-
-        private Map<K, T> mapField;
-
-        private T[] arrayField;
+        public void setNext(Recursion next) {
+            this.next = next;
+        }
     }
 }

@@ -1,11 +1,14 @@
-package org.genthz.dasha.dsl.objectfactory;
+package org.genthz.etalon.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class SimpleTestModel {
     private String name;
 
     private String lastName;
+
+    private List<String> otherNames;
 
     private Date birthDay;
 
@@ -41,5 +44,13 @@ public class SimpleTestModel {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public List<String> getOtherNames() {
+        return otherNames;
+    }
+
+    public void setOtherNames(List<String> otherNames) {
+        this.otherNames = otherNames;
     }
 }

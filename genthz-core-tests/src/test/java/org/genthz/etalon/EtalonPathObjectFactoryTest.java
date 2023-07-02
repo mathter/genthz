@@ -1,10 +1,11 @@
-package org.genthz.dasha.dsl.objectfactory;
+package org.genthz.etalon;
 
 import org.genthz.ObjectFactory;
-import org.genthz.dasha.DashaObjectFactory;
 import org.genthz.dasha.dsl.DashaDsl;
 import org.genthz.dsl.Dsl;
+import org.genthz.etalon.model.SimpleTestModel;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -14,15 +15,15 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class DashaObjectFactoryTest {
-
+public abstract class EtalonPathObjectFactoryTest extends AbstractEtalonObjectFactoryTest {
     @ParameterizedTest
+    @DisplayName("Test paths")
     @MethodSource("data")
     public void test(Dsl dsl, Consumer assertion, Class clazz, Type... typeArguments) {
-        final ObjectFactory objectFactory = new DashaObjectFactory(dsl.build());
-        final Object instance = objectFactory.get(clazz, typeArguments);
+        final ObjectFactory objectFactory = this.objectFactory(dsl);
+        final Object value = objectFactory.get(clazz, typeArguments);
 
-        assertion.accept(instance);
+        assertion.accept(value);
     }
 
     private static Stream<Arguments> data() {
@@ -82,11 +83,11 @@ public class DashaObjectFactoryTest {
                                     return e;
                                 })
                                 .get(),
-                        (Consumer<SimpleGenericModel>) e -> {
+                        (Consumer<SimpleTestModel>) e -> {
                             Assertions.assertNotNull(e);
                             Assertions.assertEquals("Name", e.getOtherNames().get(1));
                         },
-                        SimpleGenericModel.class,
+                        SimpleTestModel.class,
                         null
                 )
         );

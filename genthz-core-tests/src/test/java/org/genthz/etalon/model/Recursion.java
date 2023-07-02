@@ -1,4 +1,4 @@
-package org.genthz.dasha.dsl.objectfactory;
+package org.genthz.etalon.model;
 
 public class Recursion {
     private Recursion next;
