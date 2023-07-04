@@ -113,7 +113,7 @@ public class DashaContextFactory implements ContextFactory {
             result = new ArrayList<>(count);
 
             for (int i = 0; i < count; i++) {
-                CollectionAccessor instanceAccessor = new CollectionAccessor(i, (Collection) up.instance());
+                CollectionAccessor instanceAccessor = new CollectionAccessor(i, () -> up.get());
                 result.add(new DashaNodeInstanceContext(
                         this,
                         instanceAccessor,
@@ -140,7 +140,7 @@ public class DashaContextFactory implements ContextFactory {
             result = new ArrayList<>(count);
 
             for (int i = 0; i < count; i++) {
-                ArrayAccessor instanceAccessor = new ArrayAccessor(i, (T[]) up.instance());
+                ArrayAccessor instanceAccessor = new ArrayAccessor(i, () -> up.instance());
                 result.add(new DashaNodeInstanceContext(
                         this,
                         instanceAccessor,

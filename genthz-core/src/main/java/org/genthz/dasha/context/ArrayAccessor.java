@@ -17,10 +17,12 @@
  */
 package org.genthz.dasha.context;
 
-class ArrayAccessor<T> extends NodeObjectInstanceAccessor<T, Integer> {
-    private final T[] container;
+import java.util.function.Supplier;
 
-    public ArrayAccessor(Integer node, T[] container) {
+class ArrayAccessor<T> extends NodeObjectInstanceAccessor<T, Integer> {
+    private final Supplier<T[]> container;
+
+    public ArrayAccessor(Integer node, Supplier<T[]> container) {
         super(node);
         this.container = container;
     }
@@ -28,6 +30,6 @@ class ArrayAccessor<T> extends NodeObjectInstanceAccessor<T, Integer> {
     @Override
     public void set(T value) throws IllegalStateException {
         super.set(value);
-        this.container[this.node()] = value;
+        this.container.get()[this.node()] = value;
     }
 }

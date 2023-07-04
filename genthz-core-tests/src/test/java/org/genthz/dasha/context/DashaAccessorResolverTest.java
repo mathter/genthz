@@ -61,61 +61,70 @@ public class DashaAccessorResolverTest {
     public static Stream<Arguments> data() {
         final String[] fieldNames = {"stringField", "dateField", "tField", "collectionField", "listField", "setField", "mapField", "arrayField"};
         return Stream.concat(
-                Stream.of(fieldNames)
-                        .reduce(
-                                new ArrayList<Set<String>>(),
-                                (l, r) -> {
-                                    final Set<String> max = l.stream().max(Comparator.comparingInt(Set::size)).orElse(new HashSet<>());
-                                    final Set<String> next = new HashSet<String>();
-
-                                    next.addAll(max);
-                                    next.add(r);
-
-                                    l.add(next);
-                                    return l;
-                                },
-                                (l, r) -> {
-                                    l.addAll(r);
-                                    return l;
-                                }
+                Stream.of(
+                        Arguments.of(
+                                null,
+                                null,
+                                Stream.of(fieldNames).collect(Collectors.toSet())
                         )
-                        .stream()
-                        .map(e -> Arguments.of(
-                                        e.stream().map(ee -> FieldMatchers.name(ee)).collect(Collectors.toList()),
-                                        null,
-                                        e
+                ),
+                Stream.concat(
+                        Stream.of(fieldNames)
+                                .reduce(
+                                        new ArrayList<Set<String>>(),
+                                        (l, r) -> {
+                                            final Set<String> max = l.stream().max(Comparator.comparingInt(Set::size)).orElse(new HashSet<>());
+                                            final Set<String> next = new HashSet<String>();
+
+                                            next.addAll(max);
+                                            next.add(r);
+
+                                            l.add(next);
+                                            return l;
+                                        },
+                                        (l, r) -> {
+                                            l.addAll(r);
+                                            return l;
+                                        }
                                 )
-                        ),
-                Stream.of(fieldNames)
-                        .reduce(
-                                new ArrayList<Set<String>>(),
-                                (l, r) -> {
-                                    final Set<String> max = l.stream().max(Comparator.comparingInt(Set::size)).orElse(new HashSet<>());
-                                    final Set<String> next = new HashSet<String>();
+                                .stream()
+                                .map(e -> Arguments.of(
+                                                e.stream().map(ee -> FieldMatchers.name(ee)).collect(Collectors.toList()),
+                                                null,
+                                                e
+                                        )
+                                ),
+                        Stream.of(fieldNames)
+                                .reduce(
+                                        new ArrayList<Set<String>>(),
+                                        (l, r) -> {
+                                            final Set<String> max = l.stream().max(Comparator.comparingInt(Set::size)).orElse(new HashSet<>());
+                                            final Set<String> next = new HashSet<String>();
 
-                                    next.addAll(max);
-                                    next.add(r);
+                                            next.addAll(max);
+                                            next.add(r);
 
-                                    l.add(next);
-                                    return l;
-                                },
-                                (l, r) -> {
-                                    l.addAll(r);
-                                    return l;
-                                }
-                        )
-                        .stream()
-                        .map(e -> Arguments.of(
-                                        null,
-                                        e.stream().map(ee -> FieldMatchers.name(ee)).collect(Collectors.toList()),
-                                        Optional.of(Stream.of(fieldNames).collect(Collectors.toSet()))
-                                                .map(ee -> {
-                                                    ee.removeAll(e);
-                                                    return ee;
-                                                })
-                                                .get()
+                                            l.add(next);
+                                            return l;
+                                        },
+                                        (l, r) -> {
+                                            l.addAll(r);
+                                            return l;
+                                        }
                                 )
-                        )
+                                .stream()
+                                .map(e -> Arguments.of(
+                                                null,
+                                                e.stream().map(ee -> FieldMatchers.name(ee)).collect(Collectors.toList()),
+                                                Optional.of(Stream.of(fieldNames).collect(Collectors.toSet()))
+                                                        .map(ee -> {
+                                                            ee.removeAll(e);
+                                                            return ee;
+                                                        })
+                                                        .get()
+                                        )
+                                )
+                )
         );
     }
 }
