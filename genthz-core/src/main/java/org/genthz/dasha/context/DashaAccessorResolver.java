@@ -76,7 +76,7 @@ public class DashaAccessorResolver implements AccessorResolver {
                 .flatMap(e -> Stream.of(e.getDeclaredFields()))
                 .filter(e -> this.matche(FieldMatcher.of(e, variableTypeMap)))
                 .filter(e -> Optional.of(e.getModifiers()).map(m -> !Modifier.isFinal(m) && !Modifier.isStatic(m)).get())
-                .map(e -> (A) new FieldInstanceAccessor(up, e, Util.unrollType(variableTypeMap, e.getType())))
+                .map(e -> (A) new FieldInstanceAccessor(up, e, Util.unrollType(variableTypeMap, e.getGenericType())))
                 .collect(Collectors.toList());
 
         return result;

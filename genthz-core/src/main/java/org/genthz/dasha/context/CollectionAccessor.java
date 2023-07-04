@@ -19,11 +19,12 @@ package org.genthz.dasha.context;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 class CollectionAccessor<T> extends NodeObjectInstanceAccessor<T, Integer> {
-    private final Collection<T> container;
+    private final Supplier<? extends Collection<T>> container;
 
-    public CollectionAccessor(Integer node, Collection<T> container) {
+    public CollectionAccessor(Integer node, Supplier<? extends Collection<T>> container) {
         super(node);
         this.container = Objects.requireNonNull(container);
     }
@@ -31,6 +32,6 @@ class CollectionAccessor<T> extends NodeObjectInstanceAccessor<T, Integer> {
     @Override
     public void set(T value) throws IllegalStateException {
         super.set(value);
-        this.container.add(value);
+        this.container.get().add(value);
     }
 }
