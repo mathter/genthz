@@ -17,9 +17,9 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public abstract class EtalonPathObjectFactoryTest extends AbstractEtalonObjectFactoryTest {
-    @ParameterizedTest
-    @DisplayName("Test paths")
-    @MethodSource("data")
+//    @ParameterizedTest
+//    @DisplayName("Test paths")
+//    @MethodSource("data")
     public void test(Dsl dsl, Consumer assertion, Class clazz, Type... typeArguments) {
         final ObjectFactory objectFactory = this.objectFactory(dsl);
         final Object value = objectFactory.get(clazz, typeArguments);

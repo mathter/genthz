@@ -17,12 +17,48 @@
  */
 package org.genthz.dasha.context;
 
+import org.genthz.FieldMatchers;
+import org.genthz.context.AccessorResolver;
 import org.genthz.context.ContextFactory;
 import org.genthz.etalon.EtalonContextFactoryTest;
+import org.genthz.function.FieldMatcher;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EtalonDashaContextFactoryTest extends EtalonContextFactoryTest {
     @Override
     protected ContextFactory contextFactory() {
         return new DashaContextFactory();
+    }
+
+    @Override
+    protected AccessorResolver accessorResolver(Collection<String> includes, Collection<String> excludes) {
+        if (includes != null) {
+            includes.stream()
+                    .<FieldMatcher>map(ee -> FieldMatchers.name(ee))
+                    .peek(e -> System.out.println(e))
+                    .forEach(e -> {
+                    });
+        }
+        return new DashaAccessorResolver(
+                Optional.ofNullable(includes)
+                        .map(e -> e.stream()
+                                .distinct()
+                                .map(ee -> (FieldMatcher) FieldMatchers.name(ee))
+                                .collect(Collectors.toList()))
+                        .orElse(null),
+                Optional.ofNullable(excludes)
+                        .map(e -> e.stream()
+                                .distinct()
+                                .map(ee -> (FieldMatcher) FieldMatchers.name(ee))
+                                .collect(Collectors.toList()))
+                        .orElse(null)
+        );
     }
 }

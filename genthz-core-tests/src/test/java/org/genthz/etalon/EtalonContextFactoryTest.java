@@ -1,10 +1,11 @@
 package org.genthz.etalon;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.genthz.FieldMatchers;
+import org.genthz.context.AccessorResolver;
 import org.genthz.context.Bindings;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
+import org.genthz.context.Node;
 import org.genthz.context.NodeInstanceContext;
 import org.genthz.etalon.model.SimpleGeneric;
 import org.genthz.etalon.model.SimpleGeneric2;
@@ -127,7 +128,7 @@ public abstract class EtalonContextFactoryTest {
         Assertions.assertEquals(8, contexts.size());
 
         final NodeInstanceContext<?, String>[] ctxs = contexts.stream()
-                .sorted((l, r) -> l.node().compareTo(r.node()))
+                .sorted(Comparator.comparing(Node::node))
                 .toArray(NodeInstanceContext[]::new);
 
         Assertions.assertNotNull(ctxs[0]);
@@ -163,6 +164,23 @@ public abstract class EtalonContextFactoryTest {
         Assertions.assertEquals(Integer.class, ctxs[7].type());
     }
 
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testByProperties(Collection<String> includes, Collection<String> excludes, Set<String> fiedldNames) {
+        final InstanceContext<SimpleGeneric> up = this.contextFactory().single(SimpleGeneric.class, String.class, Integer.class);
+        final AccessorResolver accessorResolver = this.accessorResolver(includes, excludes);
+        final Collection<NodeInstanceContext<?, String>> contexts = this.contextFactory().byProperties(up, accessorResolver);
+
+        Assertions.assertNotNull(contexts);
+        Assertions.assertEquals(fiedldNames.size(), contexts.size());
+
+        for (NodeInstanceContext<?, String> ctx : contexts) {
+            Assertions.assertTrue(fiedldNames.remove(ctx.node()), "Error for " + ctx);
+        }
+
+        Assertions.assertTrue(fiedldNames.isEmpty());
+    }
+
     public static Stream<Arguments> data() {
         final String[] fieldNames = {"stringField", "dateField", "tField", "collectionField", "listField", "setField", "mapField", "arrayField"};
         return Stream.concat(
@@ -194,7 +212,7 @@ public abstract class EtalonContextFactoryTest {
                                 )
                                 .stream()
                                 .map(e -> Arguments.of(
-                                                e.stream().map(ee -> FieldMatchers.name(ee)).collect(Collectors.toList()),
+                                                e,
                                                 null,
                                                 e
                                         )
@@ -220,7 +238,7 @@ public abstract class EtalonContextFactoryTest {
                                 .stream()
                                 .map(e -> Arguments.of(
                                                 null,
-                                                e.stream().map(ee -> FieldMatchers.name(ee)).collect(Collectors.toList()),
+                                                e,
                                                 Optional.of(Stream.of(fieldNames).collect(Collectors.toSet()))
                                                         .map(ee -> {
                                                             ee.removeAll(e);
@@ -234,4 +252,6 @@ public abstract class EtalonContextFactoryTest {
     }
 
     protected abstract ContextFactory contextFactory();
+
+    protected abstract AccessorResolver accessorResolver(Collection<String> includes, Collection<String> excludes);
 }
