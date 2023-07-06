@@ -29,7 +29,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Predefined filles.
+ */
 public abstract class Fillers {
+    /**
+     * Method creates filler for filling selected fields.
+     *
+     * @param fieldNames field names for filling.
+     * @param <T>        type of object to be created.
+     * @return filler.
+     */
     public static <T> Filler<T> includes(String... fieldNames) {
         return new DefaultFiller(
                 Optional.ofNullable(fieldNames)
@@ -43,6 +53,13 @@ public abstract class Fillers {
         );
     }
 
+    /**
+     * Method creates a filler for filling fields selected by field mathchers.
+     *
+     * @param fieldMatchers field matchers.
+     * @param <T>           type of object to be created.
+     * @return filler.
+     */
     public static <T> Filler<T> includes(FieldMatcher... fieldMatchers) {
         return new DefaultFiller<>(new DashaAccessorResolver(
                 Optional.ofNullable(fieldMatchers)
@@ -53,10 +70,24 @@ public abstract class Fillers {
         ));
     }
 
+    /**
+     * Method creates a filler for filling fields selected by field mathchers.
+     *
+     * @param fieldMatchers field matchers.
+     * @param <T>           type of object to be created.
+     * @return filler.
+     */
     public static <T> Filler<T> includes(Collection<? extends FieldMatcher> fieldMatchers) {
         return new DefaultFiller<>(new DashaAccessorResolver(fieldMatchers, null));
     }
 
+    /**
+     * Method creates filler for filling fields excluding ones selected by parameter.
+     *
+     * @param fieldNames field names for excluding from filling.
+     * @param <T>        type of object to be created.
+     * @return filler.
+     */
     public static <T> Filler<T> excludes(String... fieldNames) {
         return new DefaultFiller(
                 Optional.ofNullable(fieldNames)
@@ -70,6 +101,13 @@ public abstract class Fillers {
         );
     }
 
+    /**
+     * Method creates filler for filling fields excluding ones selected by field matchers.
+     *
+     * @param fieldMatchers field matchers for excluding fields from filling.
+     * @param <T>           type of object to be created.
+     * @return filler.
+     */
     public static <T> Filler<T> excludes(FieldMatcher... fieldMatchers) {
         return new DefaultFiller<>(new DashaAccessorResolver(
                 null,
@@ -80,6 +118,13 @@ public abstract class Fillers {
         ));
     }
 
+    /**
+     * Method creates filler for filling fields excluding ones selected by field matchers.
+     *
+     * @param fieldMatchers field matchers for excluding fields from filling.
+     * @param <T>           type of object to be created.
+     * @return filler.
+     */
     public static <T> Filler<T> excludes(Collection<? extends FieldMatcher> fieldMatchers) {
         return new DefaultFiller<>(new DashaAccessorResolver(null, fieldMatchers));
     }

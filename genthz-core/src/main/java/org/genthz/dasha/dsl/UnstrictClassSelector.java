@@ -18,11 +18,12 @@
 package org.genthz.dasha.dsl;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Context;
 import org.genthz.context.InstanceContext;
 import org.genthz.function.Selector;
 
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.stream.Stream;
 
@@ -37,6 +38,31 @@ class UnstrictClassSelector extends TypeSelector {
                 super.params(),
                 Stream.of(Parameter.of("type_matching", "unstrict"))
         );
+    }
+
+    @Override
+    public int effective() {
+        return super.effective() + UnstrictClassSelector.effective(this.type);
+    }
+
+    private static int effective(Type type) {
+        final int result;
+
+        if (type instanceof Class) {
+            result = 0;
+        } else if (type instanceof ParameterizedType) {
+            result = Stream.of(((ParameterizedType) type).getActualTypeArguments())
+                    .map(e -> UnstrictClassSelector.effective(e))
+                    .reduce(0, (l, r) -> l + r);
+        } else if (type instanceof GenericArrayType) {
+            result = 1;
+        } else {
+            throw new IllegalStateException(
+                    type + " is a valud type! Must be java.lang.Class, java.lang.reflect.GenericArrayType, java.lang.reflect.ParameterizedType!"
+            );
+        }
+
+        return result;
     }
 
     @Override

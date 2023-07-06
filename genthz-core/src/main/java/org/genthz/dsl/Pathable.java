@@ -17,8 +17,6 @@
  */
 package org.genthz.dsl;
 
-import org.genthz.context.InstanceContext;
-
 /**
  * This class contains methods that make it possible to create context selectors based on the paths.
  *

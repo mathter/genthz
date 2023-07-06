@@ -18,11 +18,9 @@
 package org.genthz.reflection;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.genthz.reflection.GenericUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;

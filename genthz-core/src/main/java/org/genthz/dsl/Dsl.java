@@ -27,6 +27,8 @@ import org.genthz.GenerationProvider;
  * @since 3.0.0
  */
 public interface Dsl extends Pathable, Strictable, Unstricable, Customable {
+    public static final int DEFAULT_USER_DEFINED_METRIC = 0;
+
     /**
      * Method sets {@linkplain Defaults} for newly created generation provider.
      *
@@ -34,6 +36,13 @@ public interface Dsl extends Pathable, Strictable, Unstricable, Customable {
      * @return this object.
      */
     public Dsl defaults(Defaults defaults);
+
+    /**
+     * Method returns {@linkplain Defaults}.
+     *
+     * @return defaults.
+     */
+    public Defaults defaults();
 
     /**
      * Method build new generation provider.

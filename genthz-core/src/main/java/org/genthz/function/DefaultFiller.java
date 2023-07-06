@@ -21,9 +21,6 @@ import org.genthz.ObjectFactory;
 import org.genthz.context.AccessorResolver;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
-import org.genthz.context.Stage;
-
-import java.util.Collection;
 
 public class DefaultFiller<T> implements Filler<T> {
     private final AccessorResolver accessorResolver;

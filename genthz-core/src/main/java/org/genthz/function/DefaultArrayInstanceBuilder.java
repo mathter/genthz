@@ -20,7 +20,6 @@ package org.genthz.function;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.Defaults;
 import org.genthz.ObjectFactory;
-import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.reflection.GenericUtil;
 

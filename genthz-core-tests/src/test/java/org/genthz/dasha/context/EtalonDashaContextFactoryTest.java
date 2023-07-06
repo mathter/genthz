@@ -22,14 +22,10 @@ import org.genthz.context.AccessorResolver;
 import org.genthz.context.ContextFactory;
 import org.genthz.etalon.EtalonContextFactoryTest;
 import org.genthz.function.FieldMatcher;
-import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EtalonDashaContextFactoryTest extends EtalonContextFactoryTest {
     @Override

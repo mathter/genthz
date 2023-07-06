@@ -24,14 +24,10 @@ import org.genthz.context.Bindings;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.context.NodeInstanceContext;
-import org.genthz.dasha.DashaObjectFactory;
 import org.genthz.reflection.GenericUtil;
 import org.genthz.reflection.Util;
-import org.genthz.util.StreamUtil;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -39,9 +35,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DashaContextFactory implements ContextFactory {
     private final GenericUtil genericUtil;

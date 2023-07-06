@@ -21,7 +21,6 @@ import org.genthz.context.Accessor;
 import org.genthz.context.Bindings;
 import org.genthz.context.Context;
 import org.genthz.context.ContextFactory;
-import org.genthz.context.Instance;
 import org.genthz.context.Node;
 import org.genthz.context.NodeInstanceContext;
 
