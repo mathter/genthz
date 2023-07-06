@@ -15,21 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.dasha.context;
+package org.genthz.dasha.function;
 
 import org.genthz.FieldMatchers;
-import org.genthz.context.AccessorResolver;
-import org.genthz.context.ContextFactory;
-import org.genthz.context.InstanceContext;
-import org.genthz.context.Node;
+import org.genthz.ObjectFactory;
+import org.genthz.dasha.dsl.DashaDsl;
 import org.genthz.etalon.model.SimpleGeneric;
 import org.genthz.function.FieldMatcher;
+import org.genthz.reflection.Util;
+import org.genthz.util.StreamUtil;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -40,29 +40,106 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DashaAccessorResolverTest {
-    @Test
-    public void test() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new DashaAccessorResolver(Collections.emptyList(), Collections.emptyList()));
+public class FillersTest {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testIncludesByStringArray(Collection<String> includes, Collection<String> excludes, Set<String> fiedldNames) {
+        final ObjectFactory objectFactory = new DashaDsl() {
+            {
+                this.def();
+
+                if (includes != null) {
+                    this.unstrict(SimpleGeneric.class)
+                            .filler(Fillers.includes(includes.stream().toArray(String[]::new)));
+                } else if (excludes != null) {
+                    this.unstrict(SimpleGeneric.class)
+                            .filler(Fillers.excludes(excludes.stream().toArray(String[]::new)));
+                }
+            }
+        }.objectFactory();
+        final SimpleGeneric instance = objectFactory.get(SimpleGeneric.class, String.class, Integer.class);
+
+        Assertions.assertNotNull(instance);
+
+        for (Field field : StreamUtil.of((Class) SimpleGeneric.class, c -> c.getSuperclass())
+                .flatMap(e -> Stream.of(e.getDeclaredFields()))
+                .collect(Collectors.toList())) {
+            if (fiedldNames.contains(field.getName())) {
+                Assertions.assertNotNull(Util.getFieldValue(field, instance));
+            } else {
+                Assertions.assertNull(Util.getFieldValue(field, instance));
+            }
+        }
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public void test(Collection<FieldMatcher> includes, Collection<FieldMatcher> excludes, Set<String> fiedldNames) {
-        final ContextFactory contextFactory = new DashaContextFactory();
-        final AccessorResolver accessorResolver = new DashaAccessorResolver(includes, excludes);
-        final InstanceContext context = contextFactory.single(SimpleGeneric.class, String.class, Integer.class);
+    public void testIncludesByFieldMatcherArray(Collection<String> includes, Collection<String> excludes, Set<String> fiedldNames) {
+        final ObjectFactory objectFactory = new DashaDsl() {
+            {
+                this.def();
 
-        final Collection<? extends Node<String>> nodes = accessorResolver.resolve(context);
+                if (includes != null) {
+                    this.unstrict(SimpleGeneric.class)
+                            .filler(Fillers.includes(includes.stream()
+                                    .map(FieldMatchers::name)
+                                    .toArray(FieldMatcher[]::new)));
+                } else if (excludes != null) {
+                    this.unstrict(SimpleGeneric.class)
+                            .filler(Fillers.excludes(excludes.stream()
+                                    .map(FieldMatchers::name)
+                                    .toArray(FieldMatcher[]::new)));
+                }
+            }
+        }.objectFactory();
+        final SimpleGeneric instance = objectFactory.get(SimpleGeneric.class, String.class, Integer.class);
 
-        Assertions.assertNotNull(nodes);
-        Assertions.assertEquals(fiedldNames.size(), nodes.size());
+        Assertions.assertNotNull(instance);
 
-        for (Node node : nodes) {
-            Assertions.assertTrue(fiedldNames.remove(node.node()));
+        for (Field field : StreamUtil.of((Class) SimpleGeneric.class, c -> c.getSuperclass())
+                .flatMap(e -> Stream.of(e.getDeclaredFields()))
+                .collect(Collectors.toList())) {
+            if (fiedldNames.contains(field.getName())) {
+                Assertions.assertNotNull(Util.getFieldValue(field, instance));
+            } else {
+                Assertions.assertNull(Util.getFieldValue(field, instance));
+            }
         }
+    }
 
-        Assertions.assertTrue(fiedldNames.isEmpty());
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testIncludesByFieldMatcherCollection(Collection<String> includes, Collection<String> excludes, Set<String> fiedldNames) {
+        final ObjectFactory objectFactory = new DashaDsl() {
+            {
+                this.def();
+
+                if (includes != null) {
+                    this.unstrict(SimpleGeneric.class)
+                            .filler(Fillers.includes(includes.stream()
+                                    .map(e -> (FieldMatcher) FieldMatchers.name(e))
+                                    .collect(Collectors.toList())));
+                } else if (excludes != null) {
+                    this.unstrict(SimpleGeneric.class)
+                            .filler(Fillers.excludes(excludes.stream()
+                                    .map(e -> (FieldMatcher) FieldMatchers.name(e))
+                                    .collect(Collectors.toList())));
+                }
+            }
+        }.objectFactory();
+        final SimpleGeneric instance = objectFactory.get(SimpleGeneric.class, String.class, Integer.class);
+
+        Assertions.assertNotNull(instance);
+
+        for (Field field : StreamUtil.of((Class) SimpleGeneric.class, c -> c.getSuperclass())
+                .flatMap(e -> Stream.of(e.getDeclaredFields()))
+                .collect(Collectors.toList())) {
+            if (fiedldNames.contains(field.getName())) {
+                Assertions.assertNotNull(Util.getFieldValue(field, instance));
+            } else {
+                Assertions.assertNull(Util.getFieldValue(field, instance));
+            }
+        }
     }
 
     public static Stream<Arguments> data() {
@@ -77,7 +154,7 @@ public class DashaAccessorResolverTest {
                         Arguments.of(
                                 Collections.emptyList(),
                                 null,
-                                Collections.<Set<String>>emptySet()
+                                Collections.emptySet()
                         ),
                         Arguments.of(
                                 null,
@@ -106,7 +183,7 @@ public class DashaAccessorResolverTest {
                                 )
                                 .stream()
                                 .map(e -> Arguments.of(
-                                                e.stream().map(ee -> FieldMatchers.name(ee)).collect(Collectors.toList()),
+                                                e,
                                                 null,
                                                 e
                                         )
@@ -132,7 +209,7 @@ public class DashaAccessorResolverTest {
                                 .stream()
                                 .map(e -> Arguments.of(
                                                 null,
-                                                e.stream().map(ee -> FieldMatchers.name(ee)).collect(Collectors.toList()),
+                                                e,
                                                 Optional.of(Stream.of(fieldNames).collect(Collectors.toSet()))
                                                         .map(ee -> {
                                                             ee.removeAll(e);

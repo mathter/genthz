@@ -28,27 +28,11 @@ import java.util.Collection;
 public class DefaultFiller<T> implements Filler<T> {
     private final AccessorResolver accessorResolver;
 
-    private final Collection<String> includes;
-
-    private final Collection<String> excludes;
-
     public DefaultFiller() {
-        this(null, null, null);
+        this(null);
     }
 
-    public DefaultFiller(AccessorResolver accessorResolver, Collection<String> includes, Collection<String> excludes) {
-        if (includes == null || includes.isEmpty() || excludes == null || excludes.isEmpty()) {
-            this.includes = includes;
-            this.excludes = excludes;
-        } else {
-            throw new IllegalArgumentException(
-                    String.format(
-                            "Only one parameter 'includes can be not empty! Now: includes: %s, excludes: %s",
-                            includes,
-                            excludes
-                    )
-            );
-        }
+    public DefaultFiller(AccessorResolver accessorResolver) {
         this.accessorResolver = accessorResolver;
     }
 
