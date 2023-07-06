@@ -39,13 +39,6 @@ public class EtalonDashaContextFactoryTest extends EtalonContextFactoryTest {
 
     @Override
     protected AccessorResolver accessorResolver(Collection<String> includes, Collection<String> excludes) {
-        if (includes != null) {
-            includes.stream()
-                    .<FieldMatcher>map(ee -> FieldMatchers.name(ee))
-                    .peek(e -> System.out.println(e))
-                    .forEach(e -> {
-                    });
-        }
         return new DashaAccessorResolver(
                 Optional.ofNullable(includes)
                         .map(e -> e.stream()

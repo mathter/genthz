@@ -40,26 +40,26 @@ import java.util.stream.Stream;
 public class DashaAccessorResolver implements AccessorResolver {
     private final GenericUtil genericUtil = new GenericUtil(false);
 
-    private final Collection<FieldMatcher> includes;
+    private final Collection<? extends FieldMatcher> includes;
 
-    private final Collection<FieldMatcher> excludes;
+    private final Collection<? extends FieldMatcher> excludes;
 
     public DashaAccessorResolver() {
         this(null, null);
     }
 
-    public DashaAccessorResolver(Collection<FieldMatcher> includes, Collection<FieldMatcher> excludes) {
-        if (includes == null || includes.isEmpty() || excludes == null || excludes.isEmpty()) {
-            this.includes = includes;
-            this.excludes = excludes;
-        } else {
+    public DashaAccessorResolver(Collection<? extends FieldMatcher> includes, Collection<? extends FieldMatcher> excludes) {
+        if (includes != null && excludes != null) {
             throw new IllegalArgumentException(
                     String.format(
-                            "Only one parameter 'includes can be not empty! Now: includes: %s, excludes: %s",
+                            "Only one parameter 'includes can be not null! Now: includes: %s, excludes: %s",
                             includes,
                             excludes
                     )
             );
+        } else {
+            this.includes = includes;
+            this.excludes = excludes;
         }
     }
 

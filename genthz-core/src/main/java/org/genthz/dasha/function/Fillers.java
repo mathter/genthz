@@ -17,42 +17,73 @@
  */
 package org.genthz.dasha.function;
 
-import org.genthz.context.Accessor;
-import org.genthz.context.AccessorResolver;
-import org.genthz.context.InstanceContext;
-import org.genthz.context.Node;
-import org.genthz.context.Typeable;
+import org.genthz.FieldMatchers;
 import org.genthz.dasha.context.DashaAccessorResolver;
 import org.genthz.function.DefaultFiller;
+import org.genthz.function.FieldMatcher;
 import org.genthz.function.Filler;
 
 import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class Fillers {
-    public static <T> Filler<T> include(String... fieldNames) {
-        return new DefaultFiller() {
-            @Override
-            public void fill(InstanceContext context) {
-                super.fill(context);
-            }
-        };
+    public static <T> Filler<T> includes(String... fieldNames) {
+        return new DefaultFiller(
+                Optional.ofNullable(fieldNames)
+                        .map(Stream::of)
+                        .map(e -> e.map(ee -> (FieldMatcher) FieldMatchers.name(ee))
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList()))
+                        .map(e -> new DashaAccessorResolver(e, null))
+                        .orElse(new DashaAccessorResolver())
+
+        );
+    }
+
+    public static <T> Filler<T> includes(FieldMatcher... fieldMatchers) {
+        return new DefaultFiller<>(new DashaAccessorResolver(
+                Optional.ofNullable(fieldMatchers)
+                        .map(Stream::of)
+                        .orElse(Stream.empty())
+                        .collect(Collectors.toList()),
+                null
+        ));
+    }
+
+    public static <T> Filler<T> includes(Collection<? extends FieldMatcher> fieldMatchers) {
+        return new DefaultFiller<>(new DashaAccessorResolver(fieldMatchers, null));
+    }
+
+    public static <T> Filler<T> excludes(String... fieldNames) {
+        return new DefaultFiller(
+                Optional.ofNullable(fieldNames)
+                        .map(Stream::of)
+                        .map(e -> e.map(ee -> (FieldMatcher) FieldMatchers.name(ee))
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList()))
+                        .map(e -> new DashaAccessorResolver(null, e))
+                        .orElse(new DashaAccessorResolver())
+
+        );
+    }
+
+    public static <T> Filler<T> excludes(FieldMatcher... fieldMatchers) {
+        return new DefaultFiller<>(new DashaAccessorResolver(
+                null,
+                Optional.ofNullable(fieldMatchers)
+                        .map(Stream::of)
+                        .orElse(Stream.empty())
+                        .collect(Collectors.toList())
+        ));
+    }
+
+    public static <T> Filler<T> excludes(Collection<? extends FieldMatcher> fieldMatchers) {
+        return new DefaultFiller<>(new DashaAccessorResolver(null, fieldMatchers));
     }
 
     private Fillers() {
-    }
-
-    private static class FlammableAccessorResolver extends DashaAccessorResolver {
-        private final AccessorResolver wrapperd;
-
-        private boolean borned = false;
-
-        public FlammableAccessorResolver(AccessorResolver wrapperd) {
-            this.wrapperd = wrapperd;
-        }
-
-        @Override
-        public <A extends Accessor & Node<String> & Typeable> Collection<A> resolve(InstanceContext up) {
-            return this.borned ? this.wrapperd.resolve(up) : super.resolve(up);
-        }
     }
 }
