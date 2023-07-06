@@ -17,7 +17,6 @@
  */
 package org.genthz.dasha.dsl;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.InstanceContext;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.FillerFirst;
@@ -36,8 +35,6 @@ import org.genthz.function.Selector;
 import org.genthz.function.UnitFiller;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -87,12 +84,12 @@ class PathOp<T> extends SelectorOp<PathOp<T>> implements Pathable, Strictable, U
 
     @Override
     public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs) {
-        return (S) new StrictTypeOp(this, type, genericTypeArgs);
+        return (S) new StrictTypeOp(this, type);
     }
 
     @Override
     public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs) {
-        return (S) new UnstrictTypeOp(this, type, genericTypeArgs);
+        return (S) new UnstrictTypeOp(this, type);
     }
 
     @Override

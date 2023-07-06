@@ -17,7 +17,6 @@
  */
 package org.genthz.dasha.dsl;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.InstanceContext;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.FillerFirst;
@@ -36,15 +35,13 @@ import org.genthz.function.Selector;
 import org.genthz.function.UnitFiller;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 class StrictTypeOp<T> extends TypeOp<StrictTypeOp<T>> implements Pathable, Customable, InstanceBuilderFirst<T>, FillerFirst<T>, Metric<StrictTypeOp<T>>, Using<StrictTypeOp> {
-    public StrictTypeOp(SelectorOp up, Type type, Type... genericTypeArgs) {
-        super(up, type, genericTypeArgs);
+    public StrictTypeOp(SelectorOp up, Type type) {
+        super(up, type);
     }
 
     @Override

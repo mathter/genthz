@@ -24,8 +24,6 @@ import org.genthz.ObjectFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
 import org.genthz.dasha.DashaObjectFactory;
-import org.genthz.function.UnitFiller;
-import org.genthz.logging.Logger;
 import org.genthz.dsl.Customable;
 import org.genthz.dsl.Customs;
 import org.genthz.dsl.Dsl;
@@ -41,6 +39,8 @@ import org.genthz.function.DefaultInstanceBuilder;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
+import org.genthz.function.UnitFiller;
+import org.genthz.logging.Logger;
 import org.genthz.logging.LoggerFactory;
 
 import java.lang.reflect.Type;
@@ -68,7 +68,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class DashaDsl implements Dsl {
     private static final Logger LOG = LoggerFactory.get();
@@ -312,12 +311,12 @@ public class DashaDsl implements Dsl {
 
     @Override
     public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Type type, Type... genericTypeArgs) {
-        return (S) new StrictTypeOp(this.empty, type, genericTypeArgs);
+        return (S) new StrictTypeOp(this.empty, type);
     }
 
     @Override
     public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S unstrict(Type type, Type... genericTypeArgs) {
-        return (S) new UnstrictTypeOp(this.empty, type, genericTypeArgs);
+        return (S) new UnstrictTypeOp(this.empty, type);
     }
 
     @Override
