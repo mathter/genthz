@@ -17,6 +17,7 @@
  */
 package org.genthz.dsl;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.context.InstanceContext;
 
 import java.lang.reflect.Type;
@@ -33,6 +34,13 @@ public interface Strictable {
      * The method is short alias for {@linkplain #strict(Type, Type...)} )}.
      */
     default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S s(Type type, Type... genericTypeArgs) {
+        return this.strict(type, genericTypeArgs);
+    }
+
+    /**
+     * The method is short alias for {@linkplain #strict(Class, Type...)}.
+     */
+    default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S s(Class<T> type, Type... genericTypeArgs) {
         return this.strict(type, genericTypeArgs);
     }
 
@@ -65,6 +73,14 @@ public interface Strictable {
      * @return selector builder.
      */
     default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S strict(Class<T> clazz, Type... genericTypeArgs) {
-        return this.strict((Type) clazz, genericTypeArgs);
+        final S result;
+
+        if (genericTypeArgs == null || genericTypeArgs.length == 0) {
+            result = this.strict((Type) clazz, genericTypeArgs);
+        } else {
+            result = this.strict(TypeUtils.parameterize(clazz, genericTypeArgs));
+        }
+
+        return result;
     }
 }

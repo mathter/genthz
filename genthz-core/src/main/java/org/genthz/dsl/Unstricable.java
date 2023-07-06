@@ -17,6 +17,7 @@
  */
 package org.genthz.dsl;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.genthz.context.InstanceContext;
 
 import java.lang.reflect.Type;
@@ -33,6 +34,13 @@ public interface Unstricable {
      * The method is short alias for {@linkplain #unstrict(Type, Type...)}.
      */
     default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S us(Type type, Type... genericTypeArgs) {
+        return this.unstrict(type, genericTypeArgs);
+    }
+
+    /**
+     * The method is short alias for {@linkplain #unstrict(Class, Type...)}.
+     */
+    default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S us(Class<T> type, Type... genericTypeArgs) {
         return this.unstrict(type, genericTypeArgs);
     }
 
@@ -64,6 +72,14 @@ public interface Unstricable {
      * @return selector builder
      */
     default public <T, S extends Pathable & Customable & InstanceBuilderFirst<T> & FillerFirst<T> & Metric<S> & Using<S>> S unstrict(Class<T> clazz, Type... genericTypeArgs) {
-        return this.unstrict((Type) clazz, genericTypeArgs);
+        final S result;
+
+        if (genericTypeArgs == null || genericTypeArgs.length == 0) {
+            result = this.unstrict((Type) clazz, genericTypeArgs);
+        } else {
+            result = this.unstrict(TypeUtils.parameterize(clazz, genericTypeArgs));
+        }
+
+        return result;
     }
 }
