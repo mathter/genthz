@@ -17,20 +17,8 @@
  */
 package org.genthz.function;
 
-import org.genthz.context.InstanceContext;
+public interface Tail<T> {
+    public InstanceBuilder<T> instanceBuilder();
 
-import java.util.Optional;
-
-public interface Tail<T> extends InstanceBuilder<T>, Filler<T> {
-    @Override
-    default void fill(InstanceContext<T> context) {
-        // Do nothing.
-    }
-
-    public static <T> Tail<T> parent() {
-        return ctx -> Optional.ofNullable(ctx.up())
-                .map(e -> (InstanceContext<T>) e)
-                .map(e -> e.instance())
-                .orElseThrow(() -> new IllegalStateException("There is no parent valid value!"));
-    }
+    public Filler<T> filler();
 }

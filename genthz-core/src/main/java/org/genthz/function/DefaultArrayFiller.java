@@ -18,16 +18,29 @@
 package org.genthz.function;
 
 import org.genthz.ObjectFactory;
+import org.genthz.context.Context;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 
 public class DefaultArrayFiller<T> extends AbstractContainerFiller<T> implements Filler<T> {
     public DefaultArrayFiller() {
-        super();
-    }
+        super(context -> {
+            final int result;
 
-    public DefaultArrayFiller(ContainerSize containerSize) {
-        super(containerSize);
+            if (context instanceof InstanceContext) {
+                final Object container = ((InstanceContext<T[]>) context).get();
+
+                if (container.getClass().isArray()) {
+                    result = ((T[]) container).length;
+                } else {
+                    throw new IllegalStateException(container + " must be an array!");
+                }
+            } else {
+                throw new IllegalStateException("Context must be " + InstanceContext.class.getName() + "! Now: " + context);
+            }
+
+            return result;
+        });
     }
 
     @Override

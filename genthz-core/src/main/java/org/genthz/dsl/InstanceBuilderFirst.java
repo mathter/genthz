@@ -33,6 +33,6 @@ public interface InstanceBuilderFirst<T> {
     public void simple(InstanceBuilder<T> function);
 
     default public void tail(Tail<T> tail) {
-        this.simple(tail);
+        this.instanceBuilder(tail.instanceBuilder()).filler(tail.filler());
     }
 }

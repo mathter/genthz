@@ -24,8 +24,6 @@ import org.genthz.context.InstanceContext;
 import org.genthz.context.NodeInstanceContext;
 import org.genthz.dasha.DashaObjectFactory;
 import org.genthz.dasha.dsl.DashaDsl;
-import org.genthz.function.ContainerSize;
-import org.genthz.function.DefaultsContainerSize;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.UnitFiller;
@@ -198,8 +196,6 @@ public abstract class CollectionFillers {
             F<T, C>,
             I<T, C>,
             S<T> {
-        private static final ContainerSize<InstanceContext> DEFAULT_CONTAINER_SIZE = new DefaultsContainerSize();
-
         private Integer size;
 
         private InstanceBuilder<C> componentInstanceBuilder;
@@ -212,18 +208,6 @@ public abstract class CollectionFillers {
             this.componentFiller = componentFiller;
         }
 
-        public void setSize(Integer size) {
-            this.size = size;
-        }
-
-        public void setComponentInstanceBuilder(InstanceBuilder<C> componentInstanceBuilder) {
-            this.componentInstanceBuilder = componentInstanceBuilder;
-        }
-
-        public void setComponentFiller(Filler<C> componentFiller) {
-            this.componentFiller = componentFiller;
-        }
-
         @Override
         public void fill(InstanceContext context) {
             if (context.get() != null) {
@@ -232,7 +216,7 @@ public abstract class CollectionFillers {
                 final GenerationProvider generationProvider = objectFactory.generationProvider();
 
                 if (this.size == null) {
-                    this.size = DEFAULT_CONTAINER_SIZE.get(context);
+                    this.size = objectFactory.generationProvider().defaults().defaultCollectionSize();
                 }
 
                 if (this.size > 0) {

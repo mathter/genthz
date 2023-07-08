@@ -18,8 +18,6 @@
 package org.genthz.function;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.genthz.Defaults;
-import org.genthz.ObjectFactory;
 import org.genthz.context.InstanceContext;
 import org.genthz.reflection.GenericUtil;
 
@@ -29,25 +27,34 @@ import java.lang.reflect.Type;
 public class DefaultArrayInstanceBuilder<T> implements InstanceBuilder<T> {
     private final GenericUtil genericUtil;
 
+    private ContainerSize<InstanceContext<T>> containerSize;
+
     public DefaultArrayInstanceBuilder() {
         this(new GenericUtil(false));
     }
 
     public DefaultArrayInstanceBuilder(GenericUtil genericUtil) {
+        this(genericUtil, new DefaultsContainerSize());
+    }
+
+    public DefaultArrayInstanceBuilder(ContainerSize<InstanceContext<T>> containerSize) {
+        this(new GenericUtil(false), containerSize);
+    }
+
+    public DefaultArrayInstanceBuilder(GenericUtil genericUtil, ContainerSize<InstanceContext<T>> containerSize) {
         this.genericUtil = genericUtil;
+        this.containerSize = containerSize;
     }
 
     @Override
     public T instance(InstanceContext<T> context) {
         final T instance;
-        final ObjectFactory objectFactory = context.objectFactory();
         final Type type = context.type();
 
         if (TypeUtils.isArrayType(type)) {
-            final Defaults defaults = objectFactory.generationProvider().defaults();
             instance = (T) Array.newInstance(
                     this.genericUtil.getRawClass(null, TypeUtils.getArrayComponentType(type)),
-                    defaults.defaultCollectionSize()
+                    this.containerSize.get(context)
             );
         } else {
             throw new IllegalArgumentException(
