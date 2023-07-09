@@ -17,6 +17,9 @@ import org.genthz.function.UnitFiller;
 
 import java.util.List;
 
+/**
+ * Predefined fillers for arrays.
+ */
 public abstract class ArrayTails {
     /**
      * Method creates a filler for a collection having selected count of an elements.

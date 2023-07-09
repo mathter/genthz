@@ -30,9 +30,10 @@ import org.genthz.function.UnitFiller;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Predefined fillers for collections.
+ * Predefined fillers for {@linkplain Collection}.
  */
 public abstract class CollectionFillers {
     /**
