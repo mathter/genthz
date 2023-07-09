@@ -31,6 +31,8 @@ import java.util.stream.Stream;
 
 /**
  * Predefined filles.
+ *
+ * @since 3.0.3
  */
 public abstract class Fillers {
     /**
@@ -39,6 +41,7 @@ public abstract class Fillers {
      * @param fieldNames field names for filling.
      * @param <T>        type of object to be created.
      * @return filler.
+     * @since 3.0.3
      */
     public static <T> Filler<T> includes(String... fieldNames) {
         return new DefaultFiller(
@@ -59,6 +62,7 @@ public abstract class Fillers {
      * @param fieldMatchers field matchers.
      * @param <T>           type of object to be created.
      * @return filler.
+     * @since 3.0.3
      */
     public static <T> Filler<T> includes(FieldMatcher... fieldMatchers) {
         return new DefaultFiller<>(new DashaAccessorResolver(
@@ -76,6 +80,7 @@ public abstract class Fillers {
      * @param fieldMatchers field matchers.
      * @param <T>           type of object to be created.
      * @return filler.
+     * @since 3.0.3
      */
     public static <T> Filler<T> includes(Collection<? extends FieldMatcher> fieldMatchers) {
         return new DefaultFiller<>(new DashaAccessorResolver(fieldMatchers, null));
@@ -87,6 +92,7 @@ public abstract class Fillers {
      * @param fieldNames field names for excluding from filling.
      * @param <T>        type of object to be created.
      * @return filler.
+     * @since 3.0.3
      */
     public static <T> Filler<T> excludes(String... fieldNames) {
         return new DefaultFiller(
@@ -107,6 +113,7 @@ public abstract class Fillers {
      * @param fieldMatchers field matchers for excluding fields from filling.
      * @param <T>           type of object to be created.
      * @return filler.
+     * @since 3.0.3
      */
     public static <T> Filler<T> excludes(FieldMatcher... fieldMatchers) {
         return new DefaultFiller<>(new DashaAccessorResolver(
@@ -124,6 +131,7 @@ public abstract class Fillers {
      * @param fieldMatchers field matchers for excluding fields from filling.
      * @param <T>           type of object to be created.
      * @return filler.
+     * @since 3.0.3
      */
     public static <T> Filler<T> excludes(Collection<? extends FieldMatcher> fieldMatchers) {
         return new DefaultFiller<>(new DashaAccessorResolver(null, fieldMatchers));

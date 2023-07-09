@@ -1,3 +1,20 @@
+/*
+ * Generated - testing becomes easier
+ *
+ * Copyright (C) 2023 mathter@mail.ru
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.genthz.dasha.function;
 
 import org.genthz.GenerationProvider;
@@ -19,6 +36,8 @@ import java.util.List;
 
 /**
  * Predefined fillers for arrays.
+ *
+ * @since 3.0.3
  */
 public abstract class ArrayTails {
     /**
@@ -27,6 +46,7 @@ public abstract class ArrayTails {
      * @param size count of collection elements.
      * @param <T>  type of collection.
      * @return filler.
+     * @since 3.0.3
      */
     public static <T> S3IF<T> size(int size) {
         return new TailImpl(size, null, null);
@@ -38,6 +58,7 @@ public abstract class ArrayTails {
      * @param function instance builder.
      * @param <T>      type of the collection.
      * @return filler of the collection.
+     * @since 3.0.3
      */
     public static <T> I3SF<T> componentInstanceBuilder(InstanceBuilder<T> function) {
         return new TailImpl(null, function, null);
@@ -49,6 +70,7 @@ public abstract class ArrayTails {
      * @param function instance builder.
      * @param <T>      type of the collection.
      * @return filler of the collection.
+     * @since 3.0.3
      */
     public static <T> I3S<T> componentSimple(InstanceBuilder<T> function) {
         return new TailImpl(null, function, UnitFiller.INSTANCE);
@@ -60,11 +82,15 @@ public abstract class ArrayTails {
      * @param function filler.
      * @param <T>      type of the collection.
      * @return filler of the collection.
+     * @since 3.0.3
      */
     public static <T> F3SI<T> componentFiller(Filler<T> function) {
         return new TailImpl(null, null, function);
     }
 
+    /**
+     * @since 3.0.3
+     */
     public interface S3IF<T> extends Tail<T[]> {
         /**
          * Method creates a filler which create an instances of collection components using selected {@linkplain InstanceBuilder}.
@@ -91,6 +117,9 @@ public abstract class ArrayTails {
         public I<T> componentFiller(Filler<T> function);
     }
 
+    /**
+     * @since 3.0.3
+     */
     public interface I3SF<T> extends Tail<T[]> {
         /**
          * Method creates a filler for a collection having selected count of an elements.
@@ -109,6 +138,9 @@ public abstract class ArrayTails {
         public S<T> componentFiller(Filler<T> function);
     }
 
+    /**
+     * @since 3.0.3
+     */
     public interface F3SI<T> extends Tail<T[]> {
         /**
          * Method creates a filler for a collection having selected count of an elements.
@@ -127,6 +159,9 @@ public abstract class ArrayTails {
         public S<T> componentInstanceBuilder(InstanceBuilder<T> function);
     }
 
+    /**
+     * @since 3.0.3
+     */
     public interface I3S<T> extends Tail<T[]> {
         /**
          * Method creates a filler for a collection having selected count of an elements.
@@ -137,6 +172,9 @@ public abstract class ArrayTails {
         public F<T> size(int size);
     }
 
+    /**
+     * @since 3.0.3
+     */
     public interface I<T> extends Tail<T[]> {
         /**
          * Method creates a filler which create an instances of collection components using selected {@linkplain InstanceBuilder}.
@@ -147,6 +185,9 @@ public abstract class ArrayTails {
         public Tail<T[]> componentInstanceBuilder(InstanceBuilder<T> function);
     }
 
+    /**
+     * @since 3.0.3
+     */
     public interface F<T> extends Tail<T[]> {
         /**
          * Methods creates a filler which creates an instance of collection components using selected {@linkplain Filler}.
@@ -157,6 +198,9 @@ public abstract class ArrayTails {
         public Tail<T[]> componentFiller(Filler<T> function);
     }
 
+    /**
+     * @since 3.0.3
+     */
     public interface S<T> extends Tail<T[]> {
         /**
          * Method creates a filler for a collection having selected count of an elements.
@@ -167,6 +211,9 @@ public abstract class ArrayTails {
         public Tail<T[]> size(int size);
     }
 
+    /**
+     * @since 3.0.3
+     */
     private static class TailImpl<T> implements Tail<T[]>, S3IF<T>, I3SF<T>, F3SI<T>, I3S<T>, S<T>, I<T>, F<T> {
         private ContainerSize<InstanceContext<T[]>> containerSize;
 
