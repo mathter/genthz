@@ -17,8 +17,6 @@
  */
 package org.genthz.context;
 
-import java.lang.reflect.Type;
-
 /**
  * This class is context which have value.
  *

@@ -71,9 +71,10 @@ import java.util.function.Predicate;
 
 public class DashaDsl implements Dsl {
     private static final Logger LOG = LoggerFactory.get();
+
     public static final int DEFAULT_BASE = Integer.MIN_VALUE;
 
-    public static final int DEFAULT_METRIC = 0;
+    public static final int DEFAULT_METRIC = DEFAULT_BASE + 1000;
 
     public static final int DEFAULT_COLLECTION_METRIC_LEV_0 = DEFAULT_METRIC;
 
@@ -123,6 +124,11 @@ public class DashaDsl implements Dsl {
     public DashaDsl defaults(Defaults defaults) {
         this.defaults = defaults != null ? defaults : new DashaDefaults();
         return this;
+    }
+
+    @Override
+    public Defaults defaults() {
+        return this.defaults;
     }
 
     public DashaDsl def() {

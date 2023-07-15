@@ -15,16 +15,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.genthz.dasha.dsl;
+package org.genthz.dasha.function;
 
-import org.genthz.GenerationProvider;
-import org.genthz.ObjectFactory;
-import org.genthz.dasha.DashaObjectFactory;
-import org.genthz.etalon.EtalonConstructorObjectFactoryTest;
+import org.genthz.function.DefaultMapFiller;
+import org.genthz.function.Filler;
 
-public class EtalonConstructorDashaObjectFactoryTest extends EtalonConstructorObjectFactoryTest {
-    @Override
-    public ObjectFactory objectFactory(GenerationProvider generationProvider) {
-        return new DashaObjectFactory(generationProvider);
+import java.util.Map;
+
+/**
+ * Predefined fillers for {@linkplain Map}.
+ *
+ * @since 3.0.3
+ */
+public abstract class MapFillers {
+    /**
+     * Method creates a filler for a map having selected count of an elements.
+     *
+     * @param size count of collection elements.
+     * @param <T>  type of map.
+     * @return filler.
+     * @since 3.0.3
+     */
+    public static <T extends Map> Filler<T> size(int size) {
+        return new DefaultMapFiller(context -> size);
+    }
+
+    private MapFillers() {
     }
 }

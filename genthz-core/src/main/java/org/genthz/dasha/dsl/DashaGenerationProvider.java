@@ -22,10 +22,10 @@ import org.genthz.Defaults;
 import org.genthz.GenerationProvider;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
-import org.genthz.logging.Logger;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
+import org.genthz.logging.Logger;
 import org.genthz.logging.LoggerFactory;
 
 import java.util.Collection;

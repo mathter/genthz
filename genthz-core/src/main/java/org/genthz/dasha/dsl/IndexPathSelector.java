@@ -21,7 +21,6 @@ import org.genthz.context.Context;
 import org.genthz.context.NodeInstanceContext;
 import org.genthz.function.Selector;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 class IndexPathSelector extends PathSelector {

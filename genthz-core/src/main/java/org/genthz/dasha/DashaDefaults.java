@@ -26,11 +26,8 @@ import org.genthz.function.DefaultCollectionFiller;
 import org.genthz.function.DefaultMapFiller;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
-import org.genthz.function.InstanceBuilder;
 import org.genthz.reflection.GenericUtil;
 
-import javax.script.Bindings;
-import javax.script.SimpleBindings;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;

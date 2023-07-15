@@ -17,12 +17,10 @@
  */
 package org.genthz.dasha.dsl;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.context.Context;
 import org.genthz.context.InstanceContext;
 import org.genthz.function.Selector;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
 import java.util.stream.Stream;
