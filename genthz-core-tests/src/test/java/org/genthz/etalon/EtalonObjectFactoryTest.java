@@ -3,6 +3,7 @@ package org.genthz.etalon;
 import org.genthz.ObjectFactory;
 import org.genthz.etalon.model.Simple;
 import org.genthz.etalon.model.SimpleGeneric;
+import org.genthz.etalon.model.TestEnum;
 import org.genthz.util.StreamUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -62,6 +63,30 @@ public abstract class EtalonObjectFactoryTest extends AbstractEtalonObjectFactor
             Assertions.assertNotNull(e);
             Assertions.assertEquals(String.class, e.getClass());
         });
+    }
+
+    @Test
+    @DisplayName("Enum generation test")
+    public void testEnum() {
+        final TestEnum value = this.objectFactory().get(TestEnum.class);
+        Assertions.assertNotNull(value);
+    }
+
+    @Test
+    @DisplayName("Stream generation test.")
+    public void testStream() {
+        final Stream<String> value = this.objectFactory().get(Stream.class, String.class);
+        Assertions.assertNotNull(value);
+
+        long count = value
+                .peek(e -> {
+                    Assertions.assertTrue(e instanceof String);
+                    Assertions.assertNotNull(e);
+                })
+                .map(e -> 1)
+                .count();
+
+        Assertions.assertEquals(this.objectFactory().generationProvider().defaults().defaultCollectionSize(), count);
     }
 
     @ParameterizedTest
@@ -190,7 +215,7 @@ public abstract class EtalonObjectFactoryTest extends AbstractEtalonObjectFactor
     }
 
     public static class Recursion {
-        private  Recursion next;
+        private Recursion next;
 
         public Recursion getNext() {
             return next;

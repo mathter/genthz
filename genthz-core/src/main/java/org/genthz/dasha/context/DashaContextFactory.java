@@ -40,7 +40,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class DashaContextFactory implements ContextFactory {
@@ -154,6 +159,26 @@ public class DashaContextFactory implements ContextFactory {
         }
 
         return result;
+    }
+
+    @Override
+    public <T extends Stream, E> Stream<NodeInstanceContext<E, Integer>> byStream(InstanceContext<T> up, Stream<Integer> indexStream) {
+        final Type upType = up.type();
+        final Map<TypeVariable<?>, Type> variableTypeMap = this.genericUtil.getActualTypeArguments(upType);
+        variableTypeMap.putAll(TypeUtils.getTypeArguments(upType, Stream.class));
+
+        return indexStream
+                .map(index -> {
+                    final NodeObjectInstanceAccessor accessor = new NodeObjectInstanceAccessor(index);
+
+                    return new DashaNodeInstanceContext(
+                            this,
+                            accessor,
+                            up,
+                            Util.unrollType(variableTypeMap, Stream.class.getTypeParameters()[0]),
+                            accessor
+                    );
+                });
     }
 
     @Override
