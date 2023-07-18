@@ -24,6 +24,10 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * This class contains several methods for context creation.
@@ -91,6 +95,8 @@ public interface ContextFactory {
      * @return list of the contexts.
      */
     public <T, E> List<NodeInstanceContext<E, Integer>> byArray(InstanceContext<T> up, int count);
+
+    public <T extends Stream, E> Stream<NodeInstanceContext<E, Integer>> byStream(InstanceContext<T> up, Stream<Integer> indexStream);
 
     /**
      * Method returns {@linkplain Collection} of the contexts for fields of the parent type.

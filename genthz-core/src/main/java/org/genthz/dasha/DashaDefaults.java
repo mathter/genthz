@@ -23,9 +23,13 @@ import org.genthz.context.Context;
 import org.genthz.function.DefaultArrayFiller;
 import org.genthz.function.DefaultArrayInstanceBuilder;
 import org.genthz.function.DefaultCollectionFiller;
+import org.genthz.function.DefaultEnumBuilder;
 import org.genthz.function.DefaultMapFiller;
+import org.genthz.function.DefaultStreamBuilder;
 import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
+import org.genthz.function.InstanceBuilder;
+import org.genthz.function.UnitFiller;
 import org.genthz.reflection.GenericUtil;
 
 import java.math.BigDecimal;
@@ -57,6 +61,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class DashaDefaults implements Defaults {
     @Override
@@ -71,6 +76,8 @@ public class DashaDefaults implements Defaults {
     private final Filler<?> defaultArrayFiller = new DefaultArrayFiller<>();
 
     private final Filler<? extends Map> defaultMapFiller = new DefaultMapFiller();
+
+    private final InstanceBuilder defaultStreamInstanceBuilder = new DefaultStreamBuilder();
 
     private int defaultCollectionSize = 5;
 
@@ -237,6 +244,16 @@ public class DashaDefaults implements Defaults {
     @Override
     public Filler<?> defArrayFiller() {
         return this.defaultArrayFiller;
+    }
+
+    @Override
+    public <T extends Enum<T>> InstanceBuilder<T> defEnumInstanceBuilder() {
+        return new DefaultEnumBuilder<>();
+    }
+
+    @Override
+    public <T, S extends Stream<T>> InstanceBuilder<S> defStreamInstanceBuilder() {
+        return this.defaultStreamInstanceBuilder;
     }
 
     @Override

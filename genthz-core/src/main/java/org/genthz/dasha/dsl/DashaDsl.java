@@ -68,6 +68,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class DashaDsl implements Dsl {
     private static final Logger LOG = LoggerFactory.get();
@@ -271,6 +272,14 @@ public class DashaDsl implements Dsl {
                     .m(DEFAULT_COLLECTION_METRIC_LEV_0)
                     .ib(this.defaults.defArrayInstanceBuilder())
                     .f(this.defaults.defArrayFiller());
+
+            this.unstrict(Stream.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_0)
+                    .simple(this.defaults.defStreamInstanceBuilder());
+
+            this.unstrict(Enum.class)
+                    .m(DEFAULT_COLLECTION_METRIC_LEV_0)
+                    .simple(this.defaults.defEnumInstanceBuilder());
 
             this.unstrict(Map.class)
                     .m(DEFAULT_COLLECTION_METRIC_LEV_0)
