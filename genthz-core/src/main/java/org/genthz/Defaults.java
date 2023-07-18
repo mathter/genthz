@@ -42,6 +42,7 @@ import java.util.SortedMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * This class represents same information for generation class instances, for
@@ -267,6 +268,23 @@ public interface Defaults {
      * @return filler.
      */
     public <T> Filler defArrayFiller();
+
+    /**
+     * Method returns default instance builder for {@linkplain Enum}.
+     *
+     * @param <T> type of the enum.
+     * @return instance builder.
+     */
+    public <T extends Enum<T>> InstanceBuilder<T> defEnumInstanceBuilder();
+
+    /**
+     * Method returns default instance builder for {@linkplain Stream}.
+     *
+     * @param <T> type of the stream elements.
+     * @param <S> stream type.
+     * @return instance builder.
+     */
+    public <T, S extends Stream<T>> InstanceBuilder<S> defStreamInstanceBuilder();
 
     /**
      * Method returns default instance builder for {@linkplain Map}.
