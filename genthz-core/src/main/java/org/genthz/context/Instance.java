@@ -20,7 +20,7 @@ package org.genthz.context;
 /**
  * This class is used to access to the value.
  *
- * @param <T>
+ * @param <T> type of the instance.
  */
 public interface Instance<T> {
     /**

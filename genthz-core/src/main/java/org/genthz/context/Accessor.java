@@ -21,7 +21,7 @@ package org.genthz.context;
  * This class contains saveral methods for access to the class instance and control stage
  * of the instance creation process.
  *
- * @param <T>
+ * @param <T> type of the gnerated instance.
  */
 public interface Accessor<T> {
     public Stage stage();
@@ -31,7 +31,7 @@ public interface Accessor<T> {
     /**
      * The method returns value.
      *
-     * @return
+     * @return instance.
      */
     public T get();
 

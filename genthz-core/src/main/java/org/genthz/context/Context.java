@@ -54,7 +54,7 @@ public interface Context {
     /**
      * Method returns {@linkplain Bindings} for this context.
      *
-     * @return
+     * @return bindings.
      */
     public Bindings bindings();
 
@@ -68,7 +68,7 @@ public interface Context {
     /**
      * This method sets object factory for this context.
      *
-     * @param objectFactory
+     * @param objectFactory object factory that handles this context.
      */
     public void objectFactory(ObjectFactory objectFactory);
 }

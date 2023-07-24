@@ -31,7 +31,7 @@ public interface Bindings {
     /**
      * This method returns parent bindings. Can return {@code empty}.
      *
-     * @return
+     * @return optional with parent bindings.
      */
     public Optional<Bindings> up();
 

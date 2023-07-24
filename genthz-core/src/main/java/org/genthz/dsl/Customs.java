@@ -36,7 +36,7 @@ public final class Customs {
      * The method returns a {@linkplain Predicate} that verifies that the class represents an array.
      *
      * @param <T> type represented by InstantContext.
-     * @return
+     * @return predicate.
      */
     public static <T> Predicate<InstanceContext<T>> isArray() {
         return ctx -> ctx instanceof InstanceContext
