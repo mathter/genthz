@@ -32,7 +32,7 @@ public interface Node<N> {
     /**
      * Method returns node.
      *
-     * @return
+     * @return value of the node.
      */
     public N node();
 }

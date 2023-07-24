@@ -40,10 +40,11 @@ public interface Pathable {
      *     }
      *
      *     Dsl dsl = new DashaDsl()
-     *          .defs()                         // create default rules for object creation.
-     *          .strict(TestClass.class)        // matche only TestClass.class
+     *          .defs();                         // create default rules for object creation.
+     *
+     *          dsl.strict(TestClass.class)     // matche only TestClass.class
      *          .path("myField")                // matche fiedls with name "myField"
-     *          .simple(ctx -> "My value");     // create instance builder with fixed generated value: "My values"
+     *          .simple(ctx -&gt; "My value");     // create instance builder with fixed generated value: "My values"
      * </pre>
      *
      * @param path path.

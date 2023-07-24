@@ -52,7 +52,7 @@ public interface Strictable {
      *      Dsl dsl = new DashaDsl()
      *          .defs()                                     // create default rules for object creation.
      *          .strict(String.class)                       // matche only String.class
-     *          .simple(ctx -> "This is a test string");    // create instance builder with fixed generated value: "This is a test string"
+     *          .simple(ctx -&gt; "This is a test string");    // create instance builder with fixed generated value: "This is a test string"
      * </pre>
      *
      * @param type            type of the path element.
