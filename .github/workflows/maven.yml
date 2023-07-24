@@ -35,14 +35,6 @@ jobs:
         server-password: OSSRH_TOKEN # env variable for token in deploy
         gpg-private-key: ${{ secrets.GPG_KEY }} # Value of the GPG private key to import
         gpg-passphrase: GPG_PASSPHRASE # env variable for GPG private key passphrase
-    - name: Configure git
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git config --global user.email "mathter@mail.ru"
-        git config --global user.name "auto.mathter"
-        git remote remove origin
-        # git remote add origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
     - name: Build with Maven
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
@@ -51,4 +43,4 @@ jobs:
       run: |
         echo ${OSSRH_USERNAME}
         cat /home/runner/.m2/settings.xml
-        mvn -B clean deploy -P release
+        mvn -B clean package gpg:sign deploy -P release
