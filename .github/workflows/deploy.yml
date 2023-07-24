@@ -1,10 +1,7 @@
 name: Deploy with Maven
 
 on:
-  push:
-    branches: [ "actiontest" ]
-  pull_request:
-    branches: [ "actiontest" ]
+  workflow_dispatch
 permissions:
   actions: write
   repository-projects: write
