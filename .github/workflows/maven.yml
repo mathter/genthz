@@ -51,4 +51,4 @@ jobs:
       run: |
         echo ${OSSRH_USERNAME}
         cat /home/runner/.m2/settings.xml
-        mvn -B clean package javadoc:javadoc -P release
+        mvn -B clean deploy -P release
