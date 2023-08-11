@@ -33,7 +33,11 @@ import org.genthz.function.Filler;
 import org.genthz.function.InstanceBuilder;
 import org.genthz.function.Selector;
 import org.genthz.function.UnitFiller;
+import org.genthz.reflection.reference.GetMethodReference;
+import org.genthz.reflection.reference.ReferenceUtil;
+import org.genthz.reflection.reference.SetMethodReference;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -55,6 +59,24 @@ public class CustomOps<T> extends SelectorOp<CustomOps<T>> implements Pathable, 
     @Override
     public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(String path) {
         return (S) new PathOp(this, path);
+    }
+
+    @Override
+    public <S extends Pathable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(GetMethodReference reference) {
+        final Method method = ReferenceUtil.method(reference);
+        final String name = ReferenceUtil.propertyName(method);
+        final Type type = method.getReturnType();
+
+        return (S) new PathOp(this, name).strict(type);
+    }
+
+    @Override
+    public <S extends Pathable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(SetMethodReference reference) {
+        final Method method = ReferenceUtil.method(reference);
+        final String name = ReferenceUtil.propertyName(method);
+        final Type type = method.getGenericParameterTypes()[0];
+
+        return (S) new PathOp(this, name).strict(type);
     }
 
     @Override

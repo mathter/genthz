@@ -22,6 +22,8 @@ import org.genthz.dasha.dsl.DashaDsl;
 import org.genthz.dsl.Dsl;
 import org.genthz.etalon.model.SimpleGeneric2;
 import org.genthz.etalon.model.SimpleTestModel;
+import org.genthz.reflection.reference.GetMethodReference;
+import org.genthz.reflection.reference.SetMethodReference;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -46,6 +48,36 @@ public abstract class EtalonPathObjectFactoryTest extends AbstractEtalonObjectFa
 
     private static Stream<Arguments> data() {
         return Stream.of(
+                Arguments.of(
+                        Optional.of(new DashaDsl().def())
+                                .map(e -> {
+                                    e.path((GetMethodReference<SimpleTestModel, String>) SimpleTestModel::getName)
+                                            .simple(ctx -> "Name");
+                                    return e;
+                                })
+                                .get(),
+                        (Consumer<SimpleTestModel>) e -> {
+                            Assertions.assertNotNull(e);
+                            Assertions.assertEquals("Name", e.getName());
+                        },
+                        SimpleTestModel.class,
+                        null
+                ),
+                Arguments.of(
+                        Optional.of(new DashaDsl().def())
+                                .map(e -> {
+                                    e.path((SetMethodReference<SimpleTestModel, String>) SimpleTestModel::setName)
+                                            .simple(ctx -> "Name");
+                                    return e;
+                                })
+                                .get(),
+                        (Consumer<SimpleTestModel>) e -> {
+                            Assertions.assertNotNull(e);
+                            Assertions.assertEquals("Name", e.getName());
+                        },
+                        SimpleTestModel.class,
+                        null
+                ),
                 Arguments.of(
                         Optional.of(new DashaDsl().def())
                                 .map(e -> {

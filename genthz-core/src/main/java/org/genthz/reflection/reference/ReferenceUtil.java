@@ -18,11 +18,16 @@
 package org.genthz.reflection.reference;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.genthz.FieldMatchers;
+import org.genthz.function.FieldMatcher;
 
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ReferenceUtil {
@@ -89,5 +94,26 @@ public class ReferenceUtil {
         }
 
         return null;
+    }
+
+    public static String propertyName(Method method) {
+        final String result;
+        final Class<?> declaring = method.getDeclaringClass();
+
+        try {
+            result = Optional.of(Introspector.getBeanInfo(declaring))
+                    .map(e -> Stream.of(e.getPropertyDescriptors()))
+                    .orElse(Stream.empty())
+                    .filter(e -> method.equals(e.getReadMethod()) || method.equals(e.getWriteMethod()))
+                    .map(PropertyDescriptor::getName)
+                    .findFirst()
+                    .get();
+        } catch (Exception e) {
+            throw new IllegalStateException(
+                    String.format("Can't get property name from method %s!", method),
+                    e);
+        }
+
+        return result;
     }
 }
