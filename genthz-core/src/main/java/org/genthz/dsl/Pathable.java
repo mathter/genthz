@@ -17,6 +17,9 @@
  */
 package org.genthz.dsl;
 
+import org.genthz.reflection.reference.GetMethodReference;
+import org.genthz.reflection.reference.SetMethodReference;
+
 /**
  * This class contains methods that make it possible to create context selectors based on the paths.
  *
@@ -32,7 +35,7 @@ public interface Pathable {
     }
 
     /**
-     * Creates selector builder pased on paths. Fields, indexes of collection elements or arrays can be used.
+     * Creates selector builder based on paths. Fields, indexes of collection elements or arrays can be used.
      * <pre>
      *     public class TestClass {
      *         private String myField;
@@ -40,11 +43,11 @@ public interface Pathable {
      *     }
      *
      *     Dsl dsl = new DashaDsl()
-     *          .defs();                         // create default rules for object creation.
+     *          .defs();                        // create default rules for object creation.
      *
-     *          dsl.strict(TestClass.class)     // matche only TestClass.class
-     *          .path("myField")                // matche fiedls with name "myField"
-     *          .simple(ctx -&gt; "My value");     // create instance builder with fixed generated value: "My values"
+     *     dsl.strict(TestClass.class)     // matche only TestClass.class
+     *        .path("myField")                // matche fiedls with name "myField"
+     *        .simple(ctx -&gt; "My value");     // create instance builder with fixed generated value: "My values"
      * </pre>
      *
      * @param path path.
@@ -52,4 +55,56 @@ public interface Pathable {
      * @return selector builder.
      */
     public <S extends Pathable & Strictable & Unstricable & Customable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(String path);
+
+    /**
+     * Creates selector builder based on path described by method parameters.
+     * Next two calls are equivalent:
+     * <pre>
+     *     public class TestClass {
+     *          private String myField;
+     *
+     *          public String getMyField() {
+     *              return this.myField;
+     *          }
+     *          ...
+     *     }
+     *
+     *     Dsl dsl = new DashaDsl()
+     *          .defs();                                    // create default rules for object creation.
+     *
+     *          dsl.path(TestClass::getMyField);            // (1) first form.
+     *          dsl.path("myField").strict(String.class);   // (2) second form are equivalent to (1) first one.
+     * </pre>
+     *
+     * @param reference method reference.
+     * @param <S>       type of selector builder.
+     * @return selector builder.
+     */
+    public <S extends Pathable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(final GetMethodReference reference);
+
+    /**
+     * Creates selector builder based on path described by method parameters.
+     * Next two calls are equivalent:
+     * <pre>
+     *     public class TestClass {
+     *          private String myField;
+     *
+     *          public String setMyField() {
+     *              return this.myField;
+     *          }
+     *          ...
+     *     }
+     *
+     *     Dsl dsl = new DashaDsl()
+     *          .defs();                                    // create default rules for object creation.
+     *
+     *          dsl.path(TestClass::setMyField);            // (1) first form.
+     *          dsl.path("myField").strict(String.class);   // (2) second form are equivalent to (1) first one.
+     * </pre>
+     *
+     * @param reference method reference.
+     * @param <S>       type of selector builder.
+     * @return selector builder.
+     */
+    public <S extends Pathable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(SetMethodReference reference);
 }

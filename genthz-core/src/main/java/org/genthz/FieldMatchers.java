@@ -29,19 +29,7 @@ public class FieldMatchers {
         final F result;
         final Class<?> declaring = method.getDeclaringClass();
 
-        try {
-            result = (F) Optional.of(Introspector.getBeanInfo(declaring))
-                    .map(e -> Stream.of(e.getPropertyDescriptors()))
-                    .orElse(Stream.empty())
-                    .filter(e -> method.equals(e.getReadMethod()) || method.equals(e.getWriteMethod()))
-                    .map(e -> new FieldMatcherImpl(null, null, e.getName()))
-                    .findFirst()
-                    .get();
-        } catch (Exception e) {
-            throw new IllegalStateException(
-                    String.format("Can't build FieldMatcher from method %s!", method),
-                    e);
-        }
+        result = (F) new FieldMatcherImpl(null, null, ReferenceUtil.propertyName(method));
 
         return result;
     }
