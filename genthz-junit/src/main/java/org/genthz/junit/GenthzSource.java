@@ -11,11 +11,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @GenthzSource is an {@linkplain ArgumentsSource} which provides access to values returned by {@linkplain #objectFactory()}.
+ * This annotation is an {@linkplain ArgumentsSource} which provides access to values returned by {@linkplain #objectFactoryProvider()}.
  * If test method is annotated with annotation {@linkplain GenthzSource} annotation {@linkplain GenthzParameter} can be used
  * to annotate the parameters of this test method.
- *
  * <pre>
+ * {@code
  * public class MyTest {
  *      @ParameterizedTest
  *      @GenthzSource
@@ -25,9 +25,10 @@ import java.lang.annotation.Target;
  * }
  *
  * public class CustomInstanceBuilder implements InstanceBuilder<String> {
- *      public String instance(InstanceContext<T> context) {
+ *      public String instance(InstanceContext<String> context) {
  *          return "String value";
  *      }
+ * }
  * }
  * </pre>
  * @since 3.1.0
