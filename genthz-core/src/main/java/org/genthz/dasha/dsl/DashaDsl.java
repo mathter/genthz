@@ -21,6 +21,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.genthz.Defaults;
 import org.genthz.GenerationProvider;
 import org.genthz.ObjectFactory;
+import org.genthz.ObjectFactoryProvider;
 import org.genthz.context.InstanceContext;
 import org.genthz.dasha.DashaDefaults;
 import org.genthz.dasha.DashaObjectFactory;
@@ -74,7 +75,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class DashaDsl implements Dsl {
+public class DashaDsl implements Dsl, ObjectFactoryProvider {
     private static final Logger LOG = LoggerFactory.get();
 
     public static final int DEFAULT_BASE = Integer.MIN_VALUE;
@@ -388,6 +389,7 @@ public class DashaDsl implements Dsl {
         );
     }
 
+    @Override
     public ObjectFactory objectFactory() {
         return new DashaObjectFactory(this.build());
     }
