@@ -10,6 +10,7 @@
         <module>genthz-core</module>
         <module>genthz-logging-slf4j</module>
         <module>genthz-core-tests</module>
+        <module>genthz-junit</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -105,6 +106,11 @@
             <dependency>
                 <groupId>org.genthz</groupId>
                 <artifactId>genthz-logging-slf4j</artifactId>
+                <version>3.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.genthz</groupId>
+                <artifactId>genthz-junit</artifactId>
                 <version>3.1.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
