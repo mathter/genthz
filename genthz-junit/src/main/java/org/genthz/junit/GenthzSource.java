@@ -15,20 +15,18 @@ import java.lang.annotation.Target;
  * If test method is annotated with annotation {@linkplain GenthzSource} annotation {@linkplain GenthzParameter} can be used
  * to annotate the parameters of this test method.
  * <pre>
- * {@code
  * public class MyTest {
- *      @ParameterizedTest
- *      @GenthzSource
- *      public void test(@GenthzParameter(instanceBuilder = CustomInstanceBuilder.class) String name) {
+ *     {@literal @}ParameterizedTest
+ *     {@literal @}GenthzSource
+ *      public void test({@literal @}GenthzParameter(instanceBuilder = CustomInstanceBuilder.class) String name) {
  *          ...
  *      }
  * }
  *
- * public class CustomInstanceBuilder implements InstanceBuilder<String> {
- *      public String instance(InstanceContext<String> context) {
+ * public class CustomInstanceBuilder implements InstanceBuilder&lt;String&gt; {
+ *      public String instance(InstanceContext&lt;String&gt; context) {
  *          return "String value";
  *      }
- * }
  * }
  * </pre>
  * @since 3.1.0
