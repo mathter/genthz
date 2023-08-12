@@ -35,6 +35,15 @@ public class GenthzSourceTest {
         Assertions.assertEquals(INTEGER_VALUE, value.getIntegerValue());
     }
 
+    @ParameterizedTest
+    @GenthzSource
+    public void testGenthzParameter2(@GenthzParameter(instanceBuilder = TestInstanceBuilder.class) Model value) {
+        Assertions.assertNotNull(value.getStringValue());
+        Assertions.assertNotEquals(STRING_VALUE, value.getStringValue());
+        Assertions.assertNotNull(value.getIntegerValue());
+        Assertions.assertNotEquals(INTEGER_VALUE, value.getIntegerValue());
+    }
+
     public static class TestInstanceBuilder implements InstanceBuilder<Model> {
         @Override
         public Model instance(InstanceContext<Model> context) {
