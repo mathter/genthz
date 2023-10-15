@@ -77,11 +77,13 @@ public interface Pathable {
      * </pre>
      *
      * @param reference method reference.
+     * @param <O> type of parent object.
+     * @param <F> type of the field.
      * @param <S>       type of selector builder.
      * @return selector builder.
      * @since 3.0.3
      */
-    public <S extends Pathable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(final GetMethodReference reference);
+    public <O, F, S extends Pathable & InstanceBuilderFirst<F> & FillerFirst<F> & Metric<S> & Using<S>> S path(GetMethodReference<O, F> reference);
 
     /**
      * Creates selector builder based on path described by method parameters.
@@ -104,9 +106,11 @@ public interface Pathable {
      * </pre>
      *
      * @param reference method reference.
+     * @param <O> type of parent object.
+     * @param <F> type of the field.
      * @param <S>       type of selector builder.
      * @return selector builder.
      * @since 3.0.3
      */
-    public <S extends Pathable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(SetMethodReference reference);
+    public <O, F, S extends Pathable & InstanceBuilderFirst<F> & FillerFirst<F> & Metric<S> & Using<S>> S path(SetMethodReference<O, F> reference);
 }

@@ -64,7 +64,7 @@ class UnstrictTypeOp<T> extends TypeOp<UnstrictTypeOp<T>> implements Pathable, C
     }
 
     @Override
-    public <S extends Pathable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(GetMethodReference reference) {
+    public <O, F, S extends Pathable & InstanceBuilderFirst<F> & FillerFirst<F> & Metric<S> & Using<S>> S path(GetMethodReference<O, F> reference) {
         final Method method = ReferenceUtil.method(reference);
         final String name = ReferenceUtil.propertyName(method);
         final Type type = method.getReturnType();
@@ -73,7 +73,7 @@ class UnstrictTypeOp<T> extends TypeOp<UnstrictTypeOp<T>> implements Pathable, C
     }
 
     @Override
-    public <S extends Pathable & InstanceBuilderFirst & FillerFirst & Metric<S> & Using<S>> S path(SetMethodReference reference) {
+    public <O, F, S extends Pathable & InstanceBuilderFirst<F> & FillerFirst<F> & Metric<S> & Using<S>> S path(SetMethodReference<O, F> reference) {
         final Method method = ReferenceUtil.method(reference);
         final String name = ReferenceUtil.propertyName(method);
         final Type type = method.getGenericParameterTypes()[0];

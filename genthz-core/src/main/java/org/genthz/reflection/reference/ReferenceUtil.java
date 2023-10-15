@@ -20,6 +20,7 @@ package org.genthz.reflection.reference;
 import org.apache.commons.lang3.ObjectUtils;
 import org.genthz.FieldMatchers;
 import org.genthz.function.FieldMatcher;
+import org.genthz.reflection.Util;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -36,7 +37,20 @@ public class ReferenceUtil {
             try {
                 final Method writeReplace = clazz.getDeclaredMethod("writeReplace");
                 writeReplace.setAccessible(true);
-                final Object replacement = writeReplace.invoke(reference);
+                final Object replacement = Util.apply(writeReplace, method ->
+                        {
+                            try {
+                                return method.invoke(reference);
+                            } catch (ReflectiveOperationException e) {
+                                throw new IllegalStateException(
+                                        String.format(
+                                                "Can't get java.lang.reflect.Method from reference %s!",
+                                                reference
+                                        ),
+                                        e);
+                            }
+                        }
+                );
 
                 if (replacement instanceof SerializedLambda) {
                     final SerializedLambda serializedLambda = (SerializedLambda) replacement;
@@ -51,7 +65,7 @@ public class ReferenceUtil {
                 }
             } catch (NoSuchMethodException e) {
                 continue;
-            } catch (InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 throw new IllegalStateException(
                         String.format(
                                 "Can't get java.lang.reflect.Method from reference %s!",
@@ -69,7 +83,19 @@ public class ReferenceUtil {
             try {
                 final Method writeReplace = clazz.getDeclaredMethod("writeReplace");
                 writeReplace.setAccessible(true);
-                final Object replacement = writeReplace.invoke(reference);
+                final Object replacement = Util.apply(writeReplace, method -> {
+                            try {
+                                return method.invoke(reference);
+                            } catch (ReflectiveOperationException e) {
+                                throw new IllegalStateException(
+                                        String.format(
+                                                "Can't get java.lang.reflect.Method from reference %s!",
+                                                reference
+                                        ),
+                                        e);
+                            }
+                        }
+                );
 
                 if (replacement instanceof SerializedLambda) {
                     final SerializedLambda serializedLambda = (SerializedLambda) replacement;
@@ -88,8 +114,13 @@ public class ReferenceUtil {
                 }
             } catch (NoSuchMethodException e) {
                 continue;
-            } catch (InvocationTargetException | IllegalAccessException | ClassNotFoundException | NoSuchElementException e) {
-                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                throw new IllegalStateException(
+                        String.format(
+                                "Can't get java.lang.reflect.Method from reference %s!",
+                                reference
+                        ),
+                        e);
             }
         }
 
