@@ -51,7 +51,7 @@ public abstract class EtalonPathObjectFactoryTest extends AbstractEtalonObjectFa
                 Arguments.of(
                         Optional.of(new DashaDsl().def())
                                 .map(e -> {
-                                    e.path((GetMethodReference<SimpleTestModel, String>) SimpleTestModel::getName)
+                                    e.path(SimpleTestModel::getName)
                                             .simple(ctx -> "Name");
                                     return e;
                                 })
@@ -66,7 +66,7 @@ public abstract class EtalonPathObjectFactoryTest extends AbstractEtalonObjectFa
                 Arguments.of(
                         Optional.of(new DashaDsl().def())
                                 .map(e -> {
-                                    e.path((SetMethodReference<SimpleTestModel, String>) SimpleTestModel::setName)
+                                    e.path(SimpleTestModel::setName)
                                             .simple(ctx -> "Name");
                                     return e;
                                 })
