@@ -39,11 +39,13 @@ import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -80,6 +82,17 @@ public abstract class EtalonObjectFactoryTest extends AbstractEtalonObjectFactor
             Assertions.assertNotNull(e);
             Assertions.assertEquals(String.class, e.getClass());
         });
+    }
+
+    @Test
+    @DisplayName("Array of primitive generation test.")
+    public void testPrimitiveArrayClass() {
+        final byte[] value = this.objectFactory().get(byte[].class);
+        Assertions.assertNotNull(value);
+        Assertions.assertEquals(this.objectFactory().generationProvider().defaults().defaultCollectionSize(), value.length);
+        for (byte e : value) {
+            Assertions.assertNotNull(e);
+        }
     }
 
     @Test
