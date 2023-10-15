@@ -17,6 +17,7 @@
  */
 package org.genthz.dasha.context;
 
+import java.lang.reflect.Array;
 import java.util.function.Supplier;
 
 class ArrayAccessor<T> extends NodeObjectInstanceAccessor<T, Integer> {
@@ -30,6 +31,6 @@ class ArrayAccessor<T> extends NodeObjectInstanceAccessor<T, Integer> {
     @Override
     public void set(T value) throws IllegalStateException {
         super.set(value);
-        this.container.get()[this.node()] = value;
+        Array.set(this.container.get(), this.node(), value);
     }
 }

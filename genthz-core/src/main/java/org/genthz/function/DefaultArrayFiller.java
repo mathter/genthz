@@ -22,6 +22,8 @@ import org.genthz.context.Context;
 import org.genthz.context.ContextFactory;
 import org.genthz.context.InstanceContext;
 
+import java.lang.reflect.Array;
+
 public class DefaultArrayFiller<T> extends AbstractContainerFiller<T> implements Filler<T> {
     public DefaultArrayFiller() {
         super(context -> {
@@ -29,9 +31,10 @@ public class DefaultArrayFiller<T> extends AbstractContainerFiller<T> implements
 
             if (context instanceof InstanceContext) {
                 final Object container = ((InstanceContext<T[]>) context).get();
+                final Class<T[]> type = (Class<T[]>) container.getClass();
 
-                if (container.getClass().isArray()) {
-                    result = ((T[]) container).length;
+                if (type.isArray()) {
+                    result = Array.getLength(container);
                 } else {
                     throw new IllegalStateException(container + " must be an array!");
                 }
