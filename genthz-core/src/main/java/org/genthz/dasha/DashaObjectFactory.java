@@ -50,7 +50,7 @@ public class DashaObjectFactory implements ObjectFactory {
 
     @Override
     public <T> T get(Bindings bindings, Class<T> clazz, Type... genericTypes) {
-        final InstanceContext<T> context = this.contextFactory.single(clazz, genericTypes);
+        final InstanceContext<T> context = this.contextFactory.single(bindings, clazz, genericTypes);
 
         return this.process(context).instance();
     }
