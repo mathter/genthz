@@ -16,12 +16,12 @@ To make use of GenThz within your project, simply add the maven dependency avail
 <dependency>
     <groupId>org.genthz</groupId>
     <artifactId>genthz-core</artifactId>
-    <version>3.0.2</version> <!-- or latest version -->
+    <version>3.1.3</version> <!-- or latest version -->
 </dependency>
 <dependency>
     <groupId>org.genthz</groupId>
     <artifactId>genthz-logging-slf4j</artifactId>
-    <version>3.0.2</version> <!-- or latest version -->
+    <version>3.1.3</version> <!-- or latest version -->
 </dependency>
 ```
 
